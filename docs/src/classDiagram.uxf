@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="14.3.0">
+<diagram program="umlet" version="15.0.0">
   <zoom_level>7</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>476</x>
-      <y>56</y>
+      <x>826</x>
+      <y>98</y>
       <w>280</w>
       <h>70</h>
     </coordinates>
@@ -18,22 +18,22 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>469</x>
-      <y>189</y>
-      <w>294</w>
+      <x>791</x>
+      <y>280</y>
+      <w>336</w>
       <h>84</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt; 
 Service
 --
-+processMessage(parameters: ServiceParameters): void</panel_attributes>
++processMessage(parameters: ServiceParameters): ServiceResult</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>854</x>
-      <y>203</y>
+      <x>1169</x>
+      <y>294</y>
       <w>196</w>
       <h>42</h>
     </coordinates>
@@ -47,20 +47,20 @@ Service
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>756</x>
-      <y>217</y>
-      <w>112</w>
+      <x>1120</x>
+      <y>308</y>
+      <w>63</w>
       <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>140.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>413</x>
-      <y>357</y>
-      <w>189</w>
+      <x>826</x>
+      <y>448</y>
+      <w>98</w>
       <h>21</h>
     </coordinates>
     <panel_attributes>UpsertService</panel_attributes>
@@ -69,9 +69,9 @@ Service
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>623</x>
-      <y>357</y>
-      <w>189</w>
+      <x>1022</x>
+      <y>448</y>
+      <w>98</w>
       <h>21</h>
     </coordinates>
     <panel_attributes>DeleteService</panel_attributes>
@@ -80,41 +80,41 @@ Service
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>518</x>
-      <y>266</y>
-      <w>112</w>
-      <h>105</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>140.0;10.0;10.0;130.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>609</x>
-      <y>266</y>
-      <w>126</w>
-      <h>105</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;160.0;130.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>616</x>
-      <y>119</y>
+      <x>868</x>
+      <y>357</y>
       <w>21</w>
-      <h>84</h>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1064</x>
+      <y>357</y>
+      <w>21</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>966</x>
+      <y>161</y>
+      <w>21</w>
+      <h>133</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;100.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>427</x>
-      <y>469</y>
+      <x>777</x>
+      <y>560</y>
       <w>350</w>
       <h>70</h>
     </coordinates>
@@ -127,8 +127,8 @@ Service
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>21</x>
-      <y>294</y>
+      <x>371</x>
+      <y>420</y>
       <w>189</w>
       <h>77</h>
     </coordinates>
@@ -141,8 +141,8 @@ error: ResponseError</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>826</x>
-      <y>462</y>
+      <x>1176</x>
+      <y>560</y>
       <w>161</w>
       <h>28</h>
     </coordinates>
@@ -152,8 +152,8 @@ error: ResponseError</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>826</x>
-      <y>518</y>
+      <x>1176</x>
+      <y>609</y>
       <w>161</w>
       <h>28</h>
     </coordinates>
@@ -163,8 +163,8 @@ error: ResponseError</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>770</x>
-      <y>476</y>
+      <x>1120</x>
+      <y>567</y>
       <w>70</w>
       <h>21</h>
     </coordinates>
@@ -174,8 +174,8 @@ error: ResponseError</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>770</x>
-      <y>525</y>
+      <x>1120</x>
+      <y>616</y>
       <w>70</w>
       <h>21</h>
     </coordinates>
@@ -185,45 +185,142 @@ error: ResponseError</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>203</x>
-      <y>231</y>
-      <w>280</w>
-      <h>105</h>
+      <x>448</x>
+      <y>315</y>
+      <w>357</w>
+      <h>119</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;130.0;380.0;10.0</additional_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0;490.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>203</x>
-      <y>322</y>
+      <x>448</x>
+      <y>490</y>
+      <w>343</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;150.0;470.0;150.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>868</x>
+      <y>462</y>
+      <w>21</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1064</x>
+      <y>462</y>
+      <w>21</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;140.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>588</x>
+      <y>434</y>
+      <w>189</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>UpsertRequestMapper
+--
+map(delta: ChsDelta): UpsertRequest</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1169</x>
+      <y>427</y>
+      <w>182</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>DeleteRequestMapper
+--
+map(delta: ChsDelta): DeleteRequest</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>770</x>
+      <y>448</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;80.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1113</x>
+      <y>448</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>357</x>
+      <y>105</y>
+      <w>329</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>ErrorHandler
+--
+handleRetryableError(message: Message&lt;ChsDelta&gt;): void
+handleNonRetryableError(message: Message&lt;ChsDelta&gt;): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>679</x>
+      <y>126</y>
+      <w>161</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;210.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>399</x>
+      <y>217</y>
       <w>238</w>
-      <h>196</h>
+      <h>42</h>
     </coordinates>
-    <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;320.0;260.0</additional_attributes>
+    <panel_attributes>KafkaProducer
+--
+send(delta: ChsDelta): void</panel_attributes>
+    <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
       <x>511</x>
-      <y>371</y>
-      <w>84</w>
-      <h>112</h>
+      <y>154</y>
+      <w>21</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>100.0;140.0;10.0;10.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>637</x>
-      <y>371</y>
-      <w>84</w>
-      <h>112</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;140.0;100.0;10.0</additional_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
   </element>
 </diagram>
