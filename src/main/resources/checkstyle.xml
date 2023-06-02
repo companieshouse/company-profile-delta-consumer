@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<!DOCTYPE module PUBLIC>
+<!DOCTYPE module PUBLIC
+        >
 
 <!--
     Checkstyle configuration that checks the Google coding conventions from Google Java Style
