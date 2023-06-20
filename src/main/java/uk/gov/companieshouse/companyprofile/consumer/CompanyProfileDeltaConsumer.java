@@ -18,6 +18,7 @@ import uk.gov.companieshouse.delta.ChsDelta;
 public class CompanyProfileDeltaConsumer {
 
     private final CompanyProfileDeltaProcessor deltaProcessor;
+
     @Autowired
     public CompanyProfileDeltaConsumer(CompanyProfileDeltaProcessor deltaProcessor) {
         this.deltaProcessor = deltaProcessor;

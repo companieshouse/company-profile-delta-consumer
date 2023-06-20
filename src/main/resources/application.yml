@@ -17,7 +17,7 @@ spring:
 company-profile:
   delta:
     group-id: ${COMPANY_PROFILE_DELTA_GROUP_ID:company-profile-delta-consumer}
-    topic: ${COMPANY_PROFILE_DELTA_TOPIC:company-profile-delta}
+    topic: ${COMPANY_DELTA_TOPIC:company-profile-delta}
     retry-attempts: ${COMPANY_PROFILE_DELTA_ATTEMPTS:4}
     backoff-delay: ${COMPANY_PROFILE_DELTA_BACKOFF_DELAY:100}
 
