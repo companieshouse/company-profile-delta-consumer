@@ -23,7 +23,7 @@ public class CompanyProfileDeltaProcessor {
      * @param logger
      * @param apiClientService
      * @param transformer
-     */
+    */
     @Autowired
     public CompanyProfileDeltaProcessor(Logger logger, ApiClientService apiClientService, CompanyProfileApiTransformer transformer) {
         this.logger = logger;
