@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.companyprofile.processor;
+package uk.gov.companieshouse.companyprofile.delta.processor;
 
 import consumer.exception.NonRetryableErrorException;
 import org.junit.jupiter.api.Assertions;
@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.Message;
+import uk.gov.companieshouse.companyprofile.processor.CompanyProfileDeltaProcessor;
 import uk.gov.companieshouse.companyprofile.utils.TestHelper;
 import uk.gov.companieshouse.delta.ChsDelta;
 import uk.gov.companieshouse.logging.Logger;
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 public class CompanyProfileDeltaProcessorTest {
-    private CompanyProfileDeltaProcessor processor;
+    private uk.gov.companieshouse.companyprofile.processor.CompanyProfileDeltaProcessor processor;
 
     private TestHelper testHelper = new TestHelper();
 
