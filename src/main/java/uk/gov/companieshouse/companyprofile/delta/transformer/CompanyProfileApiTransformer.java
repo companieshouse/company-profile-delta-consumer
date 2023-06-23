@@ -27,7 +27,7 @@ public class CompanyProfileApiTransformer {
 
     public CompanyProfile transform(CompanyDelta companyDelta) {
         try {
-            CompanyProfile companyProfile = mapper.companyDeltaToCOmpanyProfile(companyDelta);
+            CompanyProfile companyProfile = mapper.companyDeltaToCompanyProfile(companyDelta);
 
             return companyProfile;
         } catch (Exception exception) {
