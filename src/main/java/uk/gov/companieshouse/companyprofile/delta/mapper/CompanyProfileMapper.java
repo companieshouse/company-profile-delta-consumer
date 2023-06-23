@@ -11,19 +11,15 @@ public interface CompanyProfileMapper {
 
     MapperUtils mapperUtils = new MapperUtils();
 
-    @Mapping(target = "madeUpto", source = "lastPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "LastAccounts.periodEndOn", source = "lastPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "LastAccounts.periodStartOn", source = "lastPeriodStartOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "type", source = "type")
-
-    @Mapping(target = "NextAccounts.dueOn", source = "nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "NextAccounts.overdue", source = "accountOverdue")
-    @Mapping(target = "NextAccounts.periodEndOn", source = "nextPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "NextAccounts.periodStartOn", source = "nextPeriodStartOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "nextDue", source = "nextDue")
-    @Mapping(target = "nextMadeUpTo", source = "nextPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "Accounts.overdue", source = "accountOverdue")
-
+    @Mapping(target = "data.accounts.lastAccounts.madeUpTo", source = "accountingDates.lastPeriodEndOn", dateFormat = "yyyyMMdd")
+    @Mapping(target = "data.accounts.lastAccounts.periodEndOn", source = "accountingDates.lastPeriodEndOn", dateFormat = "yyyyMMdd")
+    @Mapping(target = "data.accounts.lastAccounts.periodStartOn", source = "accountingDates.lastPeriodStartOn", dateFormat = "yyyyMMdd")
+    @Mapping(target = "data.accounts.lastAccounts.type", source = "accountType")
+    @Mapping(target = "data.accounts.nextAccounts.dueOn", source = "accountingDates.nextDue")
+    @Mapping(target = "data.accounts.nextAccounts.periodEndOn", source = "accountingDates.nextPeriodEndOn")
+    @Mapping(target = "data.accounts.nextAccounts.periodStartOn", source = "accountingDates.nextPeriodStartOn", dateFormat = "yyyyMMdd")
+    //Fields to be added with @AfterMapping: accountOverdue
+    public abstract CompanyProfile companyDeltaToCOmpanyProfile(CompanyDelta companyDelta);
 
 
     CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta);
