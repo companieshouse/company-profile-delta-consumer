@@ -8,11 +8,15 @@ import org.mapstruct.MappingTarget;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
+import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.api.delta.SicCodes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -66,21 +70,14 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.foreignCompanyDetails.originatingRegistry.country", source = "foreignCompany.countryOfOrigin")
     @Mapping(target = "data.foreignCompanyDetails.originatingRegistry.name", source = "foreignCompany.parentRegistry")
     @Mapping(target = "data.foreignCompanyDetails.registrationNumber", source = "foreignCompany.registrationNumber")
-    
-    @Mapping(target = "data.hasInsolvencyHistory", source = "hasInsolvencyHistory")
-    @Mapping(target = "data.hasSuperSecurePscs", source = "superSecurePscInd")
-    @Mapping(target = "data.isCommunityInterestCompany", source = "cicInd")
+
     @Mapping(target = "data.jurisdiction", source = "jurisdiction")
-    @Mapping(target = "data.lastFullMembersListDate", source = "fullMembersListDate")
+    @Mapping(target = "data.lastFullMembersListDate", source = "fullMembersListDate", dateFormat = "yyyyMMdd")
 
     //links
 
     //officer summary
 
-    @Mapping(target = "data.previousCompanyNames", source = "previousCompanyNames")
-    @Mapping(target = "data.previousCompanyNames.ceasedOn", source = "previousCompanyNames.ceasedOn")
-    @Mapping(target = "data.previousCompanyNames.effectiveFrom", source = "previousCompanyNames.effectiveFrom")
-    @Mapping(target = "data.previousCompanyNames.name", source = "previousCompanyNames.name")
 
     @Mapping(target = "data.proofStatus", source = "proofStatus")
     //Fields to be added with @AfterMapping: accountOverdue (accounts, annual return, confirmation statement), accountRefDate
@@ -98,21 +95,51 @@ public abstract class CompanyProfileMapper {
 
     //service address
 
-    @Mapping(target = "data.sicCodes", source = "sicCodes")
     @Mapping(target = "data.subtype", source = "subtype")
-    //super secure managing officer count
+ //   @Mapping(target = "data.superSecureManagingOfficerCount", source = "superSecureManagingOfficerCount")
+    //super secure managing officer count, needs to be added to CompanyDelta
     @Mapping(target = "data.type", source = "type")
     @Mapping(target = "data.undeliverableRegisteredOfficeAddress", source = "undeliverableRegisteredOfficeAddress")
-    //has mortgages
     //parent company number
 
     
     public abstract CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta);
 
+    @AfterMapping
+    public void mapBooleans(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        data.setHasInsolvencyHistory(flagToBoolean(source.getHasInsolvencyHistory()));
+        data.hasSuperSecurePscs(flagToBoolean(source.getSuperSecurePscInd()));
+        data.isCommunityInterestCompany(flagToBoolean(source.getCicInd()));
+        data.registeredOfficeIsInDispute(flagToBoolean(source.getRegisteredOfficeIsInDispute()));
+        data.undeliverableRegisteredOfficeAddress(flagToBoolean(source.getUndeliverableRegisteredOfficeAddress()));
+        target.setHasMortgages(flagToBoolean(source.getHasMortgages()));
+        target.setData(data);
+
+    }
+
+    @AfterMapping
+    public void mapSicCodes(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        List<String> sicCodes = new ArrayList<>();
+        source.getSicCodes().forEach(s -> {
+            String[] codes = new String[]{s.getSic1(), s.getSic2(), s.getSic3(), s.getSic4()};
+            for (String code : codes) {
+                if (code != null && !code.isEmpty()) {
+                    sicCodes.add(code);
+                }
+            }
+        });
+        data.setSicCodes(sicCodes);
+        target.setData(data);
+    }
+
+    public Boolean flagToBoolean(BooleanFlag flag) {
+        return flag==null ? null : flag.getValue().equals("1");
+    }
 
     @AfterMapping
     public void mapPreviousCompanyNames(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        CompanyDelta delta = source;
         List<PreviousCompanyNames> targetNames= source.getPreviousCompanyNames()
                 .stream()
                 .map(previousName -> {
