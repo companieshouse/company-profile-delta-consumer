@@ -69,6 +69,7 @@ public class CompanyProfileMapperTest {
         ForeignCompanyDetails expectedForeignCompanyDetails = new ForeignCompanyDetails();
         OriginatingRegistry expectedOriginatingRegistry = new OriginatingRegistry();
         RegisteredOfficeAddress expectedRegisteredOfficeAddress = new RegisteredOfficeAddress();
+        RegisteredOfficeAddress expectedServiceAddress = new RegisteredOfficeAddress();
 
         expectedLastAccounts.setMadeUpTo(LocalDate.parse("20141231", DateTimeFormatter.ofPattern( "yyyyMMdd" )));
         expectedLastAccounts.setPeriodEndOn(LocalDate.parse("20141231", DateTimeFormatter.ofPattern( "yyyyMMdd" )));
@@ -99,6 +100,7 @@ public class CompanyProfileMapperTest {
         expectedData.setDateOfDissolution(LocalDate.parse("20190101", DateTimeFormatter.ofPattern("yyyyMMdd")));
 
         expectedData.setExternalRegistrationNumber("12345");
+        profile.setDeltaAt("20190612181928152002");
 
         expectedAccountingRequirement.setForeignAccountType("1");
 
@@ -117,7 +119,7 @@ public class CompanyProfileMapperTest {
 
         expectedData.setProofStatus("0");
 
-        expectedData.setRegisteredOfficeAddress(null);
+        expectedData.setRegisteredOfficeAddress(expectedRegisteredOfficeAddress);
         expectedRegisteredOfficeAddress.setAddressLine1("1 North Road");
         expectedRegisteredOfficeAddress.setAddressLine2("line2");
         expectedRegisteredOfficeAddress.setCareOf("name");
@@ -128,14 +130,26 @@ public class CompanyProfileMapperTest {
         expectedRegisteredOfficeAddress.setRegion("region");
         expectedData.setRegisteredOfficeIsInDispute(false);
 
+        expectedData.setServiceAddress(expectedServiceAddress);
+        expectedServiceAddress.setAddressLine1("1 South Road");
+        expectedServiceAddress.setAddressLine2("secondLine");
+        expectedServiceAddress.setCareOf("name");
+        expectedServiceAddress.setLocality("Swansea");
+        expectedServiceAddress.setCountry("Wales");
+        expectedServiceAddress.setPostalCode("CF15 3UB");
+        expectedServiceAddress.setPoBox("21212");
+        expectedServiceAddress.setRegion("region");
+
         expectedData.setSubtype("0");
         expectedData.setType("3");
         expectedData.setUndeliverableRegisteredOfficeAddress(false);
-
-        expectedAccounts.setLastAccounts(expectedLastAccounts);
-        expectedAccounts.setNextAccounts(expectedNextAccounts);
+        profile.setHasMortgages(false);
 
         expectedData.setAccounts(expectedAccounts);
+        expectedAccounts.setLastAccounts(expectedLastAccounts);
+        expectedAccounts.setNextAccounts(expectedNextAccounts);
+        expectedForeignCompanyDetails.setOriginatingRegistry(expectedOriginatingRegistry);
+        expectedForeignCompanyDetails.setAccountingRequirement(expectedAccountingRequirement);
 
         expectedData.setProofStatus("0");
 
