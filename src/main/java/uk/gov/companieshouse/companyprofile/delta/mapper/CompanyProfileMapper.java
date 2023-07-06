@@ -24,6 +24,9 @@ public abstract class CompanyProfileMapper {
 
     MapperUtils mapperUtils = new MapperUtils();
 
+    @Mapping(target = "data.accounts.accountingReferenceDate.day", source = "accRefDate")
+    @Mapping(target = "data.accounts.accountingReferenceDate.month", source = "accRefDate")
+
     @Mapping(target = "data.accounts.lastAccounts.madeUpTo", source = "accountingDates.lastPeriodEndOn", dateFormat = "yyyyMMdd")
     @Mapping(target = "data.accounts.lastAccounts.periodEndOn", source = "accountingDates.lastPeriodEndOn", dateFormat = "yyyyMMdd")
     @Mapping(target = "data.accounts.lastAccounts.periodStartOn", source = "accountingDates.lastPeriodStartOn", dateFormat = "yyyyMMdd")
@@ -58,8 +61,12 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.externalRegistrationNumber", source = "externalRegistrationNumber")
 
     @Mapping(target = "data.foreignCompanyDetails.accountingRequirement.foreignAccountType", source = "foreignCompany.accReqType")
-    //terms of account publication
-    //required to publish
+
+    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodFrom.day", source = "foreignCompany.requiredToPublish.dayFrom")
+    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodFrom.month", source = "foreignCompany.requiredToPublish.monthFrom")
+
+    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodTo.day", source = "foreignCompany.requiredToPublish.dayTo")
+    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodTo.month", source = "foreignCompany.requiredToPublish.monthTo")
 
     @Mapping(target = "data.foreignCompanyDetails.businessActivity", source = "foreignCompany.businessActivity")
     @Mapping(target = "data.foreignCompanyDetails.companyType", source = "foreignCompany.legalForm")
@@ -74,13 +81,7 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.jurisdiction", source = "jurisdiction")
     @Mapping(target = "data.lastFullMembersListDate", source = "fullMembersListDate", dateFormat = "yyyyMMdd")
 
-    //links
-
-    //officer summary
-
-
     @Mapping(target = "data.proofStatus", source = "proofStatus")
-    //Fields to be added with @AfterMapping: accountOverdue (accounts, annual return, confirmation statement), accountRefDate
     
     @Mapping(target = "data.registeredOfficeAddress", source = "registeredOfficeAddress")
     @Mapping(target = "data.registeredOfficeAddress.addressLine1", source = "registeredOfficeAddress.addressLine1")
@@ -93,13 +94,22 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.registeredOfficeAddress.region", source = "registeredOfficeAddress.region")
     @Mapping(target = "data.registeredOfficeIsInDispute", source = "registeredOfficeIsInDispute")
 
-    //service address
+    @Mapping(target = "data.serviceAddress", source = "serviceAddress")
+    @Mapping(target = "data.serviceAddress.addressLine1", source = "serviceAddress.addressLine1")
+    @Mapping(target = "data.serviceAddress.addressLine2", source = "serviceAddress.addressLine2")
+    @Mapping(target = "data.serviceAddress.careOf", source = "serviceAddress.careOfName")
+    @Mapping(target = "data.serviceAddress.country", source = "serviceAddress.country")
+    @Mapping(target = "data.serviceAddress.locality", source = "serviceAddress.locality")
+    @Mapping(target = "data.serviceAddress.poBox",source = "serviceAddress.poBox")
+    @Mapping(target = "data.serviceAddress.postalCode", source = "serviceAddress.postalCode")
+    @Mapping(target = "data.serviceAddress.region", source = "serviceAddress.region")
 
     @Mapping(target = "data.subtype", source = "subtype")
  //   @Mapping(target = "data.superSecureManagingOfficerCount", source = "superSecureManagingOfficerCount")
     //super secure managing officer count, needs to be added to CompanyDelta
     @Mapping(target = "data.type", source = "type")
     @Mapping(target = "data.undeliverableRegisteredOfficeAddress", source = "undeliverableRegisteredOfficeAddress")
+    @Mapping(target = "hasMortgages", source = "hasMortgages")
     //parent company number
 
     
