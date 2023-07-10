@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.companyprofile.delta.processor;
+package uk.gov.companieshouse.companyprofile.processor;
 
 import consumer.exception.NonRetryableErrorException;
 import org.junit.jupiter.api.Assertions;
