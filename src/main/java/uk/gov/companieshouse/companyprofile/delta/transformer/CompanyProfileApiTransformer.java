@@ -7,14 +7,10 @@ import consumer.exception.NonRetryableErrorException;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.companyprofile.delta.mapper.CompanyProfileMapper;
-import uk.gov.companieshouse.companyprofile.delta.mapper.MapperUtils;
 
 @Component
 public class CompanyProfileApiTransformer {
     private final CompanyProfileMapper mapper;
-
-    @Autowired
-    private MapperUtils mapperUtils;
 
     /**
      * Constructor for the transformer.
@@ -25,6 +21,7 @@ public class CompanyProfileApiTransformer {
         this.mapper = mapper;
     }
 
+    /**transforms CompanyDelta into CompanyProfile. */
     public CompanyProfile transform(CompanyDelta companyDelta) {
         try {
             CompanyProfile companyProfile = mapper.companyDeltaToCompanyProfile(companyDelta);

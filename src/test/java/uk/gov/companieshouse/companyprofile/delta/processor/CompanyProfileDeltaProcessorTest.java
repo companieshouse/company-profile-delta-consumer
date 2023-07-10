@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.Message;
+import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileApiTransformer;
 import uk.gov.companieshouse.companyprofile.processor.CompanyProfileDeltaProcessor;
 import uk.gov.companieshouse.companyprofile.utils.TestHelper;
 import uk.gov.companieshouse.delta.ChsDelta;
@@ -27,9 +28,12 @@ public class CompanyProfileDeltaProcessorTest {
     @Mock
     private Logger logger;
 
+    @Mock
+    private CompanyProfileApiTransformer transformer;
+
     @BeforeEach
     public void setUp() {
-        processor = new CompanyProfileDeltaProcessor(logger);
+        processor = new CompanyProfileDeltaProcessor(logger, transformer);
     }
 
     @Test
