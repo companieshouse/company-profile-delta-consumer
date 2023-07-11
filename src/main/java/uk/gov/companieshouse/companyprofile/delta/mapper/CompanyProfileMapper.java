@@ -129,11 +129,9 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.serviceAddress.region", source = "serviceAddress.region")
 
     @Mapping(target = "data.subtype", source = "subtype")
-    //super secure managing officer count, needs to be added to CompanyDelta
     @Mapping(target = "data.type", source = "type")
     @Mapping(target = "data.undeliverableRegisteredOfficeAddress", source = "undeliverableRegisteredOfficeAddress")
     @Mapping(target = "hasMortgages", source = "hasMortgages")
-    //parent company number
 
     
     public abstract CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta);

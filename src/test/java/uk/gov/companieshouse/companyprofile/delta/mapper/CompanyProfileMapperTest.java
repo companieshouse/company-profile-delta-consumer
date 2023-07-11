@@ -65,10 +65,6 @@ public class CompanyProfileMapperTest {
         CompanyProfile profile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
         CompanyProfile expectedResult = new CompanyProfile();
 
-
-
-
         assertEquals(expectedOutputData, profile.getData());
-        //assertEquals(expectedString, actualString);
     }
 }
