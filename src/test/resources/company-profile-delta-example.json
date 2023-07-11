@@ -3,15 +3,29 @@
   "company_number": "00358948",
   "registered_office_address": {
     "address_line_1": "1 North Road",
+    "address_line_2": "line2",
+    "care_of_name": "careOf",
     "locality": "Cardiff",
     "country": "Wales",
-    "postal_code": "CF14 3UA"
+    "po_box": "12121",
+    "postal_code": "CF14 3UA",
+    "region": "region"
+  },
+  "service_address": {
+    "address_line_1": "1 South Road",
+    "address_line_2": "secondLine",
+    "care_of_name": "name",
+    "locality": "Swansea",
+    "country": "Wales",
+    "po_box": "21212",
+    "postal_code": "CF15 3UB",
+    "region": "region"
   },
   "type": "3",
-  "has_mortgages": "0",
   "registered_office_is_in_dispute": "0",
   "undeliverable_registered_office_address": "0",
   "status": "0",
+  "date_of_dissolution": "20190101",
   "creation_date": "19400122",
   "account_overdue": "1",
   "confirmation_statement_overdue": "1",
@@ -21,16 +35,20 @@
   "full_members_list_date": "20140523",
   "has_appointments": "1",
   "has_insolvency_history": "0",
+  "external_registration_number": "12345",
   "jurisdiction": "1",
   "proof_status": "0",
   "cic_ind": "0",
   "subtype": "0",
   "confirmation_statement_dates": {
+    "latest_made_up_to": "20160606",
     "next_due": "20160606",
     "next_made_up_to": "20160523"
   },
   "annual_return_dates": {
-    "latest_made_up_to": "20150523"
+    "latest_made_up_to": "20150523",
+    "next_due": "20150523",
+    "next_made_up_to": "20150523"
   },
   "accounting_dates": {
     "next_period_start_on": "20150101",
@@ -44,6 +62,17 @@
       "sic_1": "70100"
     }
   ],
+  "foreign_company": {
+
+    "governing_law": "something",
+    "country_of_origin": "country",
+    "parent_registry": "name",
+    "registration_number": "12345",
+    "legal_form": "1",
+    "credit_or_financial": "true",
+    "acc_req_type": "1",
+    "business_activity": "testBusinessActivity"
+  },
   "previous_company_names": [
     {
       "name": "BUNZL PULP & PAPER LIMITED",
