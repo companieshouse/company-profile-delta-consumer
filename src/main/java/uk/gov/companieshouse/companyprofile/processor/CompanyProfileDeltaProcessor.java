@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDeleteDelta;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.companyprofile.delta.service.ApiClientService;
 import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileApiTransformer;
 import uk.gov.companieshouse.delta.ChsDelta;
 import uk.gov.companieshouse.logging.Logger;
@@ -19,15 +20,16 @@ import static java.lang.String.format;
 public class CompanyProfileDeltaProcessor {
 
     private final Logger logger;
-
+    private final ApiClientService apiClientService;
     private final CompanyProfileApiTransformer transformer;
 
     /**
      * processor constructor.
      */
     @Autowired
-    public CompanyProfileDeltaProcessor(Logger logger, CompanyProfileApiTransformer transformer) {
+    public CompanyProfileDeltaProcessor(Logger logger, ApiClientService apiClientService, CompanyProfileApiTransformer transformer) {
         this.logger = logger;
+        this.apiClientService = apiClientService;
         this.transformer = transformer;
     }
 
@@ -65,15 +67,16 @@ public class CompanyProfileDeltaProcessor {
     public void processDeleteDelta(Message<ChsDelta> message) {
         final ChsDelta payload = message.getPayload();
         final String contextId = payload.getContextId();
+        CompanyDeleteDelta companyDeleteDelta;
         logger.info(format("Successfully extracted Chs Delta with context_id %s",
                 contextId));
         ObjectMapper objectMapper = new ObjectMapper();
-        CompanyDeleteDelta companyDeleteDelta;
         try {
             companyDeleteDelta = objectMapper.readValue(payload.getData(), CompanyDeleteDelta.class);
         } catch (Exception ex) {
             throw new NonRetryableErrorException(
                     "Error when extracting company profile delete delta", ex);
         }
+        apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyDeleteDelta.getCompanyNumber());
     }
 }
