@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.companyprofile.processor;
+package uk.gov.companieshouse.companyprofile.delta.processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

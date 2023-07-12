@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.companyprofile.delta.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +47,20 @@ public class ApiClientService {
     public ApiResponse<Void> invokeCompanyProfileDeleteHandler(String context, String companyNumber) {
         final String uri = String.format("/company/%s", companyNumber);
 
-        CompanyProfileDelete deleteExecuteOp = getApiClient(context).privateDeltaResourceHandler().deleteCompanyProfile(uri, companyNumber);
+        CompanyProfileDelete deleteExecuteOp = getApiClient(context).privateDeltaResourceHandler().deleteCompanyProfile(uri);
 
+        Map<String, Object> logMap = createLogMap(companyNumber, "DELETE", uri);
+        logger.infoContext(context, String.format("DELETE: %s", uri), logMap);
+        ResponseHandler<CompanyProfileDelete> responseHandler = (ResponseHandler<CompanyProfileDelete>) responseHandlerFactory.createResponseHandler(deleteExecuteOp);
 
+        return responseHandler.handleApiResponse(logger, context, "deleteCompanyProfile", uri, deleteExecuteOp);
+    }
+
+    public Map<String, Object> createLogMap(String companyNumber, String method, String path) {
+        final Map<String, Object> logMap = new HashMap<>();
+        logMap.put("company_number",companyNumber);
+        logMap.put("method",method);
+        logMap.put("path",path);
+        return logMap;
     }
 }
