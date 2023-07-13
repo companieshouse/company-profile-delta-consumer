@@ -27,7 +27,9 @@ public class CompanyProfileDeltaProcessor {
      * processor constructor.
      */
     @Autowired
-    public CompanyProfileDeltaProcessor(Logger logger, ApiClientService apiClientService, CompanyProfileApiTransformer transformer) {
+    public CompanyProfileDeltaProcessor(Logger logger, 
+                                        ApiClientService apiClientService, 
+                                        CompanyProfileApiTransformer transformer) {
         this.logger = logger;
         this.apiClientService = apiClientService;
         this.transformer = transformer;
