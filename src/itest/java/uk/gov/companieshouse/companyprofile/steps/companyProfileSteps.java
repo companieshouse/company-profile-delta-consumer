@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.companyprofile.steps;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -146,6 +147,12 @@ public class CompanyProfileSteps {
                 "/company/00358948")));
     }
 
+    @After
+    public void shutdownWiremock(){
+        if (wireMockServer != null)
+            wireMockServer.stop();
+    }
+
     private void countDown() throws Exception {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         countDownLatch.await(5, TimeUnit.SECONDS);
@@ -162,4 +169,5 @@ public class CompanyProfileSteps {
                 "/company/00358948"))
                 .willReturn(aResponse().withStatus(responseCode)));
     }
+
 }
