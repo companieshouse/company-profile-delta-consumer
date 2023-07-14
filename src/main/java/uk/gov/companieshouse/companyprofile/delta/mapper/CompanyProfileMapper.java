@@ -208,5 +208,7 @@ public abstract class CompanyProfileMapper {
         data.setPreviousCompanyNames(targetNames);
         target.setData(data);
     }
+
+
     
 }
