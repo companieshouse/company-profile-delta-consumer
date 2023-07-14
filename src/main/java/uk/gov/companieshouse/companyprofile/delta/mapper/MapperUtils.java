@@ -3,7 +3,9 @@ package uk.gov.companieshouse.companyprofile.delta.mapper;
 import java.util.HashMap;
 
 public class MapperUtils {
-    public static HashMap<String,String> getTypeMap(){
+
+    /**Create a hashmap for subtype.*/
+    public static HashMap<String,String> getTypeMap() {
         HashMap<String,String> typeMap = new HashMap<>();
 
         typeMap.put("1","community-interest-company");
@@ -12,7 +14,8 @@ public class MapperUtils {
         return typeMap;
     }
 
-    public static HashMap<String,String> getProof_statusMap(){
+    /**Create a hashmap for  proof_status.*/
+    public static HashMap<String,String> getProof_statusMap() {
         HashMap<String,String> proofStatusMap = new HashMap<>();
 
         proofStatusMap.put("1","paper");
@@ -24,37 +27,37 @@ public class MapperUtils {
         return proofStatusMap;
     }
 
-    public static HashMap<String,String> getJurisdictionMap(){
+    /**Create a hashmap for jurisdictions .*/
+    public static HashMap<String,String> getJurisdictionMap() {
+
         HashMap<String,String> jurisdictionMap = new HashMap<>();
-
-        getJurisdictionMap().put("1","england-wales");
-        getJurisdictionMap().put("2","wales");
-        getJurisdictionMap().put("3","scotland");
-        getJurisdictionMap().put("4","northern-ireland");
-        getJurisdictionMap().put("5","european-union");
-        getJurisdictionMap().put("6","united-kingdom");
-        getJurisdictionMap().put("7","england");
-        getJurisdictionMap().put("8","noneu");
-
+        jurisdictionMap.put("1","england-wales");
+        jurisdictionMap.put("2","wales");
+        jurisdictionMap.put("3","scotland");
+        jurisdictionMap.put("4","northern-ireland");
+        jurisdictionMap.put("5","european-union");
+        jurisdictionMap.put("6","united-kingdom");
+        jurisdictionMap.put("7","england");
+        jurisdictionMap.put("8","noneu");
         return jurisdictionMap;
     }
 
-    public static HashMap<String, String> getStatus_detailMap(){
-        HashMap<String,String> status_detailMap = new HashMap<>();
-
-        status_detailMap.put("5","transferred-from-uk");
-        status_detailMap.put("Q","active-proposal-to-strike-off");
-        status_detailMap.put("R","petition-to-restore-dissolved");
-        status_detailMap.put("X","transformed-to-se");
-        status_detailMap.put("Z","converted-to-plc");
-        status_detailMap.put("AA","converted-to-uk-societas");
-        status_detailMap.put("AB","converted-to-ukeig");
-
-        return status_detailMap;
+    /**Create a hashmap for status_detail.*/
+    public static HashMap<String, String> getStatus_detailMap() {
+        HashMap<String,String> statusDetailMap = new HashMap<>();
+        statusDetailMap.put("5","transferred-from-uk");
+        statusDetailMap.put("Q","active-proposal-to-strike-off");
+        statusDetailMap.put("R","petition-to-restore-dissolved");
+        statusDetailMap.put("X","transformed-to-se");
+        statusDetailMap.put("Z","converted-to-plc");
+        statusDetailMap.put("AA","converted-to-uk-societas");
+        statusDetailMap.put("AB","converted-to-ukeig");
+        return statusDetailMap;
 
     }
 
-    public static HashMap<String,String> getStatusMap(){
+    /**Create a hashmap for status.*/
+    public static HashMap<String,String> getStatusMap() {
         HashMap<String,String> statusMap = new HashMap<>();
         statusMap.put("0","active");
         statusMap.put("1","dissolved");
@@ -97,7 +100,8 @@ public class MapperUtils {
 
     }
 
-    public static HashMap<String,String> getAccountTypeMap(){
+    /**Create a hashmap for account_type.*/
+    public static HashMap<String,String> getAccountTypeMap() {
         HashMap<String,String> accountTypeMap = new HashMap<>();
 
         accountTypeMap.put("0","null");
