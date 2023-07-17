@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.companyprofile;
+package uk.gov.companieshouse.companyprofile.delta;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

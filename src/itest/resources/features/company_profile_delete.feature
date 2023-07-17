@@ -2,7 +2,7 @@ Feature: Company Profile delete
   Scenario: send DELETE request to the api
   Given the application is running
   When the consumer receives a delete payload
-  Then a DELETE request is sent to the company profile api with the encoded Id
+  Then a DELETE request is sent to the company profile api
 
   Scenario: send DELETE with invalid JSON
   Given the application is running

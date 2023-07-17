@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.companyprofile.config;
+package uk.gov.companieshouse.companyprofile.delta.config;
 
 import consumer.deserialization.AvroDeserializer;
 import consumer.exception.TopicErrorInterceptor;
