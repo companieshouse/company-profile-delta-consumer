@@ -7,6 +7,7 @@ import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 
 
+import javax.validation.constraints.Null;
 import java.util.HashMap;
 
 @Mapper(componentModel = "spring")
@@ -15,15 +16,24 @@ public abstract class CompanyProfileEnumMapper {
     @Mapping(target = "hasMortgages", source = "hasMortgages")
 
     public abstract CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta);
+/*
+    public CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta) {
+        CompanyProfile companyProfile = new CompanyProfile();
+        Data data = new Data();
+        companyProfile.setData(data);
 
-/*    @Named("booleanFlagToBoolean")
+        return companyProfile;
+    }
+*/
+
+    @Named("booleanFlagToBoolean")
     protected BooleanFlag map(BooleanFlag value) {
         if(value == null) {
             return null;
         }
 
         return value;
-    }*/
+    }
 
     /**maps BooleanFlag to Boolean. */
     public Boolean flagToBoolean(BooleanFlag flag) {
@@ -51,11 +61,11 @@ public abstract class CompanyProfileEnumMapper {
         String type = source.getType();
         //data.setType(MapperUtils.mapType(type));
         HashMap<String,String> typeMap = MapperUtils.getTypeMap();
-        data.setType(typeMap.get(type));
+        if(data == null) {
+            data = new Data();
+        }
+        data.setType(typeMap.getOrDefault(type,null));
         target.setData(data);
-
-
-
     }
 
     /** Maps enum status to string. */
@@ -64,7 +74,10 @@ public abstract class CompanyProfileEnumMapper {
         Data data = target.getData();
         String type = source.getType();
         HashMap<String,String> statusMap = MapperUtils.getStatusMap();
-        data.setType(statusMap.get(type));
+        if(data == null) {
+            data = new Data();
+        }
+        data.setType(statusMap.getOrDefault(type,null));
         target.setData(data);
     }
 

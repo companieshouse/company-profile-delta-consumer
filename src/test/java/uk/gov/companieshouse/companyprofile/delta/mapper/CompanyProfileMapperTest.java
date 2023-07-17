@@ -22,6 +22,7 @@ import uk.gov.companieshouse.api.delta.PscStatement;
 import uk.gov.companieshouse.api.delta.PscStatementDelta;
 import uk.gov.companieshouse.api.psc.Statement;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -43,6 +44,7 @@ public class CompanyProfileMapperTest {
 
     @Autowired
     CompanyProfileMapper companyProfileMapper;
+
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -66,5 +68,26 @@ public class CompanyProfileMapperTest {
         CompanyProfile expectedResult = new CompanyProfile();
 
         assertEquals(expectedOutputData, profile.getData());
+    }
+
+    @Test
+    public void shouldMapEmptyStringsToNullValues() throws Exception, JsonProcessingException {
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        String path = "company-profile-delta-enumMapper-example.json";
+        String input = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(path)));
+
+        companyDelta = mapper.readValue(input, CompanyDelta.class);
+
+        String expectedOutputPath = "company-profile-enumMapper-expected-output.json";
+        String expectedOutputDataString = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(expectedOutputPath)));
+        expectedOutputData = mapper.readValue(expectedOutputDataString, Data.class);
+
+        CompanyProfile profile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+        CompanyProfile expectedResult = new CompanyProfile();
+
+        assertEquals(expectedOutputData, profile.getData());
+
     }
 }
