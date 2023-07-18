@@ -1,17 +1,17 @@
 package uk.gov.companieshouse.companyprofile.delta.mapper;
 
+import uk.gov.companieshouse.api.delta.BooleanFlag;
+
 import java.util.HashMap;
 
 public class MapperUtils {
 
     /**Create a hashmap for subtype.*/
-    public static HashMap<String,String> getTypeMap() {
-        HashMap<String,String> typeMap = new HashMap<>();
-
-        typeMap.put("1","community-interest-company");
-        typeMap.put("2","private-fund-limited-partnership");
-
-        return typeMap;
+    public static HashMap<String,String> getSubTypeMap() {
+        HashMap<String,String> subTypeMap = new HashMap<>();
+        subTypeMap.put("0","community-interest-company");
+        subTypeMap.put("1","private-fund-limited-partnership");
+        return subTypeMap;
     }
 
     /**Create a hashmap for  proof_status.*/

@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 
 import java.io.InputStreamReader;
@@ -36,8 +37,6 @@ public class CompanyProfileEnumMapperTest {
     @Autowired
     CompanyProfileEnumMapper companyProfileEnumMapper;
 
-
-
     @BeforeEach
     public void setUp() throws Exception {
         mapper = new ObjectMapper();
@@ -55,19 +54,8 @@ public class CompanyProfileEnumMapperTest {
         expectedOutputData = mapper.readValue(expectedOutputDataString, Data.class);
 
     }
-/*    @Test
-    public void shouldMapTypeEnumToNullValues() throws JsonProcessingException {
-        companyProfile = new CompanyProfile();
-        companyProfile.setData(new Data());
-
-        CompanyProfile profile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta);
-
-        companyProfileEnumMapper.mapEnums(companyProfile,companyDelta);
-
-        assertEquals(expectedOutputData,profile.getData());
-    }*/
     @Test
-    public void shouldMapTypeEnumToNullValues() throws JsonProcessingException {
+    public void shouldMapAccountTypeEnumToNullValues() throws JsonProcessingException {
         CompanyDelta companyDelta1 = new CompanyDelta();
         companyDelta1.setType("");
 
@@ -82,7 +70,7 @@ public class CompanyProfileEnumMapperTest {
     }
 
     @Test
-    public void shouldMapTypeEnumToCorrectValues() throws JsonProcessingException {
+    public void shouldMapAccountTypeEnumToCorrectValues() throws JsonProcessingException {
         CompanyDelta companyDelta1 = new CompanyDelta();
         companyDelta1.setType("A");
 
@@ -97,7 +85,7 @@ public class CompanyProfileEnumMapperTest {
     }
 
     @Test
-    public void shouldNotMapTypeEnumToIncorrectValues() throws JsonProcessingException {
+    public void shouldNotMapAccountTypeEnumToIncorrectValues() throws JsonProcessingException {
         CompanyDelta companyDelta1 = new CompanyDelta();
         companyDelta1.setType("A");
 
@@ -113,6 +101,60 @@ public class CompanyProfileEnumMapperTest {
     }
 
     @Test
+    public void shouldMapJurisdictionEnumToNullValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setJurisdiction("");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        // the expected string
+        expectedData.setJurisdiction(null);
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertEquals(expectedProfile.getData().getJurisdiction(),resultProfile.getData().getJurisdiction());
+    }
+
+    @Test
+    public void shouldMapJurisdictionEnumToCorrectValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setJurisdiction("2");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        // the expected string
+        expectedData.setJurisdiction("wales");
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertEquals(expectedProfile.getData().getJurisdiction(),resultProfile.getData().getJurisdiction());
+    }
+
+    @Test
+    public void shouldNotMapJurisdictionEnumToIncorrectValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setJurisdiction("2");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        // the expected string
+        expectedData.setJurisdiction("england-wales");
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertNotEquals(expectedProfile.getData().getJurisdiction(),resultProfile.getData().getJurisdiction());
+    }
+
+    @Test
     public void shouldMapStatusEnumToNullValues() throws JsonProcessingException {
         CompanyDelta companyDelta1 = new CompanyDelta();
         //set the enum value to test
@@ -121,30 +163,205 @@ public class CompanyProfileEnumMapperTest {
         CompanyProfile expectedProfile = new CompanyProfile();
         Data expectedData = new Data();
         // the expected string
-        expectedData.setStatus(null);
+        expectedData.setCompanyStatus(null);
         expectedProfile.setData(expectedData);
 
         CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
 
         //check the expected vs outcome
-        assertEquals(expectedProfile.getData().getStatus(),resultProfile.getData().getStatus());
+        assertEquals(expectedProfile.getData().getCompanyStatus(),resultProfile.getData().getCompanyStatus());
     }
 
     @Test
     public void shouldMapStatusEnumToCorrectValues() throws JsonProcessingException {
         CompanyDelta companyDelta1 = new CompanyDelta();
         //set the enum value to test
-        companyDelta1.setStatus("AA");
+        companyDelta1.setStatus("2");
 
         CompanyProfile expectedProfile = new CompanyProfile();
         Data expectedData = new Data();
-        // the expected string
-        expectedData.setStatus("active");
+        //the expected string
+        expectedData.setCompanyStatus("liquidation");
         expectedProfile.setData(expectedData);
 
         CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
 
         //check the expected vs outcome
-        assertEquals(expectedProfile.getData().getStatus(),resultProfile.getData().getStatus());
+        assertEquals(expectedProfile.getData().getCompanyStatus(),resultProfile.getData().getCompanyStatus());
     }
+
+    @Test
+    public void shouldNotMapStatusEnumToIncorrectValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setStatus("2");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setCompanyStatus("dissolved");
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertNotEquals(expectedProfile.getData().getCompanyStatus(),resultProfile.getData().getCompanyStatus());
+    }
+
+    @Test
+    public void shouldMapStatusDetailEnumToNullValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setStatus("");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setCompanyStatusDetail(null);
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertEquals(expectedProfile.getData().getCompanyStatusDetail(),resultProfile.getData().getCompanyStatusDetail());
+    }
+
+    @Test
+    public void shouldMapStatusDetailEnumToCorrectValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setStatus("5");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setCompanyStatusDetail("transferred-from-uk");
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertEquals(expectedProfile.getData().getCompanyStatusDetail(),resultProfile.getData().getCompanyStatusDetail());
+    }
+
+    @Test
+    public void shouldNotMapStatusDetailEnumToIncorrectValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setStatus("5");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setCompanyStatusDetail("active-proposal-to-strike-off");
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertNotEquals(expectedProfile.getData().getCompanyStatusDetail(),resultProfile.getData().getCompanyStatusDetail());
+    }
+
+    @Test
+    public void shouldMapProofStatusEnumToNullValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setProofStatus("");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setProofStatus(null);
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertEquals(expectedProfile.getData().getProofStatus(),resultProfile.getData().getProofStatus());
+    }
+
+    @Test
+    public void shouldMapProofStatusEnumToCorrectValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setProofStatus("1");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setProofStatus("paper");
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertEquals(expectedProfile.getData().getProofStatus(),resultProfile.getData().getProofStatus());
+    }
+
+    @Test
+    public void shouldNotMapProofStatusEnumToIncorrectValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setProofStatus("1");
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setProofStatus("pending");
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertNotEquals(expectedProfile.getData().getProofStatus(),resultProfile.getData().getProofStatus());
+    }
+
+    @Test
+    public void shouldMapSubTypeEnumToNullValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setSubtype(null);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setSubtype(null);
+        expectedProfile.setData(expectedData);
+
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+
+        //check the expected vs outcome
+        assertEquals(expectedProfile.getData().getSubtype(),resultProfile.getData().getSubtype());
+    }
+
+    @Test
+    public void shouldMapSubTypeEnumToCorrectValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setSubtype(BooleanFlag._1);
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setSubtype("private-fund-limited-partnership");
+        expectedProfile.setData(expectedData);
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+        //check the expected vs outcome
+        assertEquals(expectedProfile.getData().getSubtype(),resultProfile.getData().getSubtype());
+    }
+
+    @Test
+    public void shouldNotMapSubTypeEnumToIncorrectValues() throws JsonProcessingException {
+        CompanyDelta companyDelta1 = new CompanyDelta();
+        //set the enum value to test
+        companyDelta1.setSubtype(BooleanFlag._1);
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        //the expected string
+        expectedData.setSubtype("community-interest-company");
+        expectedProfile.setData(expectedData);
+        CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
+        //check the expected vs outcome
+        assertNotEquals(expectedProfile.getData().getSubtype(),resultProfile.getData().getSubtype());
+    }
+
 }

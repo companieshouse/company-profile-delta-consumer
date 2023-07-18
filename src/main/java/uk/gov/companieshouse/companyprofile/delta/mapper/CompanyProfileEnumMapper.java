@@ -1,8 +1,10 @@
 package uk.gov.companieshouse.companyprofile.delta.mapper;
 
 import org.mapstruct.*;
+import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 
@@ -13,58 +15,27 @@ import java.util.HashMap;
 @Mapper(componentModel = "spring")
 public abstract class CompanyProfileEnumMapper {
 
-    @Mapping(target = "hasMortgages", source = "hasMortgages")
-
     public abstract CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta);
-/*
-    public CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta) {
-        CompanyProfile companyProfile = new CompanyProfile();
-        Data data = new Data();
-        companyProfile.setData(data);
-
-        return companyProfile;
-    }
-*/
-
-    @Named("booleanFlagToBoolean")
-    protected BooleanFlag map(BooleanFlag value) {
-        if(value == null) {
-            return null;
-        }
-
-        return value;
-    }
 
     /**maps BooleanFlag to Boolean. */
     public Boolean flagToBoolean(BooleanFlag flag) {
         return flag == null ? null : flag.getValue().equals("1");
     }
 
-    /**maps Boolean flag fields into Boolean fields in target. */
-    @AfterMapping
-    public void mapBooleans(@MappingTarget CompanyProfile target, CompanyDelta source) {
- /*       Data data = target.getData();
-        //data.setHasInsolvencyHistory(flagToBoolean(source.getHasInsolvencyHistory()));
-        data.hasSuperSecurePscs(flagToBoolean(source.getSuperSecurePscInd()));
-        data.isCommunityInterestCompany(flagToBoolean(source.getCicInd()));
-        data.registeredOfficeIsInDispute(flagToBoolean(source.getRegisteredOfficeIsInDispute()));
-        data.undeliverableRegisteredOfficeAddress(flagToBoolean(source.getUndeliverableRegisteredOfficeAddress()));
-        target.setHasMortgages(flagToBoolean(source.getHasMortgages()));
-        target.setData(data);*/
-
-    }
-
     /**Maps enum type to string. */
     @AfterMapping
     public void mapEnums(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        Data data = target.getData();
-        String type = source.getType();
-        //data.setType(MapperUtils.mapType(type));
-        HashMap<String,String> typeMap = MapperUtils.getTypeMap();
+        Data data = target.getData( );
         if(data == null) {
-            data = new Data();
+            data = new Data( ) ;
         }
-        data.setType(typeMap.getOrDefault(type,null));
+        BooleanFlag subTypeFlag = source.getSubtype( );
+        String subType = null;
+        if(subTypeFlag != null){
+            subType = subTypeFlag.getValue();
+        }
+        HashMap<String,String> subTypeMap = MapperUtils.getSubTypeMap( );
+        data.setSubtype(subTypeMap.getOrDefault(subType,null));
         target.setData(data);
     }
 
@@ -72,12 +43,12 @@ public abstract class CompanyProfileEnumMapper {
     @AfterMapping
     public void mapEnumsStatus(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String type = source.getType();
+        String statusType = source.getStatus();
         HashMap<String,String> statusMap = MapperUtils.getStatusMap();
         if(data == null) {
             data = new Data();
         }
-        data.setType(statusMap.getOrDefault(type,null));
+        data.setCompanyStatus(statusMap.getOrDefault(statusType,null));
         target.setData(data);
     }
 
@@ -85,9 +56,9 @@ public abstract class CompanyProfileEnumMapper {
     @AfterMapping
     public void mapEnumsStatusDetail(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String type = source.getType();
+        String statusDetailType = source.getStatus();
         HashMap<String,String> statusDetailMap = MapperUtils.getStatus_detailMap();
-        data.setType(statusDetailMap.get(type));
+        data.setCompanyStatusDetail(statusDetailMap.getOrDefault(statusDetailType,null));
         target.setData(data);
     }
 
@@ -95,10 +66,10 @@ public abstract class CompanyProfileEnumMapper {
     @AfterMapping
     public void mapEnumsProofStatus(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String type = source.getType();
+        String proofStatusType = source.getProofStatus();
 
         HashMap<String,String> proofStatusMap = MapperUtils.getProof_statusMap();
-        data.setType(proofStatusMap.get(type));
+        data.setProofStatus(proofStatusMap.getOrDefault(proofStatusType,null));
         target.setData(data);
 
     }
@@ -107,24 +78,52 @@ public abstract class CompanyProfileEnumMapper {
     @AfterMapping
     public void mapEnumsJurisdiction(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String type = source.getType();
+        String jurisdictionType = source.getJurisdiction();
 
         HashMap<String,String> jurisdictionMap = MapperUtils.getJurisdictionMap();
-        data.setType(jurisdictionMap.get(type));
+
+        data.setJurisdiction(jurisdictionMap.getOrDefault(jurisdictionType,null));
         target.setData(data);
     }
+
+
 
     /**Maps enum account_type to string. */
     @AfterMapping
     public void mapEnumsAccountType(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String type = source.getType();
-
+        String accountType = source.getType();
+        //data.setType(MapperUtils.mapType(type));
         HashMap<String,String> accountTypeMap = MapperUtils.getAccountTypeMap();
-        data.setType(accountTypeMap.get(type));
+        if(data == null) {
+            data = new Data();
+        }
+        data.setType(accountTypeMap.getOrDefault(accountType,null));
         target.setData(data);
 
     }
 
+
+/**Maps enum account_type to string. *//*
+
+    @AfterMapping
+    public void mapEnumsAccountType(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        String accountType = source.getAccountType();
+        Accounts accounts = data.getAccounts();
+        LastAccounts lastAccounts = accounts.getLastAccounts();
+
+        HashMap<String,String> accountTypeMap = MapperUtils.getAccountTypeMap();
+
+        lastAccounts.setType(accountTypeMap.getOrDefault(accountType,null));
+        accounts.setLastAccounts(lastAccounts);
+        data.setAccounts(accounts);
+
+        target.setData(data);
+
+    }
+
+*/
 
 }
