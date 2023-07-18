@@ -9,6 +9,7 @@ import uk.gov.companieshouse.api.company.AccountingReferenceDate;
 import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.company.Links;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
@@ -206,6 +207,17 @@ public abstract class CompanyProfileMapper {
                 }).collect(Collectors.toList());
         Data data = target.getData();
         data.setPreviousCompanyNames(targetNames);
+        target.setData(data);
+    }
+
+    /** add self link for Company Profile. */
+    @AfterMapping
+    public void setSelfLink(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        data.setCompanyNumber(source.getCompanyNumber());
+        Links links = new Links();
+        links.setSelf(String.format("/company/%s",data.getCompanyNumber()));
+        data.setLinks(links);
         target.setData(data);
     }
     

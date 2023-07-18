@@ -1,0 +1,120 @@
+{
+    "accounts" : {
+        "accounting_reference_date" : {
+            "day" : "31",
+            "month" : "12"
+        },
+        "last_accounts" : {
+            "made_up_to" : [ 2014, 12, 31 ],
+            "period_end_on" : [ 2014, 12, 31 ],
+            "period_start_on" : [ 2014, 1, 1 ],
+            "type" : "4"
+        },
+        "next_accounts" : {
+            "due_on" : [ 2016, 6, 30 ],
+            "overdue" : null,
+            "period_end_on" : [ 2015, 12, 31 ],
+            "period_start_on" : [ 2015, 1, 1 ]
+        },
+        "next_due" : [ 2016, 6, 30 ],
+        "next_made_up_to" : [ 2015, 12, 31 ],
+        "overdue" : null
+    },
+    "annual_return" : {
+        "last_made_up_to" : [ 2015, 5, 23 ],
+        "next_due" : [ 2015, 5, 23 ],
+        "next_made_up_to" : [ 2015, 5, 23 ],
+        "overdue" : null
+    },
+    "branch_company_details" : null,
+    "can_file" : null,
+    "company_name" : "BUNZL PUBLIC LIMITED COMPANY",
+    "company_number" : "00358948",
+    "company_status" : "0",
+    "status" : null,
+    "company_status_detail" : "0",
+    "confirmation_statement" : {
+        "last_made_up_to" : [ 2016, 6, 6 ],
+        "next_due" : [ 2016, 6, 6 ],
+        "next_made_up_to" : [ 2016, 5, 23 ],
+        "overdue" : null
+    },
+    "date_of_cessation" : [ 2019, 1, 1 ],
+    "date_of_creation" : [ 1940, 1, 22 ],
+    "date_of_dissolution" : [ 2019, 1, 1 ],
+    "etag" : null,
+    "external_registration_number" : "12345",
+    "foreign_company_details" : {
+        "accounting_requirement" : {
+            "foreign_account_type" : "1",
+            "terms_of_account_publication" : null
+        },
+        "accounts" : null,
+        "business_activity" : "testBusinessActivity",
+        "company_type" : "1",
+        "governed_by" : "something",
+        "is_a_credit_financial_institution" : true,
+        "originating_registry" : {
+            "country" : "country",
+            "name" : "name"
+        },
+        "registration_number" : "12345",
+        "legal_form" : "1"
+    },
+    "has_been_liquidated" : null,
+    "has_charges" : null,
+    "has_insolvency_history" : false,
+    "is_community_interest_company" : false,
+    "jurisdiction" : "1",
+    "last_full_members_list_date" : [ 2014, 5, 23 ],
+    "links" : null,
+    "previous_company_names" : [ {
+        "ceased_on" : [ 1982, 2, 9 ],
+        "effective_from" : [ 1940, 1, 22 ],
+        "name" : "BUNZL PULP & PAPER LIMITED"
+    } ],
+    "links": {
+        "filing_history": null,
+        "officers": null,
+        "persons_with_significant_control": null,
+        "self": "/company/00358948",
+        "insolvency" : null
+    },
+    "registered_office_address" : {
+        "address_line_1" : "1 North Road",
+        "address_line_2" : "line2",
+        "care_of" : "careOf",
+        "country" : "Wales",
+        "locality" : "Cardiff",
+        "po_box" : "12121",
+        "postal_code" : "CF14 3UA",
+        "premises" : null,
+        "premise" : null,
+        "region" : "region",
+        "care_of_name" : "careOf",
+        "test_data" : null
+    },
+    "registered_office_is_in_dispute" : false,
+    "service_address" : {
+        "address_line_1" : "1 South Road",
+        "address_line_2" : "secondLine",
+        "care_of" : "name",
+        "country" : "Wales",
+        "locality" : "Swansea",
+        "po_box" : "21212",
+        "postal_code" : "CF15 3UB",
+        "premises" : null,
+        "premise" : null,
+        "region" : "region",
+        "care_of_name" : "name",
+        "test_data" : null
+    },
+    "sic_codes" : [ "70100" ],
+    "subtype" : "_0",
+    "type" : "3",
+    "undeliverable_registered_office_address" : false,
+    "has_super_secure_pscs" : null,
+    "proof_status" : "0",
+    "officer_summary" : null,
+    "partial_data_available" : null
+}
