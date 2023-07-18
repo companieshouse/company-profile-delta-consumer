@@ -362,6 +362,7 @@ public class CompanyProfileEnumMapperTest {
         CompanyProfile resultProfile = companyProfileEnumMapper.companyDeltaToCompanyProfile(companyDelta1);
         //check the expected vs outcome
         assertNotEquals(expectedProfile.getData().getSubtype(),resultProfile.getData().getSubtype());
+
     }
 
 }

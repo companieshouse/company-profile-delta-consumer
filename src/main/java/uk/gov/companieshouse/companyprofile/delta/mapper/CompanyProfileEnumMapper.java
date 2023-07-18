@@ -27,7 +27,7 @@ public abstract class CompanyProfileEnumMapper {
     public void mapEnums(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData( );
         if(data == null) {
-            data = new Data( ) ;
+            data = new Data() ;
         }
         BooleanFlag subTypeFlag = source.getSubtype( );
         String subType = null;
@@ -103,27 +103,5 @@ public abstract class CompanyProfileEnumMapper {
 
     }
 
-
-/**Maps enum account_type to string. *//*
-
-    @AfterMapping
-    public void mapEnumsAccountType(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        Data data = target.getData();
-
-        String accountType = source.getAccountType();
-        Accounts accounts = data.getAccounts();
-        LastAccounts lastAccounts = accounts.getLastAccounts();
-
-        HashMap<String,String> accountTypeMap = MapperUtils.getAccountTypeMap();
-
-        lastAccounts.setType(accountTypeMap.getOrDefault(accountType,null));
-        accounts.setLastAccounts(lastAccounts);
-        data.setAccounts(accounts);
-
-        target.setData(data);
-
-    }
-
-*/
 
 }

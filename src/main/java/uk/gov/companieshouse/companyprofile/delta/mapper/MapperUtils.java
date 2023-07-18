@@ -45,6 +45,7 @@ public class MapperUtils {
     /**Create a hashmap for status_detail.*/
     public static HashMap<String, String> getStatus_detailMap() {
         HashMap<String,String> statusDetailMap = new HashMap<>();
+
         statusDetailMap.put("5","transferred-from-uk");
         statusDetailMap.put("Q","active-proposal-to-strike-off");
         statusDetailMap.put("R","petition-to-restore-dissolved");
@@ -52,6 +53,7 @@ public class MapperUtils {
         statusDetailMap.put("Z","converted-to-plc");
         statusDetailMap.put("AA","converted-to-uk-societas");
         statusDetailMap.put("AB","converted-to-ukeig");
+
         return statusDetailMap;
 
     }
