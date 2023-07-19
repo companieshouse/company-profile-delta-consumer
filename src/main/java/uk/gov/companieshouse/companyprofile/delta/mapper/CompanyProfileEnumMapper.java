@@ -43,12 +43,12 @@ public abstract class CompanyProfileEnumMapper {
     @AfterMapping
     public void mapEnumsStatus(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String statusType = source.getStatus();
+        String status = source.getStatus();
         HashMap<String,String> statusMap = MapperUtils.getStatusMap();
         if(data == null) {
             data = new Data();
         }
-        data.setCompanyStatus(statusMap.getOrDefault(statusType,null));
+        data.setCompanyStatus(statusMap.getOrDefault(status,null));
         target.setData(data);
     }
 
@@ -56,9 +56,9 @@ public abstract class CompanyProfileEnumMapper {
     @AfterMapping
     public void mapEnumsStatusDetail(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String statusDetailType = source.getStatus();
+        String statusDetail = source.getStatus();
         HashMap<String,String> statusDetailMap = MapperUtils.getStatus_detailMap();
-        data.setCompanyStatusDetail(statusDetailMap.getOrDefault(statusDetailType,null));
+        data.setCompanyStatusDetail(statusDetailMap.getOrDefault(statusDetail,null));
         target.setData(data);
     }
 
@@ -66,10 +66,10 @@ public abstract class CompanyProfileEnumMapper {
     @AfterMapping
     public void mapEnumsProofStatus(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String proofStatusType = source.getProofStatus();
+        String proofStatus = source.getProofStatus();
 
         HashMap<String,String> proofStatusMap = MapperUtils.getProof_statusMap();
-        data.setProofStatus(proofStatusMap.getOrDefault(proofStatusType,null));
+        data.setProofStatus(proofStatusMap.getOrDefault(proofStatus,null));
         target.setData(data);
 
     }
@@ -78,11 +78,11 @@ public abstract class CompanyProfileEnumMapper {
     @AfterMapping
     public void mapEnumsJurisdiction(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String jurisdictionType = source.getJurisdiction();
+        String jurisdiction = source.getJurisdiction();
 
         HashMap<String,String> jurisdictionMap = MapperUtils.getJurisdictionMap();
 
-        data.setJurisdiction(jurisdictionMap.getOrDefault(jurisdictionType,null));
+        data.setJurisdiction(jurisdictionMap.getOrDefault(jurisdiction,null));
         target.setData(data);
     }
 
@@ -92,13 +92,13 @@ public abstract class CompanyProfileEnumMapper {
     @AfterMapping
     public void mapEnumsAccountType(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        String accountType = source.getType();
+        String account = source.getType();
         //data.setType(MapperUtils.mapType(type));
         HashMap<String,String> accountTypeMap = MapperUtils.getAccountTypeMap();
         if(data == null) {
             data = new Data();
         }
-        data.setType(accountTypeMap.getOrDefault(accountType,null));
+        data.setType(accountTypeMap.getOrDefault(account,null));
         target.setData(data);
 
     }
