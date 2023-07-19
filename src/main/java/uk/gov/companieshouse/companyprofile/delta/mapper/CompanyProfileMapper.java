@@ -5,7 +5,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import org.mapstruct.MappingTarget;
-import uk.gov.companieshouse.api.company.*;
+import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.AccountingReferenceDate;
+import uk.gov.companieshouse.api.company.PreviousCompanyNames;
+import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.api.delta.ForeignCompanyRequiredToPublish;
@@ -229,16 +234,16 @@ public abstract class CompanyProfileMapper {
     /**Maps enum type to string. */
     @AfterMapping
     public void mapEnums(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        Data data = target.getData( );
-        if(data == null) {
+        Data data = target.getData();
+        if (data == null) {
             data = new Data() ;
         }
-        BooleanFlag subTypeFlag = source.getSubtype( );
+        BooleanFlag subTypeFlag = source.getSubtype();
         String subType = null;
-        if(subTypeFlag != null){
+        if (subTypeFlag != null) {
             subType = subTypeFlag.getValue();
         }
-        HashMap<String,String> subTypeMap = MapperUtils.getSubTypeMap( );
+        HashMap<String,String> subTypeMap = MapperUtils.getSubTypeMap();
         data.setSubtype(subTypeMap.getOrDefault(subType,null));
         target.setData(data);
     }
@@ -249,7 +254,7 @@ public abstract class CompanyProfileMapper {
         Data data = target.getData();
         String statusType = source.getStatus();
         HashMap<String,String> statusMap = MapperUtils.getStatusMap();
-        if(data == null) {
+        if (data == null) {
             data = new Data();
         }
         data.setCompanyStatus(statusMap.getOrDefault(statusType,null));
@@ -289,26 +294,6 @@ public abstract class CompanyProfileMapper {
         data.setJurisdiction(jurisdictionMap.getOrDefault(jurisdictionType,null));
         target.setData(data);
     }
-
-
-
-    /**Maps enum account_type to string. */
-/*
-    @AfterMapping
-    public void mapEnumsAccountType(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        Data data = target.getData();
-        String accountType = source.getType();
-        //data.setType(MapperUtils.mapType(type));
-        HashMap<String,String> accountTypeMap = MapperUtils.getAccountTypeMap();
-        if(data == null) {
-            data = new Data();
-        }
-        data.setType(accountTypeMap.getOrDefault(accountType,null));
-        target.setData(data);
-
-    }
-
-*/
 
 
 
