@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
 import uk.gov.companieshouse.api.company.AccountingReferenceDate;
 import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
