@@ -5,11 +5,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import org.mapstruct.MappingTarget;
-import uk.gov.companieshouse.api.company.AccountingReferenceDate;
-import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.AccountingReferenceDate;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
+import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.api.delta.ForeignCompanyRequiredToPublish;
@@ -18,6 +19,7 @@ import uk.gov.companieshouse.api.delta.ForeignCompany;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -208,5 +210,91 @@ public abstract class CompanyProfileMapper {
         data.setPreviousCompanyNames(targetNames);
         target.setData(data);
     }
-    
+
+
+    /**Maps enum account_type to string. */
+    @AfterMapping
+    public void mapEnumsAccountType(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        Accounts accounts = data.getAccounts();
+        LastAccounts lastAccounts = accounts.getLastAccounts();
+
+        String accountType = source.getAccountType();
+        HashMap<String,String> accountTypeMap = MapperUtils.getAccountTypeMap();
+
+        lastAccounts.setType(accountTypeMap.getOrDefault(accountType,null));
+        accounts.setLastAccounts(lastAccounts);
+        data.setAccounts(accounts);
+
+        target.setData(data);
+
+    }
+
+    /**Maps enum type to string. */
+    @AfterMapping
+    public void mapEnums(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (data == null) {
+            data = new Data() ;
+        }
+        BooleanFlag subTypeFlag = source.getSubtype();
+        String subType = null;
+        if (subTypeFlag != null) {
+            subType = subTypeFlag.getValue();
+        }
+        HashMap<String,String> subTypeMap = MapperUtils.getSubTypeMap();
+        data.setSubtype(subTypeMap.getOrDefault(subType,null));
+        target.setData(data);
+    }
+
+    /** Maps enum status to string. */
+    @AfterMapping
+    public void mapEnumsStatus(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        String statusType = source.getStatus();
+        HashMap<String,String> statusMap = MapperUtils.getStatusMap();
+        if (data == null) {
+            data = new Data();
+        }
+        data.setCompanyStatus(statusMap.getOrDefault(statusType,null));
+        target.setData(data);
+    }
+
+    /**Maps enum status_detail to string. */
+    @AfterMapping
+    public void mapEnumsStatusDetail(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        String statusDetailType = source.getStatus();
+        HashMap<String,String> statusDetailMap = MapperUtils.getStatus_detailMap();
+        data.setCompanyStatusDetail(statusDetailMap.getOrDefault(statusDetailType,null));
+        target.setData(data);
+    }
+
+    /**Maps enum proof_status to string. */
+    @AfterMapping
+    public void mapEnumsProofStatus(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        String proofStatusType = source.getProofStatus();
+
+        HashMap<String,String> proofStatusMap = MapperUtils.getProof_statusMap();
+        data.setProofStatus(proofStatusMap.getOrDefault(proofStatusType,null));
+        target.setData(data);
+
+    }
+
+    /**Maps enum jurisdiction to string. */
+    @AfterMapping
+    public void mapEnumsJurisdiction(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        String jurisdictionType = source.getJurisdiction();
+
+        HashMap<String,String> jurisdictionMap = MapperUtils.getJurisdictionMap();
+
+        data.setJurisdiction(jurisdictionMap.getOrDefault(jurisdictionType,null));
+        target.setData(data);
+    }
+
+
+
 }
