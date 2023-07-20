@@ -85,5 +85,6 @@ public class CompanyProfileDeltaProcessor {
                     "Error when extracting company profile delete delta", ex);
         }
         apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyDeleteDelta.getCompanyNumber());
+        logger.info("Sending DELETE request to company-profile-api");
     }
 }
