@@ -8,6 +8,7 @@ import org.mapstruct.MappingTarget;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.Links;
 import uk.gov.companieshouse.api.company.AccountingReferenceDate;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.company.LastAccounts;

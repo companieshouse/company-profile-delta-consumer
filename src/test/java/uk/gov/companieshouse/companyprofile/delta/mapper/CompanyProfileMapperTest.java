@@ -57,7 +57,7 @@ public class CompanyProfileMapperTest {
 
         companyDelta = mapper.readValue(input, CompanyDelta.class);
 
-        String expectedOutputPath = "company-profile-expected-output.json";
+        String expectedOutputPath = "company-profile-selflink-expected-output.json";
         String expectedOutputDataString = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(expectedOutputPath)));
         expectedOutputData = mapper.readValue(expectedOutputDataString, Data.class);
 
