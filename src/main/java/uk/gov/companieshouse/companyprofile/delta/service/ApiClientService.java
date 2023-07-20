@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import uk.gov.companieshouse.api.InternalApiClient;
+import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.handler.delta.companyprofile.request.CompanyProfileDelete;
+import uk.gov.companieshouse.api.handler.delta.companyprofile.request.CompanyProfilePut;
 import uk.gov.companieshouse.api.http.ApiKeyHttpClient;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.logging.Logger;
@@ -71,6 +73,21 @@ public class ApiClientService {
                                                  "deleteCompanyProfile", 
                                                  uri, 
                                                  deleteExecuteOp);
+    }
+
+    public ApiResponse<Void> invokeCompanyProfilePutHandler(String context, String companyNumber,
+                                                            CompanyProfile profile) {
+        final String uri = String.format("/company/%s", companyNumber);
+        CompanyProfilePut putExecuteOp = getApiClient(context)
+                .privateDeltaResourceHandler()
+                .putCompanyProfile(uri, profile);
+
+        Map<String, Object> logMap = createLogMap(companyNumber, "PUT", uri);
+        logger.infoContext(context, String.format("PUT: %s", uri), logMap);
+
+        ResponseHandler<CompanyProfilePut> responseHandler =
+                (ResponseHandler<CompanyProfilePut>) responseHandlerFactory.createResponseHandler(putExecuteOp);
+        return responseHandler.handleApiResponse(logger, context, "putCompanyProfile", uri, putExecuteOp);
     }
 
     // logMaps set to final

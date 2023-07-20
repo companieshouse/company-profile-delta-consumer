@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.companyprofile.config;
+package uk.gov.companieshouse.companyprofile.delta.config;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;

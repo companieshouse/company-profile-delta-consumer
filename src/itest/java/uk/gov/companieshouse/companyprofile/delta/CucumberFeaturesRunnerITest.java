@@ -1,10 +1,10 @@
-package uk.gov.companieshouse.companyprofile;
+package uk.gov.companieshouse.companyprofile.delta;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import io.cucumber.spring.CucumberContextConfiguration;
 import org.junit.runner.RunWith;
-import uk.gov.companieshouse.companyprofile.config.AbstractIntegrationTest;
+import uk.gov.companieshouse.companyprofile.delta.config.AbstractIntegrationTest;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "src/itest/resources/features",
