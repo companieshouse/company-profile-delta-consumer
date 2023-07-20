@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.companyprofile.data;
+package uk.gov.companieshouse.companyprofile.delta.data;
 
 import org.springframework.util.FileCopyUtils;
 
@@ -15,6 +15,11 @@ public class TestData {
 
     public static String getDeleteData() {
         String path = "src/itest/resources/json/input/company_profile_delete.json";
+        return readFile(path);
+    }
+
+    public static String getOutputData() {
+        String path = "src/itest/resources/json/output/company-profile-expected-output.json";
         return readFile(path);
     }
 

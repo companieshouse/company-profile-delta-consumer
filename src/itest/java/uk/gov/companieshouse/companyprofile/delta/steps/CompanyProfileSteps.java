@@ -1,5 +1,6 @@
-package uk.gov.companieshouse.companyprofile.steps;
+package uk.gov.companieshouse.companyprofile.delta.steps;
 
+import consumer.matcher.RequestMatcher;
 import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -13,25 +14,19 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.delete;
-import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.put;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
-import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 
-import uk.gov.companieshouse.companyprofile.data.TestData;
+import uk.gov.companieshouse.companyprofile.delta.data.TestData;
 import uk.gov.companieshouse.delta.ChsDelta;
 import uk.gov.companieshouse.logging.Logger;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.StreamSupport;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.companieshouse.companyprofile.delta.data.TestData.getOutputData;
 
 public class CompanyProfileSteps {
 
@@ -120,6 +115,16 @@ public class CompanyProfileSteps {
         countDown();
     }
 
+    @When("the consumer receives a message but the api returns a (\\d*)$")
+    public void theConsumerReceivesMessageButDataApiReturns(int responseCode) throws Exception{
+        configureWireMock();
+        stubPutStatement(responseCode);
+        ChsDelta delta = new ChsDelta(TestData.getCompanyDelta(), 1, "1", false);
+        kafkaTemplate.send(topic, delta);
+
+        countDown();
+    }
+
     @Then("^the message should be moved to topic (.*)$")
     public void theMessageShouldBeMovedToTopic(String topic) {
         ConsumerRecord<String, Object> singleRecord = KafkaTestUtils.getSingleRecord(kafkaConsumer, topic);
@@ -144,6 +149,14 @@ public class CompanyProfileSteps {
     public void deleteRequestIsSent() {
         verify(1, deleteRequestedFor(urlMatching(
                 "/company/00358948")));
+    }
+
+    @Then("a PUT request is sent to the company profile api with the transformed data")
+    public void aPutRequestIsSent() {
+        output = getOutputData();
+        verify(1, requestMadeFor(new RequestMatcher(logger, output,
+                "/company/00358948",
+                List.of("data.etag", "deltaAt"))));
     }
 
     @After

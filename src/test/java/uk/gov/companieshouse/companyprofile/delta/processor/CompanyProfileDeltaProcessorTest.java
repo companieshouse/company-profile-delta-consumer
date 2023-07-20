@@ -11,6 +11,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.Message;
 
+import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.companyprofile.delta.processor.CompanyProfileDeltaProcessor;
 import uk.gov.companieshouse.companyprofile.delta.service.ApiClientService;
 import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileApiTransformer;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class CompanyProfileDeltaProcessorTest {
@@ -52,6 +55,7 @@ public class CompanyProfileDeltaProcessorTest {
     @DisplayName("Confirms the Processor does not throw when a valid ChsDelta is given")
     void When_ValidChsDeltaMessage_Expect_ProcessorDoesNotThrow() throws IOException {
         Message<ChsDelta> mockChsDeltaMessage = testHelper.createChsDeltaMessage(false);
+        when(transformer.transform(any(CompanyDelta.class))).thenReturn(new CompanyProfile());
         Assertions.assertDoesNotThrow(() -> processor.processDelta(mockChsDeltaMessage));
     }
 

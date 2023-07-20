@@ -57,6 +57,11 @@ public class CompanyProfileDeltaProcessor {
                     .writeValueAsString(companyProfile);
             logger.info(format("Transformed delta to company profile %s",
                     profileJsonString));
+            // end of Hack
+            companyProfile.setDeltaAt(companyDelta.getDeltaAt());
+            apiClientService.invokeCompanyProfilePutHandler(contextId,
+                    companyDelta.getCompanyNumber(), companyProfile);
+
         } catch (Exception ex) {
             throw new NonRetryableErrorException(
                     "Error when extracting company profile delta", ex);

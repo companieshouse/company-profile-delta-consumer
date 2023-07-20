@@ -14,14 +14,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
-import uk.gov.companieshouse.api.company.AccountingReferenceDate;
+import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.delta.*;
-import uk.gov.companieshouse.api.psc.Statement;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
