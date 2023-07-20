@@ -6,12 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-import uk.gov.companieshouse.api.delta.PscStatement;
-import uk.gov.companieshouse.api.psc.CompanyPscStatement;
-import uk.gov.companieshouse.api.psc.Statement;
 import uk.gov.companieshouse.companyprofile.delta.mapper.CompanyProfileMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,8 +36,6 @@ public class CompanyProfileApiTransformerTest {
         CompanyProfile mockProfile = mock(CompanyProfile.class);
         when(mapper.companyDeltaToCompanyProfile(companyDelta)).thenReturn(mockProfile);
         CompanyProfile actualCompanyProfile = transformer.transform(companyDelta);
-
-        CompanyProfile expectedProfile = new CompanyProfile();
 
         assertEquals(mockProfile, actualCompanyProfile);
     }

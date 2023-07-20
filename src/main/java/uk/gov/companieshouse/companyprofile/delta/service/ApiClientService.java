@@ -75,6 +75,9 @@ public class ApiClientService {
                                                  deleteExecuteOp);
     }
 
+    /**
+     * Invokes put handler for company profile.
+     */
     public ApiResponse<Void> invokeCompanyProfilePutHandler(String context, String companyNumber,
                                                             CompanyProfile profile) {
         final String uri = String.format("/company/%s", companyNumber);

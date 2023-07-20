@@ -15,12 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
 import uk.gov.companieshouse.api.company.*;
-import uk.gov.companieshouse.api.delta.AccountingDates;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-import uk.gov.companieshouse.api.delta.ConfirmationStatementDates;
-import uk.gov.companieshouse.api.delta.PscStatement;
-import uk.gov.companieshouse.api.delta.PscStatementDelta;
-import uk.gov.companieshouse.api.psc.Statement;
 
 import java.io.InputStreamReader;
 import java.time.LocalDate;
