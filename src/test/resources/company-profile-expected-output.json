@@ -73,6 +73,13 @@
         "effective_from" : [ 1940, 1, 22 ],
         "name" : "BUNZL PULP & PAPER LIMITED"
     } ],
+    "links": {
+        "filing_history": null,
+        "officers": null,
+        "persons_with_significant_control": null,
+        "self": "/company/00358948",
+        "insolvency" : null
+    },
     "registered_office_address" : {
         "address_line_1" : "1 North Road",
         "address_line_2" : "line2",

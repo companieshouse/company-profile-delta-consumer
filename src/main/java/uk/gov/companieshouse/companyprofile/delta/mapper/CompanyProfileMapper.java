@@ -8,6 +8,7 @@ import org.mapstruct.MappingTarget;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.Links;
 import uk.gov.companieshouse.api.company.AccountingReferenceDate;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.company.LastAccounts;
@@ -295,6 +296,15 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
-
+    /** add self link for Company Profile. */
+    @AfterMapping
+    public void setSelfLink(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        data.setCompanyNumber(source.getCompanyNumber());
+        Links links = new Links();
+        links.setSelf(String.format("/company/%s",data.getCompanyNumber()));
+        data.setLinks(links);
+        target.setData(data);
+    }
 
 }
