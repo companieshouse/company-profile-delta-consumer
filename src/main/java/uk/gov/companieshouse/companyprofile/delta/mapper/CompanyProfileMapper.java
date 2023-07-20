@@ -295,6 +295,15 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
-
+    /** add self link for Company Profile. */
+    @AfterMapping
+    public void setSelfLink(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        data.setCompanyNumber(source.getCompanyNumber());
+        Links links = new Links();
+        links.setSelf(String.format("/company/%s",data.getCompanyNumber()));
+        data.setLinks(links);
+        target.setData(data);
+    }
 
 }
