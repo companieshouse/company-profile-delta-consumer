@@ -14,15 +14,12 @@ import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-import uk.gov.companieshouse.api.delta.ForeignCompanyRequiredToPublish;
-import uk.gov.companieshouse.api.delta.ForeignCompany;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -56,7 +53,10 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.annualReturn.nextMadeUpTo",
             source = "annualReturnDates.nextMadeUpTo", dateFormat = "yyyyMMdd")
 
-    //branch company details to be added with DSND-1855
+    @Mapping(target = "data.branchCompanyDetails.parentCompanyName", 
+            source = "parentCompanyName")
+    @Mapping(target = "data.branchCompanyDetails.parentCompanyNumber",
+            source = "parentCompanyNumber")
 
     @Mapping(target = "data.companyName", source = "companyName")
     @Mapping(target = "data.companyNumber", source = "companyNumber")
@@ -133,8 +133,10 @@ public abstract class CompanyProfileMapper {
 
     @Mapping(target = "data.subtype", source = "subtype")
     @Mapping(target = "data.type", source = "type")
+    @Mapping(target = "data.superSecureManagingOfficerCount", source = "superSecureManagingOfficerCount")
     @Mapping(target = "data.undeliverableRegisteredOfficeAddress", source = "undeliverableRegisteredOfficeAddress")
     @Mapping(target = "hasMortgages", source = "hasMortgages")
+    @Mapping(target = "parentCompanyNumber", source = "parentCompanyNumber")
 
     
     public abstract CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta);

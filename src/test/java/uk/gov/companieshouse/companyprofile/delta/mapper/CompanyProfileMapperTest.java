@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
@@ -19,20 +18,9 @@ import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.Data;
-import uk.gov.companieshouse.api.company.PreviousCompanyNames;
-import uk.gov.companieshouse.api.delta.*;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.when;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = { CompanyProfileMapperImpl.class})
