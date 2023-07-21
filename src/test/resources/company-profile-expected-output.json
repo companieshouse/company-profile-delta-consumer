@@ -26,7 +26,10 @@
         "next_made_up_to" : [ 2015, 5, 23 ],
         "overdue" : null
     },
-    "branch_company_details" : null,
+    "branch_company_details" : {
+        "parent_company_name": "something",
+        "parent_company_number": "1234543"
+    },
     "can_file" : null,
     "company_name" : "BUNZL PUBLIC LIMITED COMPANY",
     "company_number" : "00358948",
@@ -109,5 +112,6 @@
     "has_super_secure_pscs" : null,
     "proof_status" : "paper",
     "officer_summary" : null,
-    "partial_data_available" : null
+    "partial_data_available" : null,
+    "super_secure_managing_officer_count": "0"
 }

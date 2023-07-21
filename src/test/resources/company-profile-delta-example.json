@@ -40,6 +40,7 @@
   "proof_status": "1",
   "cic_ind": "0",
   "subtype": "0",
+  "super_secure_managing_officer_count": "0",
   "confirmation_statement_dates": {
     "latest_made_up_to": "20160606",
     "next_due": "20160606",
@@ -81,5 +82,7 @@
     }
   ],
   "CreatedTime": "12-JUN-19 18.20.02.000000",
-  "delta_at": "20190612181928152002"
+  "delta_at": "20190612181928152002",
+  "parent_company_number": "1234543",
+  "parent_company_name": "something"
 }
