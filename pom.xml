@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <main.class>uk.gov.companieshouse.companyprofile.CompanyProfileDeltaConsumerApplication</main.class>
+        <main.class>uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication</main.class>
         <map-struct.version>1.4.2.Final</map-struct.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-build-helper-plugin.version>3.2.0</maven-build-helper-plugin.version>
@@ -42,7 +42,7 @@
         <!--sonar configuration-->
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-        <sonar.projectKey>uk.gov.companieshouse:psc-statement-delta-consumer</sonar.projectKey>
+        <sonar.projectKey>uk.gov.companieshouse:company-profile-delta-consumer</sonar.projectKey>
         <sonar.sources>src/main</sonar.sources>
         <sonar.tests>src/test</sonar.tests>
         <sonar.verbose>true</sonar.verbose>

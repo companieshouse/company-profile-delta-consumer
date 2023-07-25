@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.companyprofile.utils;
+package uk.gov.companieshouse.companyprofile.delta.utils;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;

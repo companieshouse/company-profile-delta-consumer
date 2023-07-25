@@ -1,4 +1,4 @@
-package uk.gov.companieshouse.companyprofile.consumer;
+package uk.gov.companieshouse.companyprofile.delta.consumer;
 
 import consumer.exception.NonRetryableErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.companyprofile.processor.CompanyProfileDeltaProcessor;
+
+import uk.gov.companieshouse.companyprofile.delta.processor.CompanyProfileDeltaProcessor;
 import uk.gov.companieshouse.delta.ChsDelta;
 
 @Component
