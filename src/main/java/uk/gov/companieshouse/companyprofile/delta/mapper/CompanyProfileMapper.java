@@ -214,6 +214,19 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
+    /**Map isComunnityInterestCompany to string. */
+    @AfterMapping
+    public void mapCicInd(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        BooleanFlag cicIndFlag = source.getCicInd();
+        String cicIndType = null;
+        if (cicIndFlag != null) {
+            cicIndType = cicIndFlag.getValue();
+        }
+        HashMap<String, Boolean> cicIndMap = MapperUtils.getIsCommunityInterestCompanyMap();
+        data.setIsCommunityInterestCompany(cicIndMap.getOrDefault(cicIndType, null));
+        target.setData(data);
+    }
 
     /**Maps enum account_type to string. */
     @AfterMapping
@@ -231,20 +244,7 @@ public abstract class CompanyProfileMapper {
         data.setAccounts(accounts);
 
         target.setData(data);
-    }
 
-    /**Map isComunnityInterestCompany to string. */
-    @AfterMapping
-    public void mapCicInd(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        Data data = target.getData();
-        BooleanFlag cicIndFlag = source.getCicInd();
-        String cicIndType = null;
-        if (cicIndFlag != null) {
-            cicIndType = cicIndFlag.getValue();
-        }
-        HashMap<String, Boolean> cicIndMap = MapperUtils.getIsCommunityInterestCompanyMap();
-        data.setIsCommunityInterestCompany(cicIndMap.getOrDefault(cicIndType,null));
-        target.setData(data);
     }
 
     /**Maps enum type to string. */

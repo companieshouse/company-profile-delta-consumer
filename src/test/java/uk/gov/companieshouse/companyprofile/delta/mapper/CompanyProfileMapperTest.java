@@ -156,7 +156,6 @@ public class CompanyProfileMapperTest {
                 resultProfile.getData().getIsCommunityInterestCompany());
     }
 
-
     @Test
     public void shouldMapSubTypeEnumToCorrectValues() throws JsonProcessingException {
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
