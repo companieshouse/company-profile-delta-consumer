@@ -57,6 +57,8 @@ public abstract class CompanyProfileMapper {
             source = "parentCompanyName")
     @Mapping(target = "data.branchCompanyDetails.parentCompanyNumber",
             source = "parentCompanyNumber")
+    @Mapping(target = "data.branchCompanyDetails.businessActivity", 
+            source = "businessActivity")
 
     @Mapping(target = "data.companyName", source = "companyName")
     @Mapping(target = "data.companyNumber", source = "companyNumber")
