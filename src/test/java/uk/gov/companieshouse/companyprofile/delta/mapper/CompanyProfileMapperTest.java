@@ -122,6 +122,41 @@ public class CompanyProfileMapperTest {
                 resultProfile.getData().getAccounts().getLastAccounts().getType());
     }
 
+
+    @Test
+    public void shouldMapCicIndEnumToCorrectValues() throws IOException {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        //Expected field
+        expectedData.setIsCommunityInterestCompany(true);
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getIsCommunityInterestCompany(),
+                resultProfile.getData().getIsCommunityInterestCompany());
+    }
+
+    @Test
+    public void shouldMapCicIndEnumToFalseValues() throws IOException {
+        setUpforNull();
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        //Expected field
+        expectedData.setIsCommunityInterestCompany(false);
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getIsCommunityInterestCompany(),
+                resultProfile.getData().getIsCommunityInterestCompany());
+    }
+
+
     @Test
     public void shouldMapSubTypeEnumToCorrectValues() throws JsonProcessingException {
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
@@ -130,7 +165,7 @@ public class CompanyProfileMapperTest {
         Data expectedData = new Data();
 
         //Expected field
-        expectedData.setSubtype("community-interest-company");
+        expectedData.setSubtype("private-fund-limited-partnership");
         expectedProfile.setData(expectedData);
 
         //compare values
