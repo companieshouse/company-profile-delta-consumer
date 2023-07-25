@@ -67,7 +67,7 @@
     "has_been_liquidated" : null,
     "has_charges" : null,
     "has_insolvency_history" : false,
-    "is_community_interest_company" : true,
+    "is_community_interest_company" : false,
     "jurisdiction" : "england-wales",
     "last_full_members_list_date" : [ 2014, 5, 23 ],
     "links" : null,
@@ -113,7 +113,7 @@
         "test_data" : null
     },
     "sic_codes" : [ "70100" ],
-    "subtype" : "private-fund-limited-partnership",
+    "subtype" : "community-interest-company",
     "type" : "1",
     "undeliverable_registered_office_address" : false,
     "has_super_secure_pscs" : null,

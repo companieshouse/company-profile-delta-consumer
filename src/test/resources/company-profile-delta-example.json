@@ -38,8 +38,9 @@
   "external_registration_number": "12345",
   "jurisdiction": "1",
   "proof_status": "1",
-  "cic_ind": "1",
-  "subtype": "2",
+  "cic_ind": "0",
+  "subtype": "0",
+  "super_secure_managing_officer_count": "0",
   "confirmation_statement_dates": {
     "latest_made_up_to": "20160606",
     "next_due": "20160606",
