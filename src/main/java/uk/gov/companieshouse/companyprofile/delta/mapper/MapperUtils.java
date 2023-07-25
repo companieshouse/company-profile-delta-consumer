@@ -6,11 +6,20 @@ import java.util.HashMap;
 
 public class MapperUtils {
 
+    /** Create a hashmap for IsCommunityInterestCompany. */
+
+    public static HashMap<String,Boolean> getIsCommunityInterestCompanyMap() {
+        HashMap<String,Boolean> isCommunityInterestCompanyMap = new HashMap<>();
+        isCommunityInterestCompanyMap.put("0",false);
+        isCommunityInterestCompanyMap.put("1",true);
+        return isCommunityInterestCompanyMap;
+    }
+
     /**Create a hashmap for subtype.*/
     public static HashMap<String,String> getSubTypeMap() {
         HashMap<String,String> subTypeMap = new HashMap<>();
-        subTypeMap.put("0","community-interest-company");
-        subTypeMap.put("1","private-fund-limited-partnership");
+        subTypeMap.put("1","community-interest-company");
+        subTypeMap.put("2","private-fund-limited-partnership");
         return subTypeMap;
     }
 
