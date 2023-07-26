@@ -1,6 +1,4 @@
 {
-    "delta_at": "20190612181928152002",
-    "has_mortgages": false,
     "data": {
         "accounts" : {
             "accounting_reference_date" : {
@@ -11,7 +9,7 @@
                 "made_up_to" : [ 2014, 12, 31 ],
                 "period_end_on" : [ 2014, 12, 31 ],
                 "period_start_on" : [ 2014, 1, 1 ],
-                "type" : "4"
+                "type" : "group"
             },
             "next_accounts" : {
                 "due_on" : [ 2016, 6, 30 ],
@@ -29,6 +27,7 @@
             "next_made_up_to" : [ 2015, 5, 23 ],
             "overdue" : null
         },
+        "company_status_detail": null,
         "branch_company_details" : {
             "parent_company_name": "name",
             "parent_company_number": "112233",
@@ -37,9 +36,8 @@
         "can_file" : null,
         "company_name" : "BUNZL PUBLIC LIMITED COMPANY",
         "company_number" : "00358948",
-        "company_status" : "0",
+        "company_status" : "active",
         "status" : null,
-        "company_status_detail" : "0",
         "confirmation_statement" : {
             "last_made_up_to" : [ 2016, 6, 6 ],
             "next_due" : [ 2016, 6, 6 ],
@@ -71,9 +69,8 @@
         "has_charges" : null,
         "has_insolvency_history" : false,
         "is_community_interest_company" : false,
-        "jurisdiction" : "1",
+        "jurisdiction" : "england-wales",
         "last_full_members_list_date" : [ 2014, 5, 23 ],
-        "links" : null,
         "previous_company_names" : [ {
             "ceased_on" : [ 1982, 2, 9 ],
             "effective_from" : [ 1940, 1, 22 ],
@@ -108,13 +105,31 @@
             "care_of_name" : "name",
             "test_data" : null
         },
+        "links": {
+            "charges": null,
+            "exemptions": null,
+            "filing_history": null,
+            "insolvency": null,
+            "officers": null,
+            "overseas": null,
+            "persons_with_significant_control": null,
+            "persons_with_significant_control_statement": null,
+            "persons_with_significant_control_statements": null,
+            "registers": null,
+            "self": "/company/00358948",
+            "uk_establishments": null
+        },
         "sic_codes" : [ "70100" ],
-        "subtype" : "_0",
+        "subtype" : "private-fund-limited-partnership",
         "type" : "3",
         "undeliverable_registered_office_address" : false,
         "has_super_secure_pscs" : null,
-        "proof_status" : "0",
+        "proof_status" : "paper",
         "officer_summary" : null,
-        "partial_data_available" : null
-    }
+        "partial_data_available" : null,
+        "super_secure_managing_officer_count": null
+    },
+    "parent_company_number": "456",
+    "delta_at": "20190612181928152002",
+    "has_mortgages": false
 }
