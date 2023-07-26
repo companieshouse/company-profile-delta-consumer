@@ -29,7 +29,11 @@
             "next_made_up_to" : [ 2015, 5, 23 ],
             "overdue" : null
         },
-        "branch_company_details" : null,
+        "branch_company_details" : {
+            "parent_company_name": "name",
+            "parent_company_number": "112233",
+            "business_activity": "activity"
+        },
         "can_file" : null,
         "company_name" : "BUNZL PUBLIC LIMITED COMPANY",
         "company_number" : "00358948",
