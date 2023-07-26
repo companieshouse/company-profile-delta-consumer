@@ -106,7 +106,18 @@
             "test_data" : null
         },
         "links": {
-            "self": "/company/00358948"
+            "charges": null,
+            "exemptions": null,
+            "filing_history": null,
+            "insolvency": null,
+            "officers": null,
+            "overseas": null,
+            "persons_with_significant_control": null,
+            "persons_with_significant_control_statement": null,
+            "persons_with_significant_control_statements": null,
+            "registers": null,
+            "self": "/company/00358948",
+            "uk_establishments": null
         },
         "sic_codes" : [ "70100" ],
         "subtype" : "private-fund-limited-partnership",
