@@ -37,9 +37,9 @@
   "has_insolvency_history": "0",
   "external_registration_number": "12345",
   "jurisdiction": "1",
-  "proof_status": "0",
+  "proof_status": "1",
   "cic_ind": "0",
-  "subtype": "0",
+  "subtype": "2",
   "confirmation_statement_dates": {
     "latest_made_up_to": "20160606",
     "next_due": "20160606",
@@ -82,5 +82,8 @@
   ],
   "CreatedTime": "12-JUN-19 18.20.02.000000",
   "delta_at": "20190612181928152002",
-  "has_mortgages": "0"
+  "has_mortgages": "0",
+  "business_activity": "123",
+  "parent_company_name": "parentName",
+  "parent_company_number": "456"
 }
