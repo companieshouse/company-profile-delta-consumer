@@ -84,5 +84,6 @@
   "CreatedTime": "12-JUN-19 18.20.02.000000",
   "delta_at": "20190612181928152002",
   "parent_company_number": "1234543",
-  "parent_company_name": "something"
+  "parent_company_name": "something",
+  "business_activity": "beepboop"
 }

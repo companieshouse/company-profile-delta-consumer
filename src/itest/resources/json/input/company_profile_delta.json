@@ -83,7 +83,7 @@
   "CreatedTime": "12-JUN-19 18.20.02.000000",
   "delta_at": "20190612181928152002",
   "has_mortgages": "0",
-  "business_activity": "123",
-  "parent_company_name": "parentName",
-  "parent_company_number": "456"
+  "parent_company_name": "name",
+  "parent_company_number": "112233",
+  "business_activity": "activity"
 }

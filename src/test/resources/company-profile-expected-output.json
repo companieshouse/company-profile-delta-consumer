@@ -28,7 +28,8 @@
     },
     "branch_company_details" : {
         "parent_company_name": "something",
-        "parent_company_number": "1234543"
+        "parent_company_number": "1234543",
+        "business_activity": "beepboop"
     },
     "can_file" : null,
     "company_name" : "BUNZL PUBLIC LIMITED COMPANY",
