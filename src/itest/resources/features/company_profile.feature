@@ -19,3 +19,8 @@ Feature: Company Profile delta
     When the consumer receives a message but the api returns a 400
     Then the message should be moved to topic company-profile-delta-invalid
 
+  Scenario: Process message when the api returns 503
+    Given the application is running
+    When the consumer receives a message but the api returns a 503
+    Then the message should retry 3 times and then error
+
