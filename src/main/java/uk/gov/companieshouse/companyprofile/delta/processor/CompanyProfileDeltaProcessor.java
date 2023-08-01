@@ -42,6 +42,7 @@ public class CompanyProfileDeltaProcessor {
         final ChsDelta payload = message.getPayload();
         final String contextId = payload.getContextId();
         ObjectMapper objectMapper = new ObjectMapper();
+        CompanyProfile companyProfile;
         CompanyDelta companyDelta;
         logger.info(format("Successfully extracted Chs Delta with context_id %s",
                 contextId));
@@ -49,23 +50,18 @@ public class CompanyProfileDeltaProcessor {
             companyDelta = objectMapper.readValue(payload.getData(), CompanyDelta.class);
             logger.trace(format("Successfully extracted company profile delta of %s",
                     companyDelta.toString()));
-            CompanyProfile companyProfile = transformer.transform(companyDelta);
-            // HACK ALERT! Log out the profile as a JSON for ease of testing.
-            // To be removed once the data-api can save profiles to mongo.
-            objectMapper.registerModule(new JavaTimeModule());
-            String profileJsonString = objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(companyProfile);
-            logger.info(format("Transformed delta to company profile %s",
-                    profileJsonString));
-            // end of Hack
+            companyProfile = transformer.transform(companyDelta);
+
             companyProfile.setDeltaAt(companyDelta.getDeltaAt());
-            apiClientService.invokeCompanyProfilePutHandler(contextId,
-                    companyDelta.getCompanyNumber(), companyProfile);
+
 
         } catch (Exception ex) {
             throw new NonRetryableErrorException(
                     "Error when extracting company profile delta", ex);
         }
+
+        apiClientService.invokeCompanyProfilePutHandler(contextId,
+                companyDelta.getCompanyNumber(), companyProfile);
     }
 
     /**
