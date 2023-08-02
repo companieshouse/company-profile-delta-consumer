@@ -1,6 +1,7 @@
 package uk.gov.companieshouse.companyprofile.delta.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -14,7 +15,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import consumer.exception.NonRetryableErrorException;
+import consumer.exception.RetryableErrorException;
+import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.handler.delta.companyprofile.request.CompanyProfileDelete;
+import uk.gov.companieshouse.api.handler.delta.companyprofile.request.CompanyProfilePut;
 import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.logging.Logger;
 
@@ -39,6 +44,12 @@ public class ApiClientServiceTest {
 
     @Mock
     ResponseHandler<CompanyProfileDelete> deleteResponseHandler;
+    @Mock
+    ResponseHandler<CompanyProfilePut> putResponseHandler;
+    @Mock
+    CompanyProfile companyProfile;
+
+    NonRetryableErrorException nonRetryableErrorException;
 
     @BeforeEach
     public void setUp(){
@@ -57,6 +68,50 @@ public class ApiClientServiceTest {
 
         assertEquals(apiResponse, actualResponse);
         verify(deleteResponseHandler).handleApiResponse(any(), eq("testContext"), eq("deleteCompanyProfile"), eq(expectedUri), any(CompanyProfileDelete.class));
+    }
+
+    @Test
+    public void return404ResponseWhenInvalidDeleteRequestSentToApi() {
+        when(responseHandlerFactory.createResponseHandler(any())).thenReturn(deleteResponseHandler);
+        when(deleteResponseHandler.handleApiResponse(any(), anyString(), anyString(), anyString(), any(CompanyProfileDelete.class))).thenThrow(NonRetryableErrorException.class);
+
+        assertThrows(NonRetryableErrorException.class, () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber));
+    }
+
+    @Test
+    public void return503ResponseWhenInvalidDeleteRequestSentToApi() {
+        when(responseHandlerFactory.createResponseHandler(any())).thenReturn(deleteResponseHandler);
+        when(deleteResponseHandler.handleApiResponse(any(), anyString(), anyString(), anyString(), any(CompanyProfileDelete.class))).thenThrow(RetryableErrorException.class);
+
+        assertThrows(RetryableErrorException.class, () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber));
+    }
+
+    @Test
+    public void returnOkResponseWhenValidPutRequestSentToApi() {
+        String expectedUri = String.format(uri, companyNumber);
+        when(responseHandlerFactory.createResponseHandler(any())).thenReturn(putResponseHandler);
+        when(putResponseHandler.handleApiResponse(any(), anyString(), anyString(), anyString(), any(CompanyProfilePut.class))).thenReturn(apiResponse);
+
+        ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber, companyProfile);
+
+        assertEquals(apiResponse, actualResponse);
+        verify(putResponseHandler).handleApiResponse(any(), eq("testContext"), eq("putCompanyProfile"), eq(expectedUri), any(CompanyProfilePut.class));
+    }
+
+    @Test
+    public void return404ResponseWhenInvalidPutRequestSentToApi() {
+        when(responseHandlerFactory.createResponseHandler(any())).thenReturn(putResponseHandler);
+        when(putResponseHandler.handleApiResponse(any(), anyString(), anyString(), anyString(), any(CompanyProfilePut.class))).thenThrow(NonRetryableErrorException.class);
+
+        assertThrows(NonRetryableErrorException.class, () -> apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber, companyProfile));
+    }
+
+    @Test
+    public void return503ResponseWhenInvalidPutRequestSentToApi() {
+        when(responseHandlerFactory.createResponseHandler(any())).thenReturn(putResponseHandler);
+        when(putResponseHandler.handleApiResponse(any(), anyString(), anyString(), anyString(), any(CompanyProfilePut.class))).thenThrow(RetryableErrorException.class);
+
+        assertThrows(RetryableErrorException.class, () -> apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber, companyProfile));
     }
     
 }
