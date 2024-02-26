@@ -85,5 +85,6 @@
   "delta_at": "20190612181928152002",
   "parent_company_number": "1234543",
   "parent_company_name": "something",
-  "business_activity": "beepboop"
+  "business_activity": "beepboop",
+  "corporate_annotation_type": "100"
 }

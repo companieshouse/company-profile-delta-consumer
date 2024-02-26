@@ -68,9 +68,8 @@ public class CompanyProfileMapperTest {
     @Test
     public void shouldMapCompanyDeltaToCompanyProfile() throws JsonProcessingException {
         CompanyProfile profile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
-        CompanyProfile expectedResult = new CompanyProfile();
 
-        assertEquals(expectedOutputData, profile.getData());
+        assertEquals(expectedOutputData.toString(), profile.getData().toString());
     }
 
     @Test
@@ -154,6 +153,20 @@ public class CompanyProfileMapperTest {
         //compare values
         assertEquals(expectedProfile.getData().getIsCommunityInterestCompany(),
                 resultProfile.getData().getIsCommunityInterestCompany());
+    }
+
+    @Test
+    public void shouldMapCorpAnnotationTypeEnumToCorrectValues() {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        expectedData.setCorporateAnnotationType("other");
+        expectedProfile.setData(expectedData);
+
+        assertEquals(expectedProfile.getData().getCorporateAnnotationType(),
+                resultProfile.getData().getCorporateAnnotationType());
     }
 
     @Test
