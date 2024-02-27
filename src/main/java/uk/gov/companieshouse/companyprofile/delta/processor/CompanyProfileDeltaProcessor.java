@@ -1,7 +1,6 @@
 package uk.gov.companieshouse.companyprofile.delta.processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import consumer.exception.NonRetryableErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -9,12 +8,11 @@ import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDeleteDelta;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.companyprofile.delta.logging.DataMapHolder;
 import uk.gov.companieshouse.companyprofile.delta.service.ApiClientService;
 import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileApiTransformer;
 import uk.gov.companieshouse.delta.ChsDelta;
 import uk.gov.companieshouse.logging.Logger;
-
-import static java.lang.String.format;
 
 @Component
 public class CompanyProfileDeltaProcessor {
@@ -44,18 +42,22 @@ public class CompanyProfileDeltaProcessor {
         ObjectMapper objectMapper = new ObjectMapper();
         CompanyProfile companyProfile;
         CompanyDelta companyDelta;
-        logger.info(format("Successfully extracted Chs Delta with context_id %s",
-                contextId));
+        logger.infoContext(contextId, "Successfully extracted Chs Delta",
+                DataMapHolder.getLogMap());
         try {
             companyDelta = objectMapper.readValue(payload.getData(), CompanyDelta.class);
-            logger.trace(format("Successfully extracted company profile delta of %s",
-                    companyDelta.toString()));
+            DataMapHolder.get()
+                    .companyNumber(companyDelta.getCompanyNumber());
+            logger.infoContext(contextId, "Successfully extracted company profile delta",
+                    DataMapHolder.getLogMap());
+
             companyProfile = transformer.transform(companyDelta);
+            logger.infoContext(contextId, "Successfully transformed company profile",
+                    DataMapHolder.getLogMap());
 
             companyProfile.setDeltaAt(companyDelta.getDeltaAt());
-
-
         } catch (Exception ex) {
+            logger.errorContext(contextId, ex.getMessage(), ex, DataMapHolder.getLogMap());
             throw new NonRetryableErrorException(
                     "Error when extracting company profile delta", ex);
         }
@@ -71,16 +73,22 @@ public class CompanyProfileDeltaProcessor {
         final ChsDelta payload = message.getPayload();
         final String contextId = payload.getContextId();
         CompanyDeleteDelta companyDeleteDelta;
-        logger.info(format("Successfully extracted Chs Delta with context_id %s",
-                contextId));
+        logger.infoContext(contextId,"Successfully extracted Chs delete Delta",
+                DataMapHolder.getLogMap());
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            companyDeleteDelta = objectMapper.readValue(payload.getData(), CompanyDeleteDelta.class);
+            companyDeleteDelta = objectMapper.readValue(payload.getData(),
+                    CompanyDeleteDelta.class);
+            DataMapHolder.get()
+                    .companyNumber(companyDeleteDelta.getCompanyNumber());
         } catch (Exception ex) {
+            logger.errorContext(contextId, ex.getMessage(), ex, DataMapHolder.getLogMap());
             throw new NonRetryableErrorException(
                     "Error when extracting company profile delete delta", ex);
         }
-        logger.info("Sending DELETE request to company-profile-api");
-        apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyDeleteDelta.getCompanyNumber());
+        logger.infoContext(contextId, "Sending DELETE request to company-profile-api",
+                DataMapHolder.getLogMap());
+        apiClientService.invokeCompanyProfileDeleteHandler(
+                contextId, companyDeleteDelta.getCompanyNumber());
     }
 }
