@@ -44,6 +44,7 @@
             "next_made_up_to" : [ 2016, 5, 23 ],
             "overdue" : null
         },
+        "corporate_annotation_type": "other",
         "date_of_cessation" : [ 2019, 1, 1 ],
         "date_of_creation" : [ 1940, 1, 22 ],
         "date_of_dissolution" : [ 2019, 1, 1 ],

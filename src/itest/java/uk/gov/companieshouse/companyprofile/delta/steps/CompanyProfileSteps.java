@@ -154,10 +154,9 @@ public class CompanyProfileSteps {
     @Then("a PUT request is sent to the company profile api with the transformed data")
     public void aPutRequestIsSent() {
         output = getOutputData();
-        verify(1, putRequestedFor(urlMatching("/company/00358948")));
-//        verify(1, requestMadeFor(new RequestMatcher(logger, output,
-//                "/company/00358948",
-//                List.of("data.etag", "deltaAt"))));
+        verify(1, requestMadeFor(new RequestMatcher(logger, output,
+                "/company/00358948",
+                List.of("data.etag", "deltaAt"))));
     }
 
     @After

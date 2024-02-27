@@ -63,7 +63,6 @@
     }
   ],
   "foreign_company": {
-
     "governing_law": "something",
     "country_of_origin": "country",
     "parent_registry": "name",
@@ -85,5 +84,6 @@
   "has_mortgages": "0",
   "parent_company_name": "name",
   "parent_company_number": "112233",
-  "business_activity": "activity"
+  "business_activity": "activity",
+  "corporate_annotation_type": "100"
 }
