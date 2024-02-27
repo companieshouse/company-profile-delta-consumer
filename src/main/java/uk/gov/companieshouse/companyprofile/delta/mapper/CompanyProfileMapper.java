@@ -64,6 +64,7 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.companyNumber", source = "companyNumber")
     @Mapping(target = "data.companyStatus", source = "status")
     @Mapping(target = "data.companyStatusDetail", source = "status")
+    @Mapping(target = "data.corporateAnnotationType", source = "corporateAnnotationType")
 
     @Mapping(target = "data.confirmationStatement.lastMadeUpTo",
             source = "confirmationStatementDates.latestMadeUpTo", dateFormat = "yyyyMMdd")
@@ -282,6 +283,16 @@ public abstract class CompanyProfileMapper {
         String statusDetailType = source.getStatus();
         HashMap<String,String> statusDetailMap = MapperUtils.getStatus_detailMap();
         data.setCompanyStatusDetail(statusDetailMap.getOrDefault(statusDetailType,null));
+        target.setData(data);
+    }
+
+    /**Maps enum corporate_annotation_type to string. */
+    @AfterMapping
+    public void mapEnumsCorpAnnotationType(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        String corpAnnotationType = String.valueOf(source.getCorporateAnnotationType());
+        HashMap<String,String> corpAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
+        data.setCorporateAnnotationType(corpAnnotationMap.getOrDefault(corpAnnotationType, null));
         target.setData(data);
     }
 

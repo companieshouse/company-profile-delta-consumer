@@ -135,4 +135,11 @@ public class MapperUtils {
 
         return accountTypeMap;
     }
+
+    /**Create a hashmap for corporate_annotation_type.*/
+    public static HashMap<String,String> getCorpAnnotationTypeMap() {
+        HashMap<String,String> corpAnnotationTypeMap = new HashMap<>();
+        corpAnnotationTypeMap.put("100", "other");
+        return corpAnnotationTypeMap;
+    }
 }
