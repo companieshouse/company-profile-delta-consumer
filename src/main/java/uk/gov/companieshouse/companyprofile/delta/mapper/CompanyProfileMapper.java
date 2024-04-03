@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -213,7 +214,7 @@ public abstract class CompanyProfileMapper {
                     return targetName;
                 }).collect(Collectors.toList());
         Data data = target.getData();
-        data.setPreviousCompanyNames(targetNames);
+        data.setPreviousCompanyNames(Optional.ofNullable(targetNames).orElse(null));
         target.setData(data);
     }
 
