@@ -14,6 +14,7 @@ import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.api.delta.PreviousCompanyName;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -202,20 +203,25 @@ public abstract class CompanyProfileMapper {
     /**maps previousCompanyNames. */
     @AfterMapping
     public void mapPreviousCompanyNames(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        List<PreviousCompanyNames> targetNames = source.getPreviousCompanyNames()
-                .stream()
-                .map(previousName -> {
-                    PreviousCompanyNames targetName = new PreviousCompanyNames();
-                    targetName.setName(previousName.getName());
-                    targetName.setCeasedOn(LocalDate.parse(previousName.getCeasedOn(),
-                            DateTimeFormatter.ofPattern("yyyyMMdd")));
-                    targetName.setEffectiveFrom(LocalDate.parse(previousName.getEffectiveFrom(),
-                            DateTimeFormatter.ofPattern("yyyyMMdd")));
-                    return targetName;
-                }).collect(Collectors.toList());
-        Data data = target.getData();
-        data.setPreviousCompanyNames(Optional.ofNullable(targetNames).orElse(null));
-        target.setData(data);
+        List<PreviousCompanyNames> targetNames;
+        List<PreviousCompanyName> sourceList = source.getPreviousCompanyNames();
+
+        if(!sourceList.isEmpty()) {
+                targetNames=sourceList.stream()
+                    .map(previousName -> {
+                        PreviousCompanyNames targetName = new PreviousCompanyNames();
+                        targetName.setName(previousName.getName());
+                        targetName.setCeasedOn(LocalDate.parse(previousName.getCeasedOn(),
+                                DateTimeFormatter.ofPattern("yyyyMMdd")));
+                        targetName.setEffectiveFrom(LocalDate.parse(previousName.getEffectiveFrom(),
+                                DateTimeFormatter.ofPattern("yyyyMMdd")));
+                        return targetName;
+                    }).collect(Collectors.toList());
+
+            Data data = target.getData();
+            data.setPreviousCompanyNames(Optional.ofNullable(targetNames).orElse(null));
+            target.setData(data);
+        }
     }
 
     /**Map isComunnityInterestCompany to string. */
