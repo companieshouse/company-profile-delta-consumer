@@ -206,8 +206,8 @@ public abstract class CompanyProfileMapper {
         List<PreviousCompanyNames> targetNames;
         List<PreviousCompanyName> sourceList = source.getPreviousCompanyNames();
 
-        if(!sourceList.isEmpty()) {
-                targetNames=sourceList.stream()
+        if (!sourceList.isEmpty()) {
+            targetNames = sourceList.stream()
                     .map(previousName -> {
                         PreviousCompanyNames targetName = new PreviousCompanyNames();
                         targetName.setName(previousName.getName());
