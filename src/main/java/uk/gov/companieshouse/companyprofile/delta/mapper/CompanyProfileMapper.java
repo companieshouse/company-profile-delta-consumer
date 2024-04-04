@@ -14,12 +14,14 @@ import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.api.delta.SicCodes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -148,18 +150,20 @@ public abstract class CompanyProfileMapper {
     @AfterMapping
     public void mappAccRefDate(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        Accounts accounts = data.getAccounts();
+        Accounts accounts = Optional.ofNullable(data.getAccounts()).orElse(new Accounts());
         AccountingReferenceDate referenceDate = new AccountingReferenceDate();
         String sourceDate = source.getAccRefDate();
-        referenceDate.setDay(sourceDate.substring(0, Math.min(sourceDate.length(), 2)));
-        try {
-            referenceDate.setMonth(sourceDate.substring(2,4));
-        } catch (IndexOutOfBoundsException ex) {
-            referenceDate.setMonth("");
+        if (sourceDate != null) {
+            referenceDate.setDay(sourceDate.substring(0, Math.min(sourceDate.length(), 2)));
+            try {
+                referenceDate.setMonth(sourceDate.substring(2,4));
+            } catch (IndexOutOfBoundsException ex) {
+                referenceDate.setMonth("");
+            }
+            accounts.setAccountingReferenceDate(referenceDate);
+            data.setAccounts(accounts);
+            target.setData(data);
         }
-        accounts.setAccountingReferenceDate(referenceDate);
-        data.setAccounts(accounts);
-        target.setData(data);
     }
 
     /**maps Boolean flag fields into Boolean fields in target. */
@@ -181,16 +185,19 @@ public abstract class CompanyProfileMapper {
     public void mapSicCodes(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
         List<String> sicCodes = new ArrayList<>();
-        source.getSicCodes().forEach(s -> {
-            String[] codes = new String[]{s.getSic1(), s.getSic2(), s.getSic3(), s.getSic4()};
-            for (String code : codes) {
-                if (code != null && !code.isEmpty()) {
-                    sicCodes.add(code);
+        List<SicCodes> sourceCodes = source.getSicCodes();
+        if (sourceCodes != null) {
+            source.getSicCodes().forEach(s -> {
+                String[] codes = new String[]{s.getSic1(), s.getSic2(), s.getSic3(), s.getSic4()};
+                for (String code : codes) {
+                    if (code != null && !code.isEmpty()) {
+                        sicCodes.add(code);
+                    }
                 }
-            }
-        });
-        data.setSicCodes(sicCodes);
-        target.setData(data);
+            });
+            data.setSicCodes(sicCodes);
+            target.setData(data);
+        }
     }
 
     /**maps BooleanFlag to Boolean. */
@@ -201,20 +208,22 @@ public abstract class CompanyProfileMapper {
     /**maps previousCompanyNames. */
     @AfterMapping
     public void mapPreviousCompanyNames(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        List<PreviousCompanyNames> targetNames = source.getPreviousCompanyNames()
-                .stream()
-                .map(previousName -> {
-                    PreviousCompanyNames targetName = new PreviousCompanyNames();
-                    targetName.setName(previousName.getName());
-                    targetName.setCeasedOn(LocalDate.parse(previousName.getCeasedOn(),
-                            DateTimeFormatter.ofPattern("yyyyMMdd")));
-                    targetName.setEffectiveFrom(LocalDate.parse(previousName.getEffectiveFrom(),
-                            DateTimeFormatter.ofPattern("yyyyMMdd")));
-                    return targetName;
-                }).collect(Collectors.toList());
-        Data data = target.getData();
-        data.setPreviousCompanyNames(targetNames);
-        target.setData(data);
+        if (source.getPreviousCompanyNames() != null) {
+            List<PreviousCompanyNames> targetNames = source.getPreviousCompanyNames()
+                    .stream()
+                    .map(previousName -> {
+                        PreviousCompanyNames targetName = new PreviousCompanyNames();
+                        targetName.setName(previousName.getName());
+                        targetName.setCeasedOn(LocalDate.parse(previousName.getCeasedOn(),
+                                DateTimeFormatter.ofPattern("yyyyMMdd")));
+                        targetName.setEffectiveFrom(LocalDate.parse(previousName.getEffectiveFrom(),
+                                DateTimeFormatter.ofPattern("yyyyMMdd")));
+                        return targetName;
+                    }).collect(Collectors.toList());
+            Data data = target.getData();
+            data.setPreviousCompanyNames(targetNames);
+            target.setData(data);
+        }
     }
 
     /**Map isComunnityInterestCompany to string. */
