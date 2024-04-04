@@ -1,5 +1,6 @@
 package uk.gov.companieshouse.companyprofile.delta.mapper;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +22,7 @@ import uk.gov.companieshouse.api.company.Data;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = { CompanyProfileMapperImpl.class})
@@ -185,6 +187,19 @@ public class CompanyProfileMapperTest {
 
         //compare values
         assertEquals(expectedProfile.getData().getSubtype(),resultProfile.getData().getSubtype());
+    }
+
+    @Test
+    public void shouldNotFailIfDeltaIsEmpty() throws IOException {
+        setUpforNull();
+        CompanyProfile nullProfile = new CompanyProfile();
+        nullProfile.setData(new Data());
+        CompanyDelta nullDelta = new CompanyDelta();
+        nullDelta.setCompanyNumber("12345678");
+        assertDoesNotThrow(() -> companyProfileMapper.mapSicCodes(nullProfile, nullDelta));
+        assertDoesNotThrow(() -> companyProfileMapper.mappAccRefDate(nullProfile, nullDelta));
+        assertDoesNotThrow(() -> companyProfileMapper.mapPreviousCompanyNames(nullProfile, nullDelta));
+        assertDoesNotThrow(() -> companyProfileMapper.companyDeltaToCompanyProfile(nullDelta));
     }
 
     @Test
