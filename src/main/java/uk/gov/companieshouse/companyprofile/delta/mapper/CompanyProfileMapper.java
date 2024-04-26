@@ -76,7 +76,6 @@ public abstract class CompanyProfileMapper {
             source = "confirmationStatementDates.nextMadeUpTo", dateFormat = "yyyyMMdd")
 
     @Mapping(target = "data.dateOfCessation", source = "dateOfDissolution", dateFormat = "yyyyMMdd")
-    //@Mapping(target = "data.dateOfCreation", source = "creationDate", dateFormat = "yyyyMMdd")
     @Mapping(target = "data.dateOfDissolution", source = "dateOfDissolution", dateFormat = "yyyyMMdd")
 
     @Mapping(target = "deltaAt", source = "deltaAt")
@@ -342,24 +341,18 @@ public abstract class CompanyProfileMapper {
 
     /**Mapping for Date of Creation.*/
     @AfterMapping
-    public void setDateOfCreationMapping(@MappingTarget CompanyProfile target,CompanyDelta source){
-        Data data=target.getData();
-        String dateOfCreation=source.getCreationDate();
+    public void setDateOfCreationMapping(@MappingTarget CompanyProfile target,CompanyDelta source) {
+        Data data = target.getData();
+        String dateOfCreation = source.getCreationDate();
         LocalDate parsedDate = Optional.ofNullable(dateOfCreation)
                 .filter(s -> !s.isEmpty())
                 .map(s -> LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .orElse(null);
 
-        if(parsedDate != null){
+        if (parsedDate != null) {
             data.setDateOfCreation(parsedDate);
             target.setData(data);
         }
-
-
-//        if(source.getCreationDate() != null || !source.getCreationDate().isEmpty()){
-//            data.setDateOfCreation(LocalDate.parse(source.getCreationDate(),DateTimeFormatter.ofPattern("yyyyMMdd")));
-//            target.setData(data);
-//        }
     }
 
 }
