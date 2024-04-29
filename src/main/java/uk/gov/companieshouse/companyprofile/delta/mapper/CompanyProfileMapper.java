@@ -30,12 +30,6 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.accounts.accountingReferenceDate.day", source = "accRefDate")
     @Mapping(target = "data.accounts.accountingReferenceDate.month", source = "accRefDate")
 
-    @Mapping(target = "data.accounts.lastAccounts.madeUpTo",
-            source = "accountingDates.lastPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.lastAccounts.periodEndOn",
-            source = "accountingDates.lastPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.lastAccounts.periodStartOn",
-            source = "accountingDates.lastPeriodStartOn", dateFormat = "yyyyMMdd")
     @Mapping(target = "data.accounts.lastAccounts.type", source = "accountType")
 
     @Mapping(target = "data.accounts.nextAccounts.dueOn",
@@ -391,6 +385,38 @@ public abstract class CompanyProfileMapper {
                 }
                 if (parsedNextMadeUpToDate != null) {
                     data.getConfirmationStatement().setNextMadeUpTo(parsedNextMadeUpToDate);
+                }
+                target.setData(data);
+            }
+        }
+    }
+
+    /**Mapping for LastAccounts.*/
+    @AfterMapping
+    public void setLastAccountsDatesMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        if (source.getAccountingDates() != null) {
+
+            String lastAccountsMadeUpTo = source.getAccountingDates().getLastPeriodEndOn();
+            String periodStartOn = source.getAccountingDates().getLastPeriodStartOn();
+
+            LocalDate parsedLastAccountsMadeUpTo = getParsedDate(lastAccountsMadeUpTo);
+            LocalDate parsedPeriodStartOn = getParsedDate(periodStartOn);
+
+            if (parsedLastAccountsMadeUpTo != null
+                    || parsedPeriodStartOn != null) {
+
+                if (data.getAccounts() == null) {
+                    data.setAccounts(new Accounts());
+                }
+
+                if (parsedLastAccountsMadeUpTo != null) {
+                    data.getAccounts().getLastAccounts().setMadeUpTo(parsedLastAccountsMadeUpTo);
+                    data.getAccounts().getLastAccounts().setPeriodEndOn(parsedLastAccountsMadeUpTo);
+                }
+                if (parsedPeriodStartOn != null) {
+                    data.getAccounts().getLastAccounts().setPeriodStartOn(parsedPeriodStartOn);
                 }
                 target.setData(data);
             }
