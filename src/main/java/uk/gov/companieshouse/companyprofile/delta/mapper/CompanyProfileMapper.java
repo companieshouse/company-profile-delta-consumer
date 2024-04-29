@@ -3,15 +3,15 @@ package uk.gov.companieshouse.companyprofile.delta.mapper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
 import org.mapstruct.MappingTarget;
-import uk.gov.companieshouse.api.company.CompanyProfile;
-import uk.gov.companieshouse.api.company.Data;
-import uk.gov.companieshouse.api.company.Accounts;
-import uk.gov.companieshouse.api.company.Links;
 import uk.gov.companieshouse.api.company.AccountingReferenceDate;
-import uk.gov.companieshouse.api.company.PreviousCompanyNames;
+import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.company.ConfirmationStatement;
+import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.LastAccounts;
+import uk.gov.companieshouse.api.company.Links;
+import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.api.delta.SicCodes;
@@ -67,13 +67,6 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.companyStatus", source = "status")
     @Mapping(target = "data.companyStatusDetail", source = "status")
     @Mapping(target = "data.corporateAnnotationType", source = "corporateAnnotationType")
-
-    @Mapping(target = "data.confirmationStatement.lastMadeUpTo",
-            source = "confirmationStatementDates.latestMadeUpTo", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.confirmationStatement.nextDue",
-            source = "confirmationStatementDates.nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.confirmationStatement.nextMadeUpTo",
-            source = "confirmationStatementDates.nextMadeUpTo", dateFormat = "yyyyMMdd")
 
     @Mapping(target = "deltaAt", source = "deltaAt")
     @Mapping(target = "data.externalRegistrationNumber", source = "externalRegistrationNumber")
@@ -367,8 +360,47 @@ public abstract class CompanyProfileMapper {
         }
     }
 
-    private static LocalDate getParsedDate(String dateOfCreation) {
-        return Optional.ofNullable(dateOfCreation)
+    /**Mapping for Confirmation Statement Dates.*/
+    @AfterMapping
+    public void setConfirmationStatementDatesMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        if (source.getConfirmationStatementDates() != null) {
+
+            String latestMadeUpToDate = source.getConfirmationStatementDates().getLatestMadeUpTo();
+            String nextDueDate = source.getConfirmationStatementDates().getNextDue();
+            String nextMadeUpToDate = source.getConfirmationStatementDates().getNextMadeUpTo();
+
+            LocalDate parsedLatestMadeUpToDate = getParsedDate(latestMadeUpToDate);
+            LocalDate parsedNextDueDate = getParsedDate(nextDueDate);
+            LocalDate parsedNextMadeUpToDate = getParsedDate(nextMadeUpToDate);
+
+            if (parsedLatestMadeUpToDate != null
+                    || parsedNextDueDate != null
+                    || parsedNextMadeUpToDate != null) {
+
+                if (data.getConfirmationStatement() == null) {
+                    data.setConfirmationStatement(new ConfirmationStatement());
+                }
+
+                if (data.getConfirmationStatement() != null) {
+                    if (parsedLatestMadeUpToDate != null) {
+                        data.getConfirmationStatement().setLastMadeUpTo(parsedLatestMadeUpToDate);
+                    }
+                    if (parsedNextDueDate != null) {
+                        data.getConfirmationStatement().setNextDue(parsedNextDueDate);
+                    }
+                    if (parsedNextMadeUpToDate != null) {
+                        data.getConfirmationStatement().setNextMadeUpTo(parsedNextMadeUpToDate);
+                    }
+                }
+                target.setData(data);
+            }
+        }
+    }
+
+    private static LocalDate getParsedDate(String date) {
+        return Optional.ofNullable(date)
                 .filter(s -> !s.isEmpty())
                 .map(s -> LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .orElse(null);
