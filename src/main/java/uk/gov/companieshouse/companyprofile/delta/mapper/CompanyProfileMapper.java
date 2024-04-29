@@ -68,16 +68,6 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.companyStatusDetail", source = "status")
     @Mapping(target = "data.corporateAnnotationType", source = "corporateAnnotationType")
 
-    @Mapping(target = "data.confirmationStatement.lastMadeUpTo",
-            source = "confirmationStatementDates.latestMadeUpTo", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.confirmationStatement.nextDue",
-            source = "confirmationStatementDates.nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.confirmationStatement.nextMadeUpTo",
-            source = "confirmationStatementDates.nextMadeUpTo", dateFormat = "yyyyMMdd")
-
-    @Mapping(target = "data.dateOfCessation", source = "dateOfDissolution", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.dateOfDissolution", source = "dateOfDissolution", dateFormat = "yyyyMMdd")
-
     @Mapping(target = "deltaAt", source = "deltaAt")
     @Mapping(target = "data.externalRegistrationNumber", source = "externalRegistrationNumber")
 
@@ -110,7 +100,6 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.foreignCompanyDetails.registrationNumber", source = "foreignCompany.registrationNumber")
 
     @Mapping(target = "data.jurisdiction", source = "jurisdiction")
-    @Mapping(target = "data.lastFullMembersListDate", source = "fullMembersListDate", dateFormat = "yyyyMMdd")
 
     @Mapping(target = "data.proofStatus", source = "proofStatus")
     
@@ -339,20 +328,78 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
-    /**Mapping for Date of Creation.*/
+    /**Mapping for Dates.*/
     @AfterMapping
-    public void setDateOfCreationMapping(@MappingTarget CompanyProfile target,CompanyDelta source) {
+    public void setDateMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
         String dateOfCreation = source.getCreationDate();
-        LocalDate parsedDate = Optional.ofNullable(dateOfCreation)
+        String dateOfDissolution = source.getDateOfDissolution();
+        String fullMembersListDate = source.getFullMembersListDate();
+
+
+
+        LocalDate parsedCreationDate = parseDate(dateOfCreation);
+        LocalDate parsedDissolutionDate = parseDate(dateOfDissolution);
+        LocalDate parsedFullMembersListDate = parseDate(fullMembersListDate);
+
+
+        if (parsedCreationDate != null
+                || parsedDissolutionDate != null
+                || parsedFullMembersListDate != null) {
+
+            if (parsedCreationDate != null) {
+                data.setDateOfCreation(parsedCreationDate);
+            }
+            if (parsedDissolutionDate != null) {
+                data.setDateOfDissolution(parsedDissolutionDate);
+                data.setDateOfCessation(parsedDissolutionDate);
+            }
+
+            if (parsedFullMembersListDate != null) {
+                data.setLastFullMembersListDate(parsedFullMembersListDate);
+            }
+            target.setData(data);
+        }
+    }
+
+    /**Mapping for Confirmation Statement Dates.*/
+    @AfterMapping
+    public void setConfirmationStatementDatesMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        String latestMadeUpToDate = source.getConfirmationStatementDates().getLatestMadeUpTo();
+        String nextDueDate = source.getConfirmationStatementDates().getNextDue();
+        String nextMadeUpToDate = source.getConfirmationStatementDates().getNextMadeUpTo();
+
+        LocalDate parsedLatestMadeUpToDate = parseDate(latestMadeUpToDate);
+        LocalDate parsedNextDueDate = parseDate(nextDueDate);
+        LocalDate parsedNextMadeUpToDate = parseDate(nextMadeUpToDate);
+
+        if (parsedLatestMadeUpToDate != null
+                || parsedNextDueDate != null
+                || parsedNextMadeUpToDate != null) {
+
+            if (data.getConfirmationStatement() != null) {
+                if (parsedLatestMadeUpToDate != null) {
+                    data.getConfirmationStatement().setLastMadeUpTo(parsedLatestMadeUpToDate);
+                }
+                if (parsedNextDueDate != null) {
+                    data.getConfirmationStatement().setNextDue(parsedNextDueDate);
+                }
+                if (parsedNextMadeUpToDate != null) {
+                    data.getConfirmationStatement().setNextMadeUpTo(parsedNextMadeUpToDate);
+                }
+            }
+            target.setData(data);
+        }
+
+    }
+
+    /**function to parse nullable dates.*/
+    public LocalDate parseDate(String date) {
+        return Optional.ofNullable(date)
                 .filter(s -> !s.isEmpty())
                 .map(s -> LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .orElse(null);
-
-        if (parsedDate != null) {
-            data.setDateOfCreation(parsedDate);
-            target.setData(data);
-        }
     }
 
 }
