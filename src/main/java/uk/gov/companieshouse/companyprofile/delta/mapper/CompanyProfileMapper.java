@@ -383,16 +383,14 @@ public abstract class CompanyProfileMapper {
                     data.setConfirmationStatement(new ConfirmationStatement());
                 }
 
-                if (data.getConfirmationStatement() != null) {
-                    if (parsedLatestMadeUpToDate != null) {
-                        data.getConfirmationStatement().setLastMadeUpTo(parsedLatestMadeUpToDate);
-                    }
-                    if (parsedNextDueDate != null) {
-                        data.getConfirmationStatement().setNextDue(parsedNextDueDate);
-                    }
-                    if (parsedNextMadeUpToDate != null) {
-                        data.getConfirmationStatement().setNextMadeUpTo(parsedNextMadeUpToDate);
-                    }
+                if (parsedLatestMadeUpToDate != null) {
+                    data.getConfirmationStatement().setLastMadeUpTo(parsedLatestMadeUpToDate);
+                }
+                if (parsedNextDueDate != null) {
+                    data.getConfirmationStatement().setNextDue(parsedNextDueDate);
+                }
+                if (parsedNextMadeUpToDate != null) {
+                    data.getConfirmationStatement().setNextMadeUpTo(parsedNextMadeUpToDate);
                 }
                 target.setData(data);
             }
