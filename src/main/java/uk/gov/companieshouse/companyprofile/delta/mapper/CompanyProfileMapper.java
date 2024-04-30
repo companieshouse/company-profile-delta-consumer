@@ -6,6 +6,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import uk.gov.companieshouse.api.company.AccountingReferenceDate;
 import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.AnnualReturn;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.ConfirmationStatement;
 import uk.gov.companieshouse.api.company.Data;
@@ -41,13 +42,6 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.accounts.nextDue", source = "accountingDates.nextDue", dateFormat = "yyyyMMdd")
     @Mapping(target = "data.accounts.nextMadeUpTo",
             source = "accountingDates.nextPeriodEndOn", dateFormat = "yyyyMMdd")
-
-    @Mapping(target = "data.annualReturn.lastMadeUpTo",
-            source = "annualReturnDates.latestMadeUpTo", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.annualReturn.nextDue",
-            source = "annualReturnDates.nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.annualReturn.nextMadeUpTo",
-            source = "annualReturnDates.nextMadeUpTo", dateFormat = "yyyyMMdd")
 
     @Mapping(target = "data.branchCompanyDetails.parentCompanyName", 
             source = "parentCompanyName")
@@ -417,6 +411,43 @@ public abstract class CompanyProfileMapper {
                 }
                 if (parsedPeriodStartOn != null) {
                     data.getAccounts().getLastAccounts().setPeriodStartOn(parsedPeriodStartOn);
+                }
+                target.setData(data);
+            }
+        }
+    }
+
+    /**Mapping for Annual return dates.*/
+    @AfterMapping
+    public void setAnnualReturnDatesMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        if (source.getAnnualReturnDates() != null) {
+
+            String lastMadeUpTo = source.getAnnualReturnDates().getLatestMadeUpTo();
+            String nextDue = source.getAnnualReturnDates().getNextDue();
+            String nextMadeUpTo = source.getAnnualReturnDates().getNextMadeUpTo();
+
+            LocalDate parsedLastMadeUpTo = getParsedDate(lastMadeUpTo);
+            LocalDate parsedNextDue = getParsedDate(nextDue);
+            LocalDate parsedNextMadeUpTo = getParsedDate(nextMadeUpTo);
+
+            if (parsedLastMadeUpTo != null
+                    || parsedNextDue != null
+                    || parsedNextMadeUpTo != null) {
+
+                if (data.getAnnualReturn() == null) {
+                    data.setAnnualReturn(new AnnualReturn());
+                }
+
+                if (parsedLastMadeUpTo != null) {
+                    data.getAnnualReturn().setLastMadeUpTo(parsedLastMadeUpTo);
+                }
+                if (parsedNextDue != null) {
+                    data.getAnnualReturn().setNextDue(parsedNextDue);
+                }
+                if (parsedNextMadeUpTo != null) {
+                    data.getAnnualReturn().setNextMadeUpTo(parsedNextMadeUpTo);
                 }
                 target.setData(data);
             }
