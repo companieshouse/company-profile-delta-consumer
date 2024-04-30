@@ -12,6 +12,7 @@ import uk.gov.companieshouse.api.company.ConfirmationStatement;
 import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.company.Links;
+import uk.gov.companieshouse.api.company.NextAccounts;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
@@ -32,16 +33,6 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.accounts.accountingReferenceDate.month", source = "accRefDate")
 
     @Mapping(target = "data.accounts.lastAccounts.type", source = "accountType")
-
-    @Mapping(target = "data.accounts.nextAccounts.dueOn",
-            source = "accountingDates.nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.nextAccounts.periodEndOn",
-            source = "accountingDates.nextPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.nextAccounts.periodStartOn",
-            source = "accountingDates.nextPeriodStartOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.nextDue", source = "accountingDates.nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.nextMadeUpTo",
-            source = "accountingDates.nextPeriodEndOn", dateFormat = "yyyyMMdd")
 
     @Mapping(target = "data.branchCompanyDetails.parentCompanyName", 
             source = "parentCompanyName")
@@ -448,6 +439,59 @@ public abstract class CompanyProfileMapper {
                 }
                 if (parsedNextMadeUpTo != null) {
                     data.getAnnualReturn().setNextMadeUpTo(parsedNextMadeUpTo);
+                }
+                target.setData(data);
+            }
+        }
+    }
+
+    /**Mapping for Next Accounts dates.*/
+    @AfterMapping
+    public void setNextAccountsDatesMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        if (source.getAccountingDates() != null) {
+
+            String dueOn = source.getAccountingDates().getNextDue();
+            String periodEndOn = source.getAccountingDates().getNextPeriodEndOn();
+            String periodStartOn = source.getAccountingDates().getNextPeriodStartOn();
+            String nextDue = source.getAccountingDates().getNextDue();
+            String nextMadeUpTo = source.getAccountingDates().getNextPeriodEndOn();
+
+            LocalDate parsedDueOn = getParsedDate(dueOn);
+            LocalDate parsedPeriodEndOn = getParsedDate(periodEndOn);
+            LocalDate parsedPeriodStartOn = getParsedDate(periodStartOn);
+            LocalDate parsedNextDue = getParsedDate(nextDue);
+            LocalDate parsedNextMadeUpTo = getParsedDate(nextMadeUpTo);
+
+            if (parsedDueOn != null
+                    || parsedPeriodEndOn != null
+                    || parsedPeriodStartOn != null
+                    || parsedNextDue != null
+                    || parsedNextMadeUpTo != null) {
+
+                if (data.getAccounts() == null) {
+                    data.setAccounts(new Accounts());
+                }
+
+                if (data.getAccounts().getNextAccounts() == null) {
+                    data.getAccounts().setNextAccounts(new NextAccounts());
+                }
+
+                if (parsedDueOn != null) {
+                    data.getAccounts().getNextAccounts().setDueOn(parsedDueOn);
+                }
+                if (parsedPeriodEndOn != null) {
+                    data.getAccounts().getNextAccounts().setPeriodEndOn(parsedPeriodEndOn);
+                }
+                if (parsedPeriodStartOn != null) {
+                    data.getAccounts().getNextAccounts().setPeriodStartOn(parsedPeriodStartOn);
+                }
+                if (parsedNextDue != null) {
+                    data.getAccounts().setNextDue(parsedNextDue);
+                }
+                if (parsedNextMadeUpTo != null) {
+                    data.getAccounts().setNextMadeUpTo(parsedNextMadeUpTo);
                 }
                 target.setData(data);
             }
