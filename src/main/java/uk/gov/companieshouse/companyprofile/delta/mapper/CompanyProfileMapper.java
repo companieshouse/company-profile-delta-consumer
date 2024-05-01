@@ -354,13 +354,13 @@ public abstract class CompanyProfileMapper {
             LocalDate parsedNextDueDate = getParsedDate(nextDueDate);
             LocalDate parsedNextMadeUpToDate = getParsedDate(nextMadeUpToDate);
 
+            if (data.getConfirmationStatement() == null) {
+                data.setConfirmationStatement(new ConfirmationStatement());
+            }
+
             if (parsedLatestMadeUpToDate != null
                     || parsedNextDueDate != null
                     || parsedNextMadeUpToDate != null) {
-
-                if (data.getConfirmationStatement() == null) {
-                    data.setConfirmationStatement(new ConfirmationStatement());
-                }
 
                 if (parsedLatestMadeUpToDate != null) {
                     data.getConfirmationStatement().setLastMadeUpTo(parsedLatestMadeUpToDate);
@@ -389,12 +389,12 @@ public abstract class CompanyProfileMapper {
             LocalDate parsedLastAccountsMadeUpTo = getParsedDate(lastAccountsMadeUpTo);
             LocalDate parsedPeriodStartOn = getParsedDate(periodStartOn);
 
+            if (data.getAccounts() == null) {
+                data.setAccounts(new Accounts());
+            }
+
             if (parsedLastAccountsMadeUpTo != null
                     || parsedPeriodStartOn != null) {
-
-                if (data.getAccounts() == null) {
-                    data.setAccounts(new Accounts());
-                }
 
                 if (parsedLastAccountsMadeUpTo != null) {
                     data.getAccounts().getLastAccounts().setMadeUpTo(parsedLastAccountsMadeUpTo);
@@ -423,13 +423,13 @@ public abstract class CompanyProfileMapper {
             LocalDate parsedNextDue = getParsedDate(nextDue);
             LocalDate parsedNextMadeUpTo = getParsedDate(nextMadeUpTo);
 
+            if (data.getAnnualReturn() == null) {
+                data.setAnnualReturn(new AnnualReturn());
+            }
+
             if (parsedLastMadeUpTo != null
                     || parsedNextDue != null
                     || parsedNextMadeUpTo != null) {
-
-                if (data.getAnnualReturn() == null) {
-                    data.setAnnualReturn(new AnnualReturn());
-                }
 
                 if (parsedLastMadeUpTo != null) {
                     data.getAnnualReturn().setLastMadeUpTo(parsedLastMadeUpTo);
@@ -464,19 +464,19 @@ public abstract class CompanyProfileMapper {
             LocalDate parsedNextDue = getParsedDate(nextDue);
             LocalDate parsedNextMadeUpTo = getParsedDate(nextMadeUpTo);
 
+            if (data.getAccounts() == null) {
+                data.setAccounts(new Accounts());
+            }
+
+            if (data.getAccounts().getNextAccounts() == null) {
+                data.getAccounts().setNextAccounts(new NextAccounts());
+            }
+
             if (parsedDueOn != null
                     || parsedPeriodEndOn != null
                     || parsedPeriodStartOn != null
                     || parsedNextDue != null
                     || parsedNextMadeUpTo != null) {
-
-                if (data.getAccounts() == null) {
-                    data.setAccounts(new Accounts());
-                }
-
-                if (data.getAccounts().getNextAccounts() == null) {
-                    data.getAccounts().setNextAccounts(new NextAccounts());
-                }
 
                 if (parsedDueOn != null) {
                     data.getAccounts().getNextAccounts().setDueOn(parsedDueOn);
