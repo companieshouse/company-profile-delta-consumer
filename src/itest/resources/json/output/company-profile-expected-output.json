@@ -22,7 +22,7 @@
             "overdue" : null
         },
         "annual_return" : {
-            "last_made_up_to" : [ 2015, 5, 23 ],
+            "last_made_up_to" : null,
             "next_due" : [ 2015, 5, 23 ],
             "next_made_up_to" : [ 2015, 5, 23 ],
             "overdue" : null
@@ -46,7 +46,7 @@
         },
         "corporate_annotation_type": "other",
         "date_of_cessation" : [ 2019, 1, 1 ],
-        "date_of_creation" : [ 1940, 1, 22 ],
+        "date_of_creation" : null,
         "date_of_dissolution" : [ 2019, 1, 1 ],
         "external_registration_number" : "12345",
         "foreign_company_details" : {

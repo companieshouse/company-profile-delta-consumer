@@ -3,15 +3,17 @@ package uk.gov.companieshouse.companyprofile.delta.mapper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
 import org.mapstruct.MappingTarget;
-import uk.gov.companieshouse.api.company.CompanyProfile;
-import uk.gov.companieshouse.api.company.Data;
-import uk.gov.companieshouse.api.company.Accounts;
-import uk.gov.companieshouse.api.company.Links;
 import uk.gov.companieshouse.api.company.AccountingReferenceDate;
-import uk.gov.companieshouse.api.company.PreviousCompanyNames;
+import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.AnnualReturn;
+import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.company.ConfirmationStatement;
+import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.LastAccounts;
+import uk.gov.companieshouse.api.company.Links;
+import uk.gov.companieshouse.api.company.NextAccounts;
+import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.api.delta.SicCodes;
@@ -30,30 +32,7 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.accounts.accountingReferenceDate.day", source = "accRefDate")
     @Mapping(target = "data.accounts.accountingReferenceDate.month", source = "accRefDate")
 
-    @Mapping(target = "data.accounts.lastAccounts.madeUpTo",
-            source = "accountingDates.lastPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.lastAccounts.periodEndOn",
-            source = "accountingDates.lastPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.lastAccounts.periodStartOn",
-            source = "accountingDates.lastPeriodStartOn", dateFormat = "yyyyMMdd")
     @Mapping(target = "data.accounts.lastAccounts.type", source = "accountType")
-
-    @Mapping(target = "data.accounts.nextAccounts.dueOn",
-            source = "accountingDates.nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.nextAccounts.periodEndOn",
-            source = "accountingDates.nextPeriodEndOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.nextAccounts.periodStartOn",
-            source = "accountingDates.nextPeriodStartOn", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.nextDue", source = "accountingDates.nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.accounts.nextMadeUpTo",
-            source = "accountingDates.nextPeriodEndOn", dateFormat = "yyyyMMdd")
-
-    @Mapping(target = "data.annualReturn.lastMadeUpTo",
-            source = "annualReturnDates.latestMadeUpTo", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.annualReturn.nextDue",
-            source = "annualReturnDates.nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.annualReturn.nextMadeUpTo",
-            source = "annualReturnDates.nextMadeUpTo", dateFormat = "yyyyMMdd")
 
     @Mapping(target = "data.branchCompanyDetails.parentCompanyName", 
             source = "parentCompanyName")
@@ -67,16 +46,6 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.companyStatus", source = "status")
     @Mapping(target = "data.companyStatusDetail", source = "status")
     @Mapping(target = "data.corporateAnnotationType", source = "corporateAnnotationType")
-
-    @Mapping(target = "data.confirmationStatement.lastMadeUpTo",
-            source = "confirmationStatementDates.latestMadeUpTo", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.confirmationStatement.nextDue",
-            source = "confirmationStatementDates.nextDue", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.confirmationStatement.nextMadeUpTo",
-            source = "confirmationStatementDates.nextMadeUpTo", dateFormat = "yyyyMMdd")
-
-    @Mapping(target = "data.dateOfCessation", source = "dateOfDissolution", dateFormat = "yyyyMMdd")
-    @Mapping(target = "data.dateOfDissolution", source = "dateOfDissolution", dateFormat = "yyyyMMdd")
 
     @Mapping(target = "deltaAt", source = "deltaAt")
     @Mapping(target = "data.externalRegistrationNumber", source = "externalRegistrationNumber")
@@ -110,7 +79,6 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.foreignCompanyDetails.registrationNumber", source = "foreignCompany.registrationNumber")
 
     @Mapping(target = "data.jurisdiction", source = "jurisdiction")
-    @Mapping(target = "data.lastFullMembersListDate", source = "fullMembersListDate", dateFormat = "yyyyMMdd")
 
     @Mapping(target = "data.proofStatus", source = "proofStatus")
     
@@ -339,20 +307,202 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
-    /**Mapping for Date of Creation.*/
+    /**Mapping for Dates.*/
     @AfterMapping
-    public void setDateOfCreationMapping(@MappingTarget CompanyProfile target,CompanyDelta source) {
+    public void setDateMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
         String dateOfCreation = source.getCreationDate();
-        LocalDate parsedDate = Optional.ofNullable(dateOfCreation)
+        String dateOfDissolution = source.getDateOfDissolution();
+        String fullMembersListDate = source.getFullMembersListDate();
+
+        LocalDate parsedCreationDate = getParsedDate(dateOfCreation);
+        LocalDate parsedDissolutionDate = getParsedDate(dateOfDissolution);
+        LocalDate parsedFullMembersListDate = getParsedDate(fullMembersListDate);
+
+
+        if (parsedCreationDate != null
+                || parsedDissolutionDate != null
+                || parsedFullMembersListDate != null) {
+
+            if (parsedCreationDate != null) {
+                data.setDateOfCreation(parsedCreationDate);
+            }
+            if (parsedDissolutionDate != null) {
+                data.setDateOfDissolution(parsedDissolutionDate);
+                data.setDateOfCessation(parsedDissolutionDate);
+            }
+
+            if (parsedFullMembersListDate != null) {
+                data.setLastFullMembersListDate(parsedFullMembersListDate);
+            }
+            target.setData(data);
+        }
+    }
+
+    /**Mapping for Confirmation Statement Dates.*/
+    @AfterMapping
+    public void setConfirmationStatementDatesMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        if (source.getConfirmationStatementDates() != null) {
+
+            String latestMadeUpToDate = source.getConfirmationStatementDates().getLatestMadeUpTo();
+            String nextDueDate = source.getConfirmationStatementDates().getNextDue();
+            String nextMadeUpToDate = source.getConfirmationStatementDates().getNextMadeUpTo();
+
+            LocalDate parsedLatestMadeUpToDate = getParsedDate(latestMadeUpToDate);
+            LocalDate parsedNextDueDate = getParsedDate(nextDueDate);
+            LocalDate parsedNextMadeUpToDate = getParsedDate(nextMadeUpToDate);
+
+            if (data.getConfirmationStatement() == null) {
+                data.setConfirmationStatement(new ConfirmationStatement());
+            }
+
+            if (parsedLatestMadeUpToDate != null
+                    || parsedNextDueDate != null
+                    || parsedNextMadeUpToDate != null) {
+
+                if (parsedLatestMadeUpToDate != null) {
+                    data.getConfirmationStatement().setLastMadeUpTo(parsedLatestMadeUpToDate);
+                }
+                if (parsedNextDueDate != null) {
+                    data.getConfirmationStatement().setNextDue(parsedNextDueDate);
+                }
+                if (parsedNextMadeUpToDate != null) {
+                    data.getConfirmationStatement().setNextMadeUpTo(parsedNextMadeUpToDate);
+                }
+                target.setData(data);
+            }
+        }
+    }
+
+    /**Mapping for LastAccounts.*/
+    @AfterMapping
+    public void setLastAccountsDatesMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        if (source.getAccountingDates() != null) {
+
+            String lastAccountsMadeUpTo = source.getAccountingDates().getLastPeriodEndOn();
+            String periodStartOn = source.getAccountingDates().getLastPeriodStartOn();
+
+            LocalDate parsedLastAccountsMadeUpTo = getParsedDate(lastAccountsMadeUpTo);
+            LocalDate parsedPeriodStartOn = getParsedDate(periodStartOn);
+
+            if (data.getAccounts() == null) {
+                data.setAccounts(new Accounts());
+            }
+
+            if (parsedLastAccountsMadeUpTo != null
+                    || parsedPeriodStartOn != null) {
+
+                if (parsedLastAccountsMadeUpTo != null) {
+                    data.getAccounts().getLastAccounts().setMadeUpTo(parsedLastAccountsMadeUpTo);
+                    data.getAccounts().getLastAccounts().setPeriodEndOn(parsedLastAccountsMadeUpTo);
+                }
+                if (parsedPeriodStartOn != null) {
+                    data.getAccounts().getLastAccounts().setPeriodStartOn(parsedPeriodStartOn);
+                }
+                target.setData(data);
+            }
+        }
+    }
+
+    /**Mapping for Annual return dates.*/
+    @AfterMapping
+    public void setAnnualReturnDatesMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        if (source.getAnnualReturnDates() != null) {
+
+            String lastMadeUpTo = source.getAnnualReturnDates().getLatestMadeUpTo();
+            String nextDue = source.getAnnualReturnDates().getNextDue();
+            String nextMadeUpTo = source.getAnnualReturnDates().getNextMadeUpTo();
+
+            LocalDate parsedLastMadeUpTo = getParsedDate(lastMadeUpTo);
+            LocalDate parsedNextDue = getParsedDate(nextDue);
+            LocalDate parsedNextMadeUpTo = getParsedDate(nextMadeUpTo);
+
+            if (data.getAnnualReturn() == null) {
+                data.setAnnualReturn(new AnnualReturn());
+            }
+
+            if (parsedLastMadeUpTo != null
+                    || parsedNextDue != null
+                    || parsedNextMadeUpTo != null) {
+
+                if (parsedLastMadeUpTo != null) {
+                    data.getAnnualReturn().setLastMadeUpTo(parsedLastMadeUpTo);
+                }
+                if (parsedNextDue != null) {
+                    data.getAnnualReturn().setNextDue(parsedNextDue);
+                }
+                if (parsedNextMadeUpTo != null) {
+                    data.getAnnualReturn().setNextMadeUpTo(parsedNextMadeUpTo);
+                }
+                target.setData(data);
+            }
+        }
+    }
+
+    /**Mapping for Next Accounts dates.*/
+    @AfterMapping
+    public void setNextAccountsDatesMapping(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+
+        if (source.getAccountingDates() != null) {
+
+            String dueOn = source.getAccountingDates().getNextDue();
+            String periodEndOn = source.getAccountingDates().getNextPeriodEndOn();
+            String periodStartOn = source.getAccountingDates().getNextPeriodStartOn();
+            String nextDue = source.getAccountingDates().getNextDue();
+            String nextMadeUpTo = source.getAccountingDates().getNextPeriodEndOn();
+
+            LocalDate parsedDueOn = getParsedDate(dueOn);
+            LocalDate parsedPeriodEndOn = getParsedDate(periodEndOn);
+            LocalDate parsedPeriodStartOn = getParsedDate(periodStartOn);
+            LocalDate parsedNextDue = getParsedDate(nextDue);
+            LocalDate parsedNextMadeUpTo = getParsedDate(nextMadeUpTo);
+
+            if (data.getAccounts() == null) {
+                data.setAccounts(new Accounts());
+            }
+
+            if (data.getAccounts().getNextAccounts() == null) {
+                data.getAccounts().setNextAccounts(new NextAccounts());
+            }
+
+            if (parsedDueOn != null
+                    || parsedPeriodEndOn != null
+                    || parsedPeriodStartOn != null
+                    || parsedNextDue != null
+                    || parsedNextMadeUpTo != null) {
+
+                if (parsedDueOn != null) {
+                    data.getAccounts().getNextAccounts().setDueOn(parsedDueOn);
+                }
+                if (parsedPeriodEndOn != null) {
+                    data.getAccounts().getNextAccounts().setPeriodEndOn(parsedPeriodEndOn);
+                }
+                if (parsedPeriodStartOn != null) {
+                    data.getAccounts().getNextAccounts().setPeriodStartOn(parsedPeriodStartOn);
+                }
+                if (parsedNextDue != null) {
+                    data.getAccounts().setNextDue(parsedNextDue);
+                }
+                if (parsedNextMadeUpTo != null) {
+                    data.getAccounts().setNextMadeUpTo(parsedNextMadeUpTo);
+                }
+                target.setData(data);
+            }
+        }
+    }
+
+    private static LocalDate getParsedDate(String date) {
+        return Optional.ofNullable(date)
                 .filter(s -> !s.isEmpty())
                 .map(s -> LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyyMMdd")))
                 .orElse(null);
-
-        if (parsedDate != null) {
-            data.setDateOfCreation(parsedDate);
-            target.setData(data);
-        }
     }
 
 }

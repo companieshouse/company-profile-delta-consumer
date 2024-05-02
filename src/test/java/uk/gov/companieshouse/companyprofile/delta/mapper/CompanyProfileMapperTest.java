@@ -14,14 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
-import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.api.company.Accounts;
-import uk.gov.companieshouse.api.company.LastAccounts;
+import uk.gov.companieshouse.api.company.AnnualReturn;
 import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.company.ConfirmationStatement;
 import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.company.LastAccounts;
+import uk.gov.companieshouse.api.company.NextAccounts;
+import uk.gov.companieshouse.api.delta.CompanyDelta;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
@@ -63,6 +68,20 @@ public class CompanyProfileMapperTest {
         companyDelta = mapper.readValue(input, CompanyDelta.class);
 
         String expectedOutputPath = "company-profile-enumMapper-expected-output.json";
+        String expectedOutputDataString = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(expectedOutputPath)));
+        expectedOutputData = mapper.readValue(expectedOutputDataString, Data.class);
+    }
+
+    public void setUpforDates() throws IOException {
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        String path = "company-profile-delta-dates-example.json";
+        String input = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(path)));
+
+        companyDelta = mapper.readValue(input, CompanyDelta.class);
+
+        String expectedOutputPath = "company-profile-dates-expected-output.json";
         String expectedOutputDataString = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(expectedOutputPath)));
         expectedOutputData = mapper.readValue(expectedOutputDataString, Data.class);
     }
@@ -338,4 +357,181 @@ public class CompanyProfileMapperTest {
         //compare values
         assertEquals(expectedProfile.getData().getJurisdiction(),resultProfile.getData().getJurisdiction());
     }
+
+    @Test
+    public void shouldMapNextAccountTypeEnumToCorrectValues() throws IOException {
+        setUpforDates();
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        Accounts accounts = new Accounts();
+        NextAccounts nextAccounts = new NextAccounts();
+
+        accounts.setNextAccounts(nextAccounts);
+        expectedData.setAccounts(accounts);
+
+        //Expected field
+        expectedData.getAccounts().getNextAccounts().setDueOn(LocalDate.parse("20160630", DateTimeFormatter.ofPattern("yyyyMMdd")));
+
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(
+                expectedProfile.getData().getAccounts().getNextAccounts().getDueOn(),
+                resultProfile.getData().getAccounts().getNextAccounts().getDueOn());
+    }
+
+    @Test
+    public void shouldMapNextAccountTypeEnumToNullValues() throws IOException {
+        setUpforDates();
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        Accounts accounts = new Accounts();
+        NextAccounts nextAccounts = new NextAccounts();
+
+        accounts.setNextAccounts(nextAccounts);
+        expectedData.setAccounts(accounts);
+
+        //Expected field
+        expectedData.getAccounts().getNextAccounts().setPeriodStartOn(null);
+
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(
+                expectedProfile.getData().getAccounts().getNextAccounts().getPeriodStartOn(),
+                resultProfile.getData().getAccounts().getNextAccounts().getPeriodStartOn());
+    }
+
+    @Test
+    public void shouldMapAnnualReturnsTypeEnumToCorrectValues() throws IOException {
+        setUpforDates();
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        AnnualReturn annualReturn = new AnnualReturn();
+        expectedData.setAnnualReturn(annualReturn);
+
+        //Expected field
+        expectedData.getAnnualReturn().setNextDue(LocalDate.parse("20150523", DateTimeFormatter.ofPattern("yyyyMMdd")));
+
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(
+                expectedProfile.getData().getAnnualReturn().getNextDue(),
+                resultProfile.getData().getAnnualReturn().getNextDue());
+    }
+
+    @Test
+    public void shouldMapAnnualReturnsTypeEnumToNullValues() throws IOException {
+        setUpforDates();
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        AnnualReturn annualReturn = new AnnualReturn();
+        expectedData.setAnnualReturn(annualReturn);
+
+        //Expected field
+        expectedData.getAnnualReturn().setLastMadeUpTo(null);
+
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(
+                expectedProfile.getData().getAnnualReturn().getLastMadeUpTo(),
+                resultProfile.getData().getAnnualReturn().getLastMadeUpTo());
+    }
+
+    @Test
+    public void shouldMapConfirmationStatementTypeEnumToCorrectValues() throws IOException {
+        setUpforDates();
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        ConfirmationStatement confirmationStatement = new ConfirmationStatement();
+        expectedData.setConfirmationStatement(confirmationStatement);
+
+        //Expected field
+        expectedData.getConfirmationStatement().setLastMadeUpTo(LocalDate.parse("20160606", DateTimeFormatter.ofPattern("yyyyMMdd")));
+
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(
+                expectedProfile.getData().getConfirmationStatement().getLastMadeUpTo(),
+                resultProfile.getData().getConfirmationStatement().getLastMadeUpTo());
+    }
+
+    @Test
+    public void shouldMapConfirmationStatementTypeEnumToNullValues() throws IOException {
+        setUpforDates();
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        ConfirmationStatement confirmationStatement = new ConfirmationStatement();
+        expectedData.setConfirmationStatement(confirmationStatement);
+
+        //Expected field
+        expectedData.getConfirmationStatement().setNextDue(null);
+
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(
+                expectedProfile.getData().getConfirmationStatement().getNextDue(),
+                resultProfile.getData().getConfirmationStatement().getNextDue());
+    }
+
+    @Test
+    public void shouldMapDissolutionDateTypeEnumToCorrectValues() throws IOException {
+        setUpforDates();
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        //Expected field
+        expectedData.setDateOfDissolution(LocalDate.parse("20190101", DateTimeFormatter.ofPattern("yyyyMMdd")));
+
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(
+                expectedProfile.getData().getDateOfDissolution(),
+                resultProfile.getData().getDateOfDissolution());
+    }
+
+    @Test
+    public void shouldMapCreationDateTypeEnumToNullValues() throws IOException {
+        setUpforDates();
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        //Expected field
+        expectedData.setDateOfCreation(null);
+
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(
+                expectedProfile.getData().getDateOfCreation(),
+                resultProfile.getData().getDateOfCreation());
+    }
+
 }
