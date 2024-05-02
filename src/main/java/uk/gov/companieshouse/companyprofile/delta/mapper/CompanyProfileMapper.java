@@ -239,6 +239,19 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
+    /**Maps enum type to string. */
+    @AfterMapping
+    public void mapEnumsType(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (data == null) {
+            data = new Data();
+        }
+        String typeFlag = source.getType();
+        HashMap<String,String> typeMap = MapperUtils.getTypeMap();
+        data.setType(typeMap.getOrDefault(typeFlag,null));
+        target.setData(data);
+    }
+
     /** Maps enum status to string. */
     @AfterMapping
     public void mapEnumsStatus(@MappingTarget CompanyProfile target, CompanyDelta source) {
