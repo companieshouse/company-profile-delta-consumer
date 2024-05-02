@@ -115,7 +115,7 @@
     },
     "sic_codes" : [ "70100" ],
     "subtype" : "private-fund-limited-partnership",
-    "type" : "1",
+    "type" : "private-unlimited",
     "undeliverable_registered_office_address" : false,
     "has_super_secure_pscs" : null,
     "proof_status" : "paper",

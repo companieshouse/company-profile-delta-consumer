@@ -142,4 +142,47 @@ public class MapperUtils {
         corpAnnotationTypeMap.put("100", "other");
         return corpAnnotationTypeMap;
     }
+
+    /**Create a hashmap for type.*/
+    public static HashMap<String,String> getTypeMap() {
+        HashMap<String,String> typeMap = new HashMap<>();
+        typeMap.put("1","private-unlimited");
+        typeMap.put("2","ltd");
+        typeMap.put("3","plc");
+        typeMap.put("4","old-public-company");
+        typeMap.put("5","private-limited-guarant-nsc-limited-exemption");
+        typeMap.put("6","limited-partnership");
+        typeMap.put("7","private-limited-guarant-nsc");
+        typeMap.put("8","converted-or-closed");
+        typeMap.put("9","private-unlimited-nsc");
+        typeMap.put("10","private-limited-shares-section-30-exemption");
+        typeMap.put("11","assurance-company");
+        typeMap.put("12","oversea-company");
+        typeMap.put("13","eeig-establishment");
+        typeMap.put("14","icvc-securities");
+        typeMap.put("15","icvc-warrant");
+        typeMap.put("16","icvc-umbrella");
+        typeMap.put("17","industrial-and-provident-society");
+        typeMap.put("18","northern-ireland");
+        typeMap.put("19","northern-ireland-other");
+        typeMap.put("20","llp");
+        typeMap.put("21","royal-charter");
+        typeMap.put("22","investment-company-with-variable-capital");
+        typeMap.put("23","unregistered-company");
+        typeMap.put("24","llp");
+        typeMap.put("25","other");
+        typeMap.put("26","united-kingdom-societas");
+        typeMap.put("27","registered-society-non-jurisdictional");
+        typeMap.put("28","uk-establishment");
+        typeMap.put("29","protected-cell-company");
+        typeMap.put("30","scottish-partnership");
+        typeMap.put("31","charitable-incorporated-organisation");
+        typeMap.put("32","scottish-charitable-incorporated-organisation");
+        typeMap.put("33","further-education-or-sixth-form-college-corporation");
+        typeMap.put("34","european-public-limited-liability-company-se");
+        typeMap.put("35","eeig");
+        typeMap.put("36","ukeig");
+        typeMap.put("37","registered-overseas-entity");
+        return typeMap;
+    }
 }
