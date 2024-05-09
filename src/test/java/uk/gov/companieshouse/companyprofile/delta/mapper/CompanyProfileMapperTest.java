@@ -1,8 +1,5 @@
 package uk.gov.companieshouse.companyprofile.delta.mapper;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -28,6 +25,8 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = { CompanyProfileMapperImpl.class})
@@ -431,6 +430,23 @@ public class CompanyProfileMapperTest {
     }
 
     @Test
+    public void shouldNotReturnEmptyObjects() throws IOException {
+        CompanyDelta emptyDelta = new CompanyDelta();
+        emptyDelta.setSubtype("1");
+
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(emptyDelta);
+
+
+        //compare values
+        assertNull(resultProfile.getData().getBranchCompanyDetails());
+        assertNull(resultProfile.getData().getForeignCompanyDetails());
+        assertNull(resultProfile.getData().getConfirmationStatement());
+        assertNull(resultProfile.getData().getRegisteredOfficeAddress());
+        assertNull(resultProfile.getData().getServiceAddress());
+        assertNull(resultProfile.getData().getAccounts());
+    }
+
+    @Test
     public void shouldMapAnnualReturnsTypeEnumToNullValues() throws IOException {
         setUpforDates();
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
@@ -530,7 +546,7 @@ public class CompanyProfileMapperTest {
 
         //compare values
         assertEquals(
-                expectedProfile.getData().getDateOfCreation(),
+                expectedProfile.getData().getBranchCompanyDetails(),
                 resultProfile.getData().getDateOfCreation());
     }
 
