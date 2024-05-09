@@ -4,16 +4,23 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import uk.gov.companieshouse.api.company.AccountPeriod;
 import uk.gov.companieshouse.api.company.AccountingReferenceDate;
+import uk.gov.companieshouse.api.company.AccountingRequirement;
 import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.AnnualReturn;
+import uk.gov.companieshouse.api.company.BranchCompanyDetails;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.ConfirmationStatement;
 import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
+import uk.gov.companieshouse.api.company.ForeignCompanyDetailsAccounts;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.company.Links;
 import uk.gov.companieshouse.api.company.NextAccounts;
+import uk.gov.companieshouse.api.company.OriginatingRegistry;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
+import uk.gov.companieshouse.api.company.RegisteredOfficeAddress;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.api.delta.SicCodes;
@@ -23,6 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -477,19 +485,19 @@ public abstract class CompanyProfileMapper {
             LocalDate parsedNextDue = getParsedDate(nextDue);
             LocalDate parsedNextMadeUpTo = getParsedDate(nextMadeUpTo);
 
-            if (data.getAccounts() == null) {
-                data.setAccounts(new Accounts());
-            }
-
-            if (data.getAccounts().getNextAccounts() == null) {
-                data.getAccounts().setNextAccounts(new NextAccounts());
-            }
-
             if (parsedDueOn != null
                     || parsedPeriodEndOn != null
                     || parsedPeriodStartOn != null
                     || parsedNextDue != null
                     || parsedNextMadeUpTo != null) {
+
+                if (data.getAccounts() == null) {
+                    data.setAccounts(new Accounts());
+                }
+
+                if (data.getAccounts().getNextAccounts() == null) {
+                    data.getAccounts().setNextAccounts(new NextAccounts());
+                }
 
                 if (parsedDueOn != null) {
                     data.getAccounts().getNextAccounts().setDueOn(parsedDueOn);
@@ -507,6 +515,53 @@ public abstract class CompanyProfileMapper {
                     data.getAccounts().setNextMadeUpTo(parsedNextMadeUpTo);
                 }
                 target.setData(data);
+            }
+        }
+    }
+
+    /**removes empty objects from the target to ensure they are not persisted to Mongo. */
+    @AfterMapping
+    public void removeEmptyObjects(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (data.getAccounts() != null) {
+            if (Objects.equals(data.getAccounts().getLastAccounts(), new LastAccounts())) {
+                data.getAccounts().setLastAccounts(null);
+            }
+            if (Objects.equals(data.getAccounts().getAccountingReferenceDate(), new AccountingReferenceDate())) {
+                data.getAccounts().setAccountingReferenceDate(null);
+            }
+            if (Objects.equals(data.getAccounts(), new Accounts())) {
+                data.setAccounts(null);
+            }
+        }
+        if (Objects.equals(data.getBranchCompanyDetails(), new BranchCompanyDetails())) {
+            data.setBranchCompanyDetails(null);
+        }
+        if (Objects.equals(data.getServiceAddress(), new RegisteredOfficeAddress())) {
+            data.setServiceAddress(null);
+        }
+        ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
+        if (foreignCompanyDetails != null) {
+
+            if (Objects.equals(foreignCompanyDetails.getAccounts(), new ForeignCompanyDetailsAccounts())) {
+                foreignCompanyDetails.setAccounts(null);
+            } else if (foreignCompanyDetails.getAccounts() != null) {
+                if (Objects.equals(foreignCompanyDetails.getAccounts().getAccountPeriodFrom(), new AccountPeriod())) {
+                    foreignCompanyDetails.getAccounts().setAccountPeriodFrom(null);
+                }
+                if (Objects.equals(foreignCompanyDetails.getAccounts().getAccountPeriodTo(), new AccountPeriod())) {
+                    foreignCompanyDetails.getAccounts().setAccountPeriodTo(null);
+                }
+            }
+            if (Objects.equals(foreignCompanyDetails.getAccountingRequirement(), new AccountingRequirement())) {
+                foreignCompanyDetails.setAccountingRequirement(null);
+            }
+            if (Objects.equals(foreignCompanyDetails.getOriginatingRegistry(), new OriginatingRegistry())) {
+                foreignCompanyDetails.setOriginatingRegistry(null);
+            }
+            data.setForeignCompanyDetails(foreignCompanyDetails);
+            if (Objects.equals(foreignCompanyDetails, new ForeignCompanyDetails())) {
+                data.setForeignCompanyDetails(null);
             }
         }
     }
