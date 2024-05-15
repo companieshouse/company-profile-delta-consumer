@@ -182,14 +182,16 @@ public abstract class CompanyProfileMapper {
     public void mapPartialDataAvailable(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
         String companyNumber = source.getCompanyNumber();
-        if (companyNumber.matches("^(IC|SI|NV|AC|SA|NA|PC)\\w{6}$")) {
-            data.setPartialDataAvailable("full-data-available-from-"
-                    + "financial-conduct-authority");
-        } else if (companyNumber.matches("^(RC|SR|NR)\\w{6}$")) {
-            data.setPartialDataAvailable("full-data-available-from-the-company");
-        } else if (companyNumber.matches("^(NP|NO|IP|SP|RS)\\w{6}$")) {
-            data.setPartialDataAvailable("full-data-available-from-financial-"
-                    + "conduct-authority-mutuals-public-register");
+        if (companyNumber != null) {
+            if (companyNumber.matches("^(IC|SI|NV|AC|SA|NA|PC)\\w{6}$")) {
+                data.setPartialDataAvailable("full-data-available-from-"
+                        + "financial-conduct-authority");
+            } else if (companyNumber.matches("^(RC|SR|NR)\\w{6}$")) {
+                data.setPartialDataAvailable("full-data-available-from-the-company");
+            } else if (companyNumber.matches("^(NP|NO|IP|SP|RS)\\w{6}$")) {
+                data.setPartialDataAvailable("full-data-available-from-financial-"
+                        + "conduct-authority-mutuals-public-register");
+            }
         }
         target.setData(data);
     }
