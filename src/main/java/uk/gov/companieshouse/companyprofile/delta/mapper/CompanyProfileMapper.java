@@ -47,6 +47,7 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.companyStatusDetail", source = "status")
     @Mapping(target = "data.corporateAnnotationType", source = "corporateAnnotationType")
 
+    @Mapping(target = "data.etag", ignore = true)
     @Mapping(target = "deltaAt", source = "deltaAt")
     @Mapping(target = "data.externalRegistrationNumber", source = "externalRegistrationNumber")
 
@@ -62,6 +63,9 @@ public abstract class CompanyProfileMapper {
             source = "foreignCompany.requiredToPublish.dayTo")
     @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodTo.month",
             source = "foreignCompany.requiredToPublish.monthTo")
+
+    @Mapping(target = "data.foreignCompanyDetails.accounts.mustFileWithin.months",
+            source = "foreignCompany.requiredToPublish.numberOfMonths")
 
     @Mapping(target = "data.foreignCompanyDetails.businessActivity",
             source = "foreignCompany.businessActivity")
@@ -108,14 +112,16 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.superSecureManagingOfficerCount", source = "superSecureManagingOfficerCount")
     @Mapping(target = "data.undeliverableRegisteredOfficeAddress", source = "undeliverableRegisteredOfficeAddress")
     @Mapping(target = "hasMortgages", source = "hasMortgages")
+    @Mapping(target = "data.hasCharges", source = "hasCharges")
     @Mapping(target = "parentCompanyNumber", source = "parentCompanyNumber")
+    @Mapping(target = "data.partialDataAvailable", source = "partialDataAvailable")
 
     
     public abstract CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta);
 
     /**maps AccRefDate. */
     @AfterMapping
-    public void mappAccRefDate(@MappingTarget CompanyProfile target, CompanyDelta source) {
+    public void mapAccRefDate(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
         Accounts accounts = Optional.ofNullable(data.getAccounts()).orElse(new Accounts());
         AccountingReferenceDate referenceDate = new AccountingReferenceDate();
@@ -165,6 +171,26 @@ public abstract class CompanyProfileMapper {
             data.setSicCodes(sicCodes);
             target.setData(data);
         }
+    }
+
+    /** Maps partial data available based on company number prefix. */
+    @AfterMapping
+    public void mapPartialDataAvailable(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (source.getCompanyNumber().contains("RC") ||
+                source.getCompanyNumber().contains("SR") ||
+                source.getCompanyNumber().contains("NR")) {
+            data.setPartialDataAvailable("full-data-available-from-the-company");
+        } else if (source.getCompanyNumber().contains("NP") ||
+                source.getCompanyNumber().contains("NO") ||
+                source.getCompanyNumber().contains("IP") ||
+                source.getCompanyNumber().contains("SP") ||
+                source.getCompanyNumber().contains("RS")) {
+            data.setPartialDataAvailable("full-data-available-from-financial-conduct-authority-mutuals-public-register");
+        } else {
+            data.setPartialDataAvailable("full-data-available-from-financial-conduct-authority");
+        }
+        target.setData(data);
     }
 
     /**maps BooleanFlag to Boolean. */

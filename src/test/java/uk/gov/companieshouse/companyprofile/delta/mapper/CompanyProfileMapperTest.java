@@ -177,6 +177,20 @@ public class CompanyProfileMapperTest {
     }
 
     @Test
+    public void shouldMapPartialDataAvailable() {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        expectedData.setPartialDataAvailable("full-data-available-from-the-company");
+        expectedProfile.setData(expectedData);
+
+        assertEquals(expectedProfile.getData().getPartialDataAvailable(),
+                resultProfile.getData().getPartialDataAvailable());
+    }
+
+    @Test
     public void shouldMapCorpAnnotationTypeEnumToCorrectValues() {
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
@@ -229,7 +243,7 @@ public class CompanyProfileMapperTest {
         CompanyDelta nullDelta = new CompanyDelta();
         nullDelta.setCompanyNumber("12345678");
         assertDoesNotThrow(() -> companyProfileMapper.mapSicCodes(nullProfile, nullDelta));
-        assertDoesNotThrow(() -> companyProfileMapper.mappAccRefDate(nullProfile, nullDelta));
+        assertDoesNotThrow(() -> companyProfileMapper.mapAccRefDate(nullProfile, nullDelta));
         assertDoesNotThrow(() -> companyProfileMapper.mapPreviousCompanyNames(nullProfile, nullDelta));
         assertDoesNotThrow(() -> companyProfileMapper.companyDeltaToCompanyProfile(nullDelta));
     }
