@@ -47,23 +47,20 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.companyStatusDetail", source = "status")
     @Mapping(target = "data.corporateAnnotationType", source = "corporateAnnotationType")
 
-    @Mapping(target = "data.etag", ignore = true)
     @Mapping(target = "deltaAt", source = "deltaAt")
     @Mapping(target = "data.externalRegistrationNumber", source = "externalRegistrationNumber")
 
     @Mapping(target = "data.foreignCompanyDetails.accountingRequirement.foreignAccountType",
             source = "foreignCompany.accReqType")
 
-    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodFrom.day",
-            source = "foreignCompany.requiredToPublish.dayFrom")
     @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodFrom.month",
             source = "foreignCompany.requiredToPublish.monthFrom")
-
-    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodTo.day",
-            source = "foreignCompany.requiredToPublish.dayTo")
+    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodFrom.day",
+            source = "foreignCompany.requiredToPublish.dayFrom")
     @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodTo.month",
             source = "foreignCompany.requiredToPublish.monthTo")
-
+    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodTo.day",
+            source = "foreignCompany.requiredToPublish.dayTo")
     @Mapping(target = "data.foreignCompanyDetails.accounts.mustFileWithin.months",
             source = "foreignCompany.requiredToPublish.numberOfMonths")
 
@@ -112,9 +109,8 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.superSecureManagingOfficerCount", source = "superSecureManagingOfficerCount")
     @Mapping(target = "data.undeliverableRegisteredOfficeAddress", source = "undeliverableRegisteredOfficeAddress")
     @Mapping(target = "hasMortgages", source = "hasMortgages")
-    @Mapping(target = "data.hasCharges", source = "hasCharges")
     @Mapping(target = "parentCompanyNumber", source = "parentCompanyNumber")
-    @Mapping(target = "data.partialDataAvailable", source = "partialDataAvailable")
+    @Mapping(target = "data.partialDataAvailable", ignore = true)
 
     
     public abstract CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta);
@@ -177,18 +173,15 @@ public abstract class CompanyProfileMapper {
     @AfterMapping
     public void mapPartialDataAvailable(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
-        if (source.getCompanyNumber().contains("RC") ||
-                source.getCompanyNumber().contains("SR") ||
-                source.getCompanyNumber().contains("NR")) {
+        String companyNumber = source.getCompanyNumber();
+        if (companyNumber.matches("^(IC|SI|NV|AC|SA|NA|PC)\\w{6}$")) {
+            data.setPartialDataAvailable("full-data-available-from-"
+                    + "financial-conduct-authority");
+        } else if (companyNumber.matches("^(RC|SR|NR)\\w{6}$")) {
             data.setPartialDataAvailable("full-data-available-from-the-company");
-        } else if (source.getCompanyNumber().contains("NP") ||
-                source.getCompanyNumber().contains("NO") ||
-                source.getCompanyNumber().contains("IP") ||
-                source.getCompanyNumber().contains("SP") ||
-                source.getCompanyNumber().contains("RS")) {
-            data.setPartialDataAvailable("full-data-available-from-financial-conduct-authority-mutuals-public-register");
-        } else {
-            data.setPartialDataAvailable("full-data-available-from-financial-conduct-authority");
+        } else if (companyNumber.matches("^(NP|NO|IP|SP|RS)\\w{6}$")) {
+            data.setPartialDataAvailable("full-data-available-from-financial-"
+                    + "conduct-authority-mutuals-public-register");
         }
         target.setData(data);
     }
