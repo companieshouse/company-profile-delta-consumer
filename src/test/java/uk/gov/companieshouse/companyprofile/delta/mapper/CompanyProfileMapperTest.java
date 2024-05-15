@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,50 +44,34 @@ public class CompanyProfileMapperTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-
-        String path = "company-profile-delta-example.json";
-        String input = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(path)));
-
-        companyDelta = mapper.readValue(input, CompanyDelta.class);
-
-        String expectedOutputPath = "company-profile-expected-output.json";
-        String expectedOutputDataString = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(expectedOutputPath)));
-        expectedOutputData = mapper.readValue(expectedOutputDataString, Data.class);
-
+        setUpTestData("company-profile-delta-example.json", "company-profile-expected-output.json");
     }
 
-    public void setUpforNull() throws IOException {
+    private void setUpTestData(String inputPath, String outputPath) throws IOException {
         mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        String path = "company-profile-delta-enumMapper-example.json";
-        String input = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(path)));
-
-        companyDelta = mapper.readValue(input, CompanyDelta.class);
-
-        String expectedOutputPath = "company-profile-enumMapper-expected-output.json";
-        String expectedOutputDataString = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(expectedOutputPath)));
-        expectedOutputData = mapper.readValue(expectedOutputDataString, Data.class);
+        if (inputPath != null) {
+            String input = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(inputPath)));
+            companyDelta = mapper.readValue(input, CompanyDelta.class);
+        }
+        if (outputPath != null) {
+            String expectedOutputDataString = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(outputPath)));
+            expectedOutputData = mapper.readValue(expectedOutputDataString, Data.class);
+        }
     }
+    @Test
+    public void shouldMapCompanyDeltaToCompanyProfile() throws JsonProcessingException {
+        CompanyProfile profile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
-    public void setUpforDates() throws IOException {
-        mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-
-        String path = "company-profile-delta-dates-example.json";
-        String input = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(path)));
-
-        companyDelta = mapper.readValue(input, CompanyDelta.class);
-
-        String expectedOutputPath = "company-profile-dates-expected-output.json";
-        String expectedOutputDataString = FileCopyUtils.copyToString(new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(expectedOutputPath)));
-        expectedOutputData = mapper.readValue(expectedOutputDataString, Data.class);
+        assertEquals(expectedOutputData.toString(), profile.getData().toString());
     }
 
     @Test
-    public void shouldMapCompanyDeltaToCompanyProfile() throws JsonProcessingException {
+    public void shouldMapCompanyDeltaToCompanyProfileRequiredToPublish() throws IOException {
+        setUpTestData("company-profile-delta-required-to-publish-example.json",
+                "company-profile-expected-required-to-publish-output.json");
+
         CompanyProfile profile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         assertEquals(expectedOutputData.toString(), profile.getData().toString());
@@ -120,7 +103,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapAccountTypeEnumToNullValues() throws IOException {
-        setUpforNull();
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -162,7 +145,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapCicIndEnumToFalseValues() throws IOException {
-        setUpforNull();
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -175,6 +158,51 @@ public class CompanyProfileMapperTest {
         //compare values
         assertEquals(expectedProfile.getData().getIsCommunityInterestCompany(),
                 resultProfile.getData().getIsCommunityInterestCompany());
+    }
+
+    @Test
+    public void shouldMapPartialDataAvailableFinancialConductAuthority() throws IOException {
+        setUpTestData("company-profile-delta-iccompanynumber-example.json", null);
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        expectedData.setPartialDataAvailable("full-data-available-from-financial-conduct-authority");
+        expectedProfile.setData(expectedData);
+
+        assertEquals(expectedProfile.getData().getPartialDataAvailable(),
+                resultProfile.getData().getPartialDataAvailable());
+    }
+
+    @Test
+    public void shouldMapPartialDataAvailableFromTheCompany() throws IOException {
+        setUpTestData("company-profile-delta-rccompanynumber-example.json", null);
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        expectedData.setPartialDataAvailable("full-data-available-from-the-company");
+        expectedProfile.setData(expectedData);
+
+        assertEquals(expectedProfile.getData().getPartialDataAvailable(),
+                resultProfile.getData().getPartialDataAvailable());
+    }
+
+    @Test
+    public void shouldMapPartialDataAvailableMutualsPublicRegister() throws IOException {
+        setUpTestData("company-profile-delta-npcompanynumber-example.json", null);
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        expectedData.setPartialDataAvailable("full-data-available-from-financial-conduct-authority-mutuals-public-register");
+        expectedProfile.setData(expectedData);
+
+        assertEquals(expectedProfile.getData().getPartialDataAvailable(),
+                resultProfile.getData().getPartialDataAvailable());
     }
 
     @Test
@@ -208,7 +236,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapSubTypeEnumToNullValues() throws IOException {
-        setUpforNull();
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -224,13 +252,13 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldNotFailIfDeltaIsEmpty() throws IOException {
-        setUpforNull();
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
         CompanyProfile nullProfile = new CompanyProfile();
         nullProfile.setData(new Data());
         CompanyDelta nullDelta = new CompanyDelta();
         nullDelta.setCompanyNumber("12345678");
         assertDoesNotThrow(() -> companyProfileMapper.mapSicCodes(nullProfile, nullDelta));
-        assertDoesNotThrow(() -> companyProfileMapper.mappAccRefDate(nullProfile, nullDelta));
+        assertDoesNotThrow(() -> companyProfileMapper.mapAccRefDate(nullProfile, nullDelta));
         assertDoesNotThrow(() -> companyProfileMapper.mapPreviousCompanyNames(nullProfile, nullDelta));
         assertDoesNotThrow(() -> companyProfileMapper.companyDeltaToCompanyProfile(nullDelta));
     }
@@ -252,7 +280,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapStatusEnumToNullValues() throws IOException {
-        setUpforNull();
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -283,7 +311,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapStatusDetailEnumToNullValues() throws IOException {
-        setUpforNull();
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -314,7 +342,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapProofStatusEnumToNullValues() throws IOException {
-        setUpforNull();
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -345,7 +373,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapJurisdictionEnumToNullValues() throws IOException {
-        setUpforNull();
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -361,7 +389,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapNextAccountTypeEnumToCorrectValues() throws IOException {
-        setUpforDates();
+        setUpTestData("company-profile-delta-dates-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -386,7 +414,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapNextAccountTypeEnumToNullValues() throws IOException {
-        setUpforDates();
+        setUpTestData("company-profile-delta-dates-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -411,7 +439,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapAnnualReturnsTypeEnumToCorrectValues() throws IOException {
-        setUpforDates();
+        setUpTestData("company-profile-delta-dates-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -450,7 +478,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapAnnualReturnsTypeEnumToNullValues() throws IOException {
-        setUpforDates();
+        setUpTestData("company-profile-delta-dates-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -472,7 +500,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapConfirmationStatementTypeEnumToCorrectValues() throws IOException {
-        setUpforDates();
+        setUpTestData("company-profile-delta-dates-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -494,7 +522,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapConfirmationStatementTypeEnumToNullValues() throws IOException {
-        setUpforDates();
+        setUpTestData("company-profile-delta-dates-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -516,7 +544,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapDissolutionDateTypeEnumToCorrectValues() throws IOException {
-        setUpforDates();
+        setUpTestData("company-profile-delta-dates-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -535,7 +563,7 @@ public class CompanyProfileMapperTest {
 
     @Test
     public void shouldMapCreationDateTypeEnumToNullValues() throws IOException {
-        setUpforDates();
+        setUpTestData("company-profile-delta-dates-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();

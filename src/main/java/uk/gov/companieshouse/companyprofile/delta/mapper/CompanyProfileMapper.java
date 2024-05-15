@@ -61,15 +61,16 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.foreignCompanyDetails.accountingRequirement.foreignAccountType",
             source = "foreignCompany.accReqType")
 
-    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodFrom.day",
-            source = "foreignCompany.requiredToPublish.dayFrom")
     @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodFrom.month",
             source = "foreignCompany.requiredToPublish.monthFrom")
-
-    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodTo.day",
-            source = "foreignCompany.requiredToPublish.dayTo")
+    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodFrom.day",
+            source = "foreignCompany.requiredToPublish.dayFrom")
     @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodTo.month",
             source = "foreignCompany.requiredToPublish.monthTo")
+    @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodTo.day",
+            source = "foreignCompany.requiredToPublish.dayTo")
+    @Mapping(target = "data.foreignCompanyDetails.accounts.mustFileWithin.months",
+            source = "foreignCompany.requiredToPublish.numberOfMonths")
 
     @Mapping(target = "data.foreignCompanyDetails.businessActivity",
             source = "foreignCompany.businessActivity")
@@ -117,13 +118,14 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.undeliverableRegisteredOfficeAddress", source = "undeliverableRegisteredOfficeAddress")
     @Mapping(target = "hasMortgages", source = "hasMortgages")
     @Mapping(target = "parentCompanyNumber", source = "parentCompanyNumber")
+    @Mapping(target = "data.partialDataAvailable", ignore = true)
 
     
     public abstract CompanyProfile companyDeltaToCompanyProfile(CompanyDelta companyDelta);
 
     /**maps AccRefDate. */
     @AfterMapping
-    public void mappAccRefDate(@MappingTarget CompanyProfile target, CompanyDelta source) {
+    public void mapAccRefDate(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
         Accounts accounts = Optional.ofNullable(data.getAccounts()).orElse(new Accounts());
         AccountingReferenceDate referenceDate = new AccountingReferenceDate();
@@ -173,6 +175,23 @@ public abstract class CompanyProfileMapper {
             data.setSicCodes(sicCodes);
             target.setData(data);
         }
+    }
+
+    /** Maps partial data available based on company number prefix. */
+    @AfterMapping
+    public void mapPartialDataAvailable(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        String companyNumber = source.getCompanyNumber();
+        if (companyNumber.matches("^(IC|SI|NV|AC|SA|NA|PC)\\w{6}$")) {
+            data.setPartialDataAvailable("full-data-available-from-"
+                    + "financial-conduct-authority");
+        } else if (companyNumber.matches("^(RC|SR|NR)\\w{6}$")) {
+            data.setPartialDataAvailable("full-data-available-from-the-company");
+        } else if (companyNumber.matches("^(NP|NO|IP|SP|RS)\\w{6}$")) {
+            data.setPartialDataAvailable("full-data-available-from-financial-"
+                    + "conduct-authority-mutuals-public-register");
+        }
+        target.setData(data);
     }
 
     /**maps BooleanFlag to Boolean. */
