@@ -551,7 +551,7 @@ public class CompanyProfileMapperTest {
         Data expectedData = new Data();
 
         //Expected field
-        expectedData.setDateOfDissolution(LocalDate.parse("20190101", DateTimeFormatter.ofPattern("yyyyMMdd")));
+        expectedData.setDateOfDissolution(LocalDate.parse("20200101", DateTimeFormatter.ofPattern("yyyyMMdd")));
 
         expectedProfile.setData(expectedData);
 

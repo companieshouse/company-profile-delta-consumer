@@ -25,6 +25,7 @@
   "registered_office_is_in_dispute": "0",
   "undeliverable_registered_office_address": "0",
   "status": "5",
+  "closure_date": "20200101",
   "date_of_dissolution": "20190101",
   "account_overdue": "1",
   "confirmation_statement_overdue": "1",
