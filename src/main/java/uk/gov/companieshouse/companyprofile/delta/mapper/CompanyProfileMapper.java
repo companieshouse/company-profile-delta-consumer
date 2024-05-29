@@ -355,10 +355,12 @@ public abstract class CompanyProfileMapper {
         Data data = target.getData();
         String dateOfCreation = source.getCreationDate();
         String dateOfDissolution = source.getDateOfDissolution();
+        String closureDate = source.getClosureDate();
         String fullMembersListDate = source.getFullMembersListDate();
 
         LocalDate parsedCreationDate = getParsedDate(dateOfCreation);
         LocalDate parsedDissolutionDate = getParsedDate(dateOfDissolution);
+        LocalDate parsedClosureDate = getParsedDate(closureDate);
         LocalDate parsedFullMembersListDate = getParsedDate(fullMembersListDate);
 
 
@@ -369,8 +371,12 @@ public abstract class CompanyProfileMapper {
             if (parsedCreationDate != null) {
                 data.setDateOfCreation(parsedCreationDate);
             }
-            if (parsedDissolutionDate != null) {
+            if (parsedClosureDate != null) {
+                data.setDateOfDissolution(parsedClosureDate);
+            } else if (parsedDissolutionDate != null) {
                 data.setDateOfDissolution(parsedDissolutionDate);
+            }
+            if (parsedDissolutionDate != null) {
                 data.setDateOfCessation(parsedDissolutionDate);
             }
 
