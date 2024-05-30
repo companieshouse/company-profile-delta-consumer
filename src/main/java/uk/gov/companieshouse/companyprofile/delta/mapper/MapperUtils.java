@@ -115,7 +115,7 @@ public class MapperUtils {
     public static HashMap<String,String> getAccountTypeMap() {
         HashMap<String,String> accountTypeMap = new HashMap<>();
 
-        accountTypeMap.put("0","null");
+        accountTypeMap.put("0", null);
         accountTypeMap.put("1","full");
         accountTypeMap.put("2","small");
         accountTypeMap.put("3","medium");
