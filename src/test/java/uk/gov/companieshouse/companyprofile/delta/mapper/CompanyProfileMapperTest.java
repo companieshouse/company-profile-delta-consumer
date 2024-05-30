@@ -552,7 +552,6 @@ public class CompanyProfileMapperTest {
 
         //Expected field
         expectedData.setDateOfDissolution(LocalDate.parse("20200101", DateTimeFormatter.ofPattern("yyyyMMdd")));
-
         expectedProfile.setData(expectedData);
 
         //compare values
@@ -578,6 +577,18 @@ public class CompanyProfileMapperTest {
         assertEquals(
                 expectedProfile.getData().getBranchCompanyDetails(),
                 resultProfile.getData().getDateOfCreation());
+    }
+
+    @Test
+    public void shouldNotMapReferenceDataIfSourceValueIs9999() throws IOException {
+        //given
+        setUpTestData("company-profile-delta-9999-ref-date-example.json", null);
+
+        //when
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        //then
+        assertNull(resultProfile.getData().getAccounts().getAccountingReferenceDate());
     }
 
 }

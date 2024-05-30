@@ -131,13 +131,17 @@ public abstract class CompanyProfileMapper {
         AccountingReferenceDate referenceDate = new AccountingReferenceDate();
         String sourceDate = source.getAccRefDate();
         if (sourceDate != null) {
-            referenceDate.setDay(sourceDate.substring(0, Math.min(sourceDate.length(), 2)));
-            try {
-                referenceDate.setMonth(sourceDate.substring(2,4));
-            } catch (IndexOutOfBoundsException ex) {
-                referenceDate.setMonth("");
+            if (!"9999".equals(sourceDate)) {
+                referenceDate.setDay(sourceDate.substring(0, Math.min(sourceDate.length(), 2)));
+                try {
+                    referenceDate.setMonth(sourceDate.substring(2,4));
+                } catch (IndexOutOfBoundsException ex) {
+                    referenceDate.setMonth("");
+                }
+                accounts.setAccountingReferenceDate(referenceDate);
+            } else {
+                accounts.setAccountingReferenceDate(null);
             }
-            accounts.setAccountingReferenceDate(referenceDate);
             data.setAccounts(accounts);
             target.setData(data);
         }
