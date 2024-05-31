@@ -70,7 +70,7 @@
     "parent_registry": "name",
     "registration_number": "12345",
     "legal_form": "1",
-    "credit_or_financial": "true",
+    "credit_or_financial": "1",
     "acc_req_type": "1",
     "business_activity": "testBusinessActivity"
   },

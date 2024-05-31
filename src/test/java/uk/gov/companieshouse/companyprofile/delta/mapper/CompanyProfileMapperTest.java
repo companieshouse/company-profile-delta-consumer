@@ -426,6 +426,25 @@ public class CompanyProfileMapperTest {
     }
 
     @Test
+    public void shouldMapForeignAccountIsCreditOrFinancialToBoolean() throws JsonProcessingException {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        ForeignCompanyDetails expectedForeignCompanyDetails = new ForeignCompanyDetails();
+
+        expectedData.setForeignCompanyDetails(expectedForeignCompanyDetails);
+
+        //Expected field
+        expectedData.getForeignCompanyDetails().setIsACreditFinancialInstitution(true);
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getForeignCompanyDetails().getIsACreditFinancialInstitution(),
+                resultProfile.getData().getForeignCompanyDetails().getIsACreditFinancialInstitution());
+    }
+
+    @Test
     public void shouldMapNextAccountTypeEnumToCorrectValues() throws IOException {
         setUpTestData("company-profile-delta-dates-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);

@@ -364,6 +364,20 @@ public abstract class CompanyProfileMapper {
         }
     }
 
+    /**Maps Foreign Company Credit or Financial boolean. */
+    @AfterMapping
+    public void mapIsCreditOrFinancial(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (data.getForeignCompanyDetails() != null) {
+            ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
+            String isCreditOrFinancial = source.getForeignCompany().getCreditOrFinancial();
+
+            foreignCompanyDetails.setIsACreditFinancialInstitution(!isCreditOrFinancial.equals("0"));
+            data.setForeignCompanyDetails(foreignCompanyDetails);
+            target.setData(data);
+        }
+    }
+
     /** add self link for Company Profile. */
     @AfterMapping
     public void setSelfLink(@MappingTarget CompanyProfile target, CompanyDelta source) {
