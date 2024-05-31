@@ -11,13 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
-import uk.gov.companieshouse.api.company.Accounts;
-import uk.gov.companieshouse.api.company.AnnualReturn;
-import uk.gov.companieshouse.api.company.CompanyProfile;
-import uk.gov.companieshouse.api.company.ConfirmationStatement;
-import uk.gov.companieshouse.api.company.Data;
-import uk.gov.companieshouse.api.company.LastAccounts;
-import uk.gov.companieshouse.api.company.NextAccounts;
+import uk.gov.companieshouse.api.company.*;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 
 import java.io.IOException;
@@ -385,6 +379,50 @@ public class CompanyProfileMapperTest {
 
         //compare values
         assertEquals(expectedProfile.getData().getJurisdiction(),resultProfile.getData().getJurisdiction());
+    }
+
+    @Test
+    public void shouldMapForeignAccountTypeEnumToCorrectValues() throws JsonProcessingException {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        ForeignCompanyDetails expectedForeignCompanyDetails = new ForeignCompanyDetails();
+        AccountingRequirement expectedAccountingRequirement = new AccountingRequirement();
+
+        expectedData.setForeignCompanyDetails(expectedForeignCompanyDetails);
+        expectedForeignCompanyDetails.setAccountingRequirement(expectedAccountingRequirement);
+
+        //Expected field
+        expectedData.getForeignCompanyDetails().getAccountingRequirement().setForeignAccountType("accounting-requirements-of-originating-country-apply");
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getForeignCompanyDetails()
+                        .getAccountingRequirement().getForeignAccountType(),
+                resultProfile.getData().getForeignCompanyDetails()
+                        .getAccountingRequirement().getForeignAccountType());
+    }
+
+    @Test
+    public void shouldMapForeignAccountTypeEnumToNull() throws IOException {
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        ForeignCompanyDetails expectedForeignCompanyDetails = new ForeignCompanyDetails();
+        AccountingRequirement expectedAccountingRequirement = new AccountingRequirement();
+
+        expectedForeignCompanyDetails.setAccountingRequirement(expectedAccountingRequirement);
+        expectedData.setForeignCompanyDetails(expectedForeignCompanyDetails);
+
+        //Expected field
+        expectedData.getForeignCompanyDetails().getAccountingRequirement().setForeignAccountType(null);
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertNull(expectedProfile.getData().getForeignCompanyDetails()
+                .getAccountingRequirement().getForeignAccountType());
     }
 
     @Test

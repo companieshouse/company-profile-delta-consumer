@@ -136,6 +136,18 @@ public class MapperUtils {
         return accountTypeMap;
     }
 
+    /**Create a hashmap for Foreign company account type.*/
+    public static HashMap<String,String> getForeignAccountTypeMap() {
+        HashMap<String,String> foreignAccountTypeMap = new HashMap<>();
+
+        foreignAccountTypeMap.put("1", "accounting-requirements-of-originating-country-apply");
+        foreignAccountTypeMap.put("2", "accounting-requirements-of-originating-country-apply");
+        foreignAccountTypeMap.put("3", "accounting-requirements-of-originating-country-do-not-apply");
+        foreignAccountTypeMap.put("4", "accounting-requirements-of-originating-country-do-not-apply");
+
+        return foreignAccountTypeMap;
+    }
+
     /**Create a hashmap for corporate_annotation_type.*/
     public static HashMap<String,String> getCorpAnnotationTypeMap() {
         HashMap<String,String> corpAnnotationTypeMap = new HashMap<>();

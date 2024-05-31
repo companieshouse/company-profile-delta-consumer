@@ -23,6 +23,7 @@ import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.company.RegisteredOfficeAddress;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.api.delta.ForeignCompany;
 import uk.gov.companieshouse.api.delta.SicCodes;
 
 import java.time.LocalDate;
@@ -340,6 +341,27 @@ public abstract class CompanyProfileMapper {
 
         data.setJurisdiction(jurisdictionMap.getOrDefault(jurisdictionType,null));
         target.setData(data);
+    }
+
+    /**Maps Foreign Company Account type to string. */
+    @AfterMapping
+    public void mapForeignAccountType(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (data.getForeignCompanyDetails() != null) {
+            ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
+            if (foreignCompanyDetails.getAccountingRequirement() != null) {
+                AccountingRequirement accountingRequirement = foreignCompanyDetails.getAccountingRequirement();
+
+                String foreignAccountType = source.getForeignCompany().getAccReqType();
+
+                HashMap<String,String> foreignAccountTypeMap = MapperUtils.getForeignAccountTypeMap();
+                accountingRequirement.setForeignAccountType(foreignAccountTypeMap
+                        .getOrDefault(foreignAccountType, null));
+                foreignCompanyDetails.setAccountingRequirement(accountingRequirement);
+                data.setForeignCompanyDetails(foreignCompanyDetails);
+                target.setData(data);
+            }
+        }
     }
 
     /** add self link for Company Profile. */
