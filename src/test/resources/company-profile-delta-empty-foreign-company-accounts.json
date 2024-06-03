@@ -65,15 +65,14 @@
   ],
   "foreign_company": {
 
-    "governing_law": "something",
-    "country_of_origin": "country",
-    "parent_registry": "name",
-    "registration_number": "12345",
-    "legal_form": "1",
-    "credit_or_financial": "1",
-    "acc_req_type": "1",
-    "business_activity": "testBusinessActivity",
-    "terms_of_account_publication": "1"
+    "governing_law": "",
+    "country_of_origin": "",
+    "parent_registry": "",
+    "registration_number": "",
+    "legal_form": "",
+    "credit_or_financial": "",
+    "acc_req_type": "",
+    "business_activity": ""
   },
   "previous_company_names": [
     {

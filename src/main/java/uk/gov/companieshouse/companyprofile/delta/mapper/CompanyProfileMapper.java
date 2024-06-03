@@ -17,6 +17,7 @@ import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
 import uk.gov.companieshouse.api.company.ForeignCompanyDetailsAccounts;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.company.Links;
+import uk.gov.companieshouse.api.company.MustFileWithin;
 import uk.gov.companieshouse.api.company.NextAccounts;
 import uk.gov.companieshouse.api.company.OriginatingRegistry;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
@@ -364,15 +365,36 @@ public abstract class CompanyProfileMapper {
         }
     }
 
-    /**Maps Foreign Company Credit or Financial boolean. */
+    /**Maps Foreign Company terms of account publication. */
     @AfterMapping
-    public void mapIsCreditOrFinancial(@MappingTarget CompanyProfile target, CompanyDelta source) {
+    public void mapTermsOfAccountPublication(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
         if (data.getForeignCompanyDetails() != null) {
             ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
-            String isCreditOrFinancial = source.getForeignCompany().getCreditOrFinancial();
+            if (foreignCompanyDetails.getAccountingRequirement() != null) {
+                AccountingRequirement accountingRequirement = foreignCompanyDetails.getAccountingRequirement();
+                String termsOfAccountPublication = source.getForeignCompany().getTermsOfAccountPublication();
 
+                HashMap<String,String> termsOfAccountPublicationMap = MapperUtils.getTermsOfAccountPublicationMap();
+                accountingRequirement.setTermsOfAccountPublication(termsOfAccountPublicationMap
+                        .getOrDefault(termsOfAccountPublication, null));
+                foreignCompanyDetails.setAccountingRequirement(accountingRequirement);
+                data.setForeignCompanyDetails(foreignCompanyDetails);
+                target.setData(data);
+            }
+        }
+    }
+
+    /**Maps Foreign Company Credit or Financial boolean. */
+    @AfterMapping
+    public void mapCreditOrFinancial(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (data.getForeignCompanyDetails() != null) {
+            ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
+
+            String isCreditOrFinancial = source.getForeignCompany().getCreditOrFinancial();
             foreignCompanyDetails.setIsACreditFinancialInstitution(!isCreditOrFinancial.equals("0"));
+
             data.setForeignCompanyDetails(foreignCompanyDetails);
             target.setData(data);
         }
