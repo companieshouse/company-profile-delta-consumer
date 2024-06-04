@@ -641,6 +641,9 @@ public abstract class CompanyProfileMapper {
                 if (Objects.equals(foreignCompanyDetails.getAccounts().getAccountPeriodTo(), new AccountPeriod())) {
                     foreignCompanyDetails.getAccounts().setAccountPeriodTo(null);
                 }
+                if (Objects.equals(foreignCompanyDetails.getAccounts().getMustFileWithin(), new MustFileWithin())) {
+                    foreignCompanyDetails.getAccounts().setMustFileWithin(null);
+                }
             }
             if (Objects.equals(foreignCompanyDetails.getAccounts(), new ForeignCompanyDetailsAccounts())) {
                 foreignCompanyDetails.setAccounts(null);
