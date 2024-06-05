@@ -393,7 +393,14 @@ public abstract class CompanyProfileMapper {
             ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
 
             String isCreditOrFinancial = source.getForeignCompany().getCreditOrFinancial();
-            foreignCompanyDetails.setIsACreditFinancialInstitution(!isCreditOrFinancial.equals("0"));
+
+            if (isCreditOrFinancial == null) {
+                foreignCompanyDetails.setIsACreditFinancialInstitution(null);
+            } else if (isCreditOrFinancial.equals("1")) {
+                foreignCompanyDetails.setIsACreditFinancialInstitution(true);
+            } else if (isCreditOrFinancial.equals("o")) {
+                foreignCompanyDetails.setIsACreditFinancialInstitution(false);
+            }
 
             data.setForeignCompanyDetails(foreignCompanyDetails);
             target.setData(data);
