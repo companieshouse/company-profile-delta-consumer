@@ -398,7 +398,7 @@ public abstract class CompanyProfileMapper {
                 foreignCompanyDetails.setIsACreditFinancialInstitution(null);
             } else if (isCreditOrFinancial.equals("1")) {
                 foreignCompanyDetails.setIsACreditFinancialInstitution(true);
-            } else if (isCreditOrFinancial.equals("o")) {
+            } else if (isCreditOrFinancial.equals("0")) {
                 foreignCompanyDetails.setIsACreditFinancialInstitution(false);
             }
 
