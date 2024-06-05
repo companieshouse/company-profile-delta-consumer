@@ -11,9 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
-import uk.gov.companieshouse.api.company.*;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-
+import uk.gov.companieshouse.api.company.AccountingRequirement;
+import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.AnnualReturn;
+import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.company.ConfirmationStatement;
+import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
+import uk.gov.companieshouse.api.company.LastAccounts;
+import uk.gov.companieshouse.api.company.NextAccounts;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
