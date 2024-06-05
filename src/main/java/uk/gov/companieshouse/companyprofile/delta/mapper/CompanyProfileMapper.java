@@ -17,12 +17,14 @@ import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
 import uk.gov.companieshouse.api.company.ForeignCompanyDetailsAccounts;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.company.Links;
+import uk.gov.companieshouse.api.company.MustFileWithin;
 import uk.gov.companieshouse.api.company.NextAccounts;
 import uk.gov.companieshouse.api.company.OriginatingRegistry;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.company.RegisteredOfficeAddress;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.api.delta.ForeignCompany;
 import uk.gov.companieshouse.api.delta.SicCodes;
 
 import java.time.LocalDate;
@@ -342,6 +344,69 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
+    /**Maps Foreign Company Account type to string. */
+    @AfterMapping
+    public void mapForeignAccountType(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (data.getForeignCompanyDetails() != null) {
+            ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
+            if (foreignCompanyDetails.getAccountingRequirement() != null) {
+                AccountingRequirement accountingRequirement = foreignCompanyDetails.getAccountingRequirement();
+
+                String foreignAccountType = source.getForeignCompany().getAccReqType();
+
+                HashMap<String,String> foreignAccountTypeMap = MapperUtils.getForeignAccountTypeMap();
+                accountingRequirement.setForeignAccountType(foreignAccountTypeMap
+                        .getOrDefault(foreignAccountType, null));
+                foreignCompanyDetails.setAccountingRequirement(accountingRequirement);
+                data.setForeignCompanyDetails(foreignCompanyDetails);
+                target.setData(data);
+            }
+        }
+    }
+
+    /**Maps Foreign Company terms of account publication. */
+    @AfterMapping
+    public void mapTermsOfAccountPublication(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (data.getForeignCompanyDetails() != null) {
+            ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
+            if (foreignCompanyDetails.getAccountingRequirement() != null) {
+                AccountingRequirement accountingRequirement = foreignCompanyDetails.getAccountingRequirement();
+                String termsOfAccountPublication = source.getForeignCompany().getTermsOfAccountPublication();
+
+                HashMap<String,String> termsOfAccountPublicationMap = MapperUtils.getTermsOfAccountPublicationMap();
+                accountingRequirement.setTermsOfAccountPublication(termsOfAccountPublicationMap
+                        .getOrDefault(termsOfAccountPublication, null));
+                foreignCompanyDetails.setAccountingRequirement(accountingRequirement);
+                data.setForeignCompanyDetails(foreignCompanyDetails);
+                target.setData(data);
+            }
+        }
+    }
+
+    /**Maps Foreign Company Credit or Financial boolean. */
+    @AfterMapping
+    public void mapCreditOrFinancial(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        if (data.getForeignCompanyDetails() != null) {
+            ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
+
+            String isCreditOrFinancial = source.getForeignCompany().getCreditOrFinancial();
+
+            if (isCreditOrFinancial == null) {
+                foreignCompanyDetails.setIsACreditFinancialInstitution(null);
+            } else if (isCreditOrFinancial.equals("1")) {
+                foreignCompanyDetails.setIsACreditFinancialInstitution(true);
+            } else if (isCreditOrFinancial.equals("0")) {
+                foreignCompanyDetails.setIsACreditFinancialInstitution(false);
+            }
+
+            data.setForeignCompanyDetails(foreignCompanyDetails);
+            target.setData(data);
+        }
+    }
+
     /** add self link for Company Profile. */
     @AfterMapping
     public void setSelfLink(@MappingTarget CompanyProfile target, CompanyDelta source) {
@@ -578,6 +643,9 @@ public abstract class CompanyProfileMapper {
                 }
                 if (Objects.equals(foreignCompanyDetails.getAccounts().getAccountPeriodTo(), new AccountPeriod())) {
                     foreignCompanyDetails.getAccounts().setAccountPeriodTo(null);
+                }
+                if (Objects.equals(foreignCompanyDetails.getAccounts().getMustFileWithin(), new MustFileWithin())) {
+                    foreignCompanyDetails.getAccounts().setMustFileWithin(null);
                 }
             }
             if (Objects.equals(foreignCompanyDetails.getAccounts(), new ForeignCompanyDetailsAccounts())) {

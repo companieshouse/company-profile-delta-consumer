@@ -11,15 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
+import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.api.company.AccountingRequirement;
 import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.AnnualReturn;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.company.ConfirmationStatement;
 import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
 import uk.gov.companieshouse.api.company.LastAccounts;
 import uk.gov.companieshouse.api.company.NextAccounts;
-import uk.gov.companieshouse.api.delta.CompanyDelta;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
@@ -385,6 +386,116 @@ public class CompanyProfileMapperTest {
 
         //compare values
         assertEquals(expectedProfile.getData().getJurisdiction(),resultProfile.getData().getJurisdiction());
+    }
+
+    @Test
+    public void shouldMapForeignAccountTypeEnumToCorrectValues() {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        ForeignCompanyDetails expectedForeignCompanyDetails = new ForeignCompanyDetails();
+        AccountingRequirement expectedAccountingRequirement = new AccountingRequirement();
+
+        expectedData.setForeignCompanyDetails(expectedForeignCompanyDetails);
+        expectedForeignCompanyDetails.setAccountingRequirement(expectedAccountingRequirement);
+
+        //Expected field
+        expectedData.getForeignCompanyDetails().getAccountingRequirement().setForeignAccountType("accounting-requirements-of-originating-country-apply");
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getForeignCompanyDetails()
+                        .getAccountingRequirement().getForeignAccountType(),
+                resultProfile.getData().getForeignCompanyDetails()
+                        .getAccountingRequirement().getForeignAccountType());
+    }
+
+    @Test
+    public void shouldMapForeignAccountTypeEnumToNull() throws IOException {
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        ForeignCompanyDetails expectedForeignCompanyDetails = new ForeignCompanyDetails();
+        AccountingRequirement expectedAccountingRequirement = new AccountingRequirement();
+
+        expectedForeignCompanyDetails.setAccountingRequirement(expectedAccountingRequirement);
+        expectedData.setForeignCompanyDetails(expectedForeignCompanyDetails);
+
+        //Expected field
+        expectedData.getForeignCompanyDetails().getAccountingRequirement().setForeignAccountType(null);
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getForeignCompanyDetails()
+                .getAccountingRequirement().getForeignAccountType(),
+                resultProfile.getData().getForeignCompanyDetails()
+                        .getAccountingRequirement().getForeignAccountType());
+    }
+
+    @Test
+    public void shouldMapTermsOfAccountPublicationToCorrectValues() {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        ForeignCompanyDetails expectedForeignCompanyDetails = new ForeignCompanyDetails();
+        AccountingRequirement expectedAccountingRequirement = new AccountingRequirement();
+
+        expectedData.setForeignCompanyDetails(expectedForeignCompanyDetails);
+        expectedForeignCompanyDetails.setAccountingRequirement(expectedAccountingRequirement);
+
+        //Expected field
+        expectedData.getForeignCompanyDetails().getAccountingRequirement().setTermsOfAccountPublication("accounts-publication-date-supplied-by-company");
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getForeignCompanyDetails()
+                        .getAccountingRequirement().getTermsOfAccountPublication(),
+                resultProfile.getData().getForeignCompanyDetails()
+                        .getAccountingRequirement().getTermsOfAccountPublication());
+    }
+
+    @Test
+    public void shouldMapForeignAccountIsCreditOrFinancialToBoolean() throws JsonProcessingException {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        ForeignCompanyDetails expectedForeignCompanyDetails = new ForeignCompanyDetails();
+
+        expectedData.setForeignCompanyDetails(expectedForeignCompanyDetails);
+
+        //Expected field
+        expectedData.getForeignCompanyDetails().setIsACreditFinancialInstitution(true);
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getForeignCompanyDetails().getIsACreditFinancialInstitution(),
+                resultProfile.getData().getForeignCompanyDetails().getIsACreditFinancialInstitution());
+    }
+
+    @Test
+    public void shouldNotMapForeignCompanyAccountsWhenNull() {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+        ForeignCompanyDetails expectedForeignCompanyDetails = new ForeignCompanyDetails();
+
+        expectedData.setForeignCompanyDetails(expectedForeignCompanyDetails);
+        expectedData.getForeignCompanyDetails().setAccounts(null);
+        expectedProfile.setData(expectedData);
+
+        assertEquals(expectedData.getForeignCompanyDetails().getAccounts(), resultProfile.getData().getForeignCompanyDetails().getAccounts());
+    }
+
+    @Test
+    public void shouldNotMapMustFileWithinWhenNull() throws IOException {
+        setUpTestData("company-profile-delta-empty-foreign-company-accounts.json", null);
+
     }
 
     @Test

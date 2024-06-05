@@ -49,10 +49,9 @@
     "external_registration_number" : "12345",
     "foreign_company_details" : {
         "accounting_requirement" : {
-            "foreign_account_type" : "1",
-            "terms_of_account_publication" : null
+            "foreign_account_type" : "accounting-requirements-of-originating-country-apply",
+            "terms_of_account_publication" : "accounts-publication-date-supplied-by-company"
         },
-        "accounts" : null,
         "business_activity" : "testBusinessActivity",
         "company_type" : "1",
         "governed_by" : "something",
