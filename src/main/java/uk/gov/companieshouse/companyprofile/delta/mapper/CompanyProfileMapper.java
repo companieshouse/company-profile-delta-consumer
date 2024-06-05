@@ -438,10 +438,6 @@ public abstract class CompanyProfileMapper {
             } else if (parsedDissolutionDate != null) {
                 data.setDateOfDissolution(parsedDissolutionDate);
             }
-            if (parsedDissolutionDate != null) {
-                data.setDateOfCessation(parsedDissolutionDate);
-            }
-
             if (parsedFullMembersListDate != null) {
                 data.setLastFullMembersListDate(parsedFullMembersListDate);
             }
