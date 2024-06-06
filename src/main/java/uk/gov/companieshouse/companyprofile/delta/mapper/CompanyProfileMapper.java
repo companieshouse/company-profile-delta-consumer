@@ -62,6 +62,8 @@ public abstract class CompanyProfileMapper {
 
     @Mapping(target = "data.foreignCompanyDetails.accountingRequirement.foreignAccountType",
             source = "foreignCompany.accReqType")
+    @Mapping(target = "data.foreignCompanyDetails.accountingRequirement.termsOfAccountPublication",
+            source = "foreignCompany.accReqType")
 
     @Mapping(target = "data.foreignCompanyDetails.accounts.accountPeriodFrom.month",
             source = "foreignCompany.requiredToPublish.monthFrom")
@@ -373,7 +375,7 @@ public abstract class CompanyProfileMapper {
             ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
             if (foreignCompanyDetails.getAccountingRequirement() != null) {
                 AccountingRequirement accountingRequirement = foreignCompanyDetails.getAccountingRequirement();
-                String termsOfAccountPublication = source.getForeignCompany().getTermsOfAccountPublication();
+                String termsOfAccountPublication = source.getForeignCompany().getAccReqType();
 
                 HashMap<String,String> termsOfAccountPublicationMap = MapperUtils.getTermsOfAccountPublicationMap();
                 accountingRequirement.setTermsOfAccountPublication(termsOfAccountPublicationMap

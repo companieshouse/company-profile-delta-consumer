@@ -412,7 +412,7 @@ public class CompanyProfileMapperTest {
     }
 
     @Test
-    public void shouldMapForeignAccountTypeEnumToNull() throws IOException {
+    public void shouldMapAccountingRequirementToNullWhenAccReqTypeNull() throws IOException {
         setUpTestData("company-profile-delta-enumMapper-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
@@ -429,10 +429,7 @@ public class CompanyProfileMapperTest {
         expectedProfile.setData(expectedData);
 
         //compare values
-        assertEquals(expectedProfile.getData().getForeignCompanyDetails()
-                .getAccountingRequirement().getForeignAccountType(),
-                resultProfile.getData().getForeignCompanyDetails()
-                        .getAccountingRequirement().getForeignAccountType());
+        assertNull(resultProfile.getData().getForeignCompanyDetails().getAccountingRequirement());
     }
 
     @Test
@@ -490,12 +487,6 @@ public class CompanyProfileMapperTest {
         expectedProfile.setData(expectedData);
 
         assertEquals(expectedData.getForeignCompanyDetails().getAccounts(), resultProfile.getData().getForeignCompanyDetails().getAccounts());
-    }
-
-    @Test
-    public void shouldNotMapMustFileWithinWhenNull() throws IOException {
-        setUpTestData("company-profile-delta-empty-foreign-company-accounts.json", null);
-
     }
 
     @Test
