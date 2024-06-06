@@ -72,8 +72,7 @@
     "legal_form": "1",
     "credit_or_financial": "1",
     "acc_req_type": "1",
-    "business_activity": "testBusinessActivity",
-    "terms_of_account_publication": "1"
+    "business_activity": "testBusinessActivity"
   },
   "previous_company_names": [
     {
