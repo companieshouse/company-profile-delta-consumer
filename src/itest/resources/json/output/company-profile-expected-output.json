@@ -56,7 +56,7 @@
             },
             "accounts" : null,
             "business_activity" : "testBusinessActivity",
-            "company_type" : "1",
+            "company_type" : null,
             "governed_by" : "something",
             "is_a_credit_financial_institution" : true,
             "originating_registry" : {

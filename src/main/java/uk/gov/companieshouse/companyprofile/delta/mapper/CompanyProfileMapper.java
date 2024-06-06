@@ -76,8 +76,6 @@ public abstract class CompanyProfileMapper {
 
     @Mapping(target = "data.foreignCompanyDetails.businessActivity",
             source = "foreignCompany.businessActivity")
-    @Mapping(target = "data.foreignCompanyDetails.companyType",
-            source = "foreignCompany.legalForm")
     @Mapping(target = "data.foreignCompanyDetails.governedBy",
             source = "foreignCompany.governingLaw")
     @Mapping(target = "data.foreignCompanyDetails.isACreditFinancialInstitution",
