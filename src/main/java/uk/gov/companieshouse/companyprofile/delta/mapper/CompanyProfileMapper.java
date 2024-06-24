@@ -632,6 +632,9 @@ public abstract class CompanyProfileMapper {
         if (Objects.equals(data.getServiceAddress(), new RegisteredOfficeAddress())) {
             data.setServiceAddress(null);
         }
+        if (Objects.equals(data.getRegisteredOfficeAddress(), new RegisteredOfficeAddress())) {
+            data.setRegisteredOfficeAddress(null);
+        }
         ForeignCompanyDetails foreignCompanyDetails = data.getForeignCompanyDetails();
         if (foreignCompanyDetails != null) {
 
