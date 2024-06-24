@@ -69,7 +69,7 @@
         "has_been_liquidated" : null,
         "has_charges" : null,
         "has_insolvency_history" : false,
-        "is_community_interest_company" : false,
+        "is_community_interest_company" : null,
         "jurisdiction" : "england-wales",
         "last_full_members_list_date" : [ 2014, 5, 23 ],
         "previous_company_names" : [ {
