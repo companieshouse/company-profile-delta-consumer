@@ -26,7 +26,7 @@
   "undeliverable_registered_office_address": "0",
   "status": "0",
   "date_of_dissolution": "20190101",
-  "creation_date": "19400122",
+  "creation_date": "",
   "account_overdue": "1",
   "confirmation_statement_overdue": "1",
   "annual_return_overdue": "1",
@@ -46,7 +46,7 @@
     "next_made_up_to": "20160523"
   },
   "annual_return_dates": {
-    "latest_made_up_to": "20150523",
+    "latest_made_up_to": "",
     "next_due": "20150523",
     "next_made_up_to": "20150523"
   },
