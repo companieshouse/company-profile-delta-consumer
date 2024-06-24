@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -222,12 +223,13 @@ public abstract class CompanyProfileMapper {
     public void mapCicInd(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
         BooleanFlag cicIndFlag = source.getCicInd();
-        String cicIndType = null;
         if (cicIndFlag != null) {
-            cicIndType = cicIndFlag.getValue();
+            if (Objects.equals(cicIndFlag.getValue(), "1")) {
+                data.setIsCommunityInterestCompany(true);
+            } else {
+                data.setIsCommunityInterestCompany(null);
+            }
         }
-        HashMap<String, Boolean> cicIndMap = MapperUtils.getIsCommunityInterestCompanyMap();
-        data.setIsCommunityInterestCompany(cicIndMap.getOrDefault(cicIndType, null));
         target.setData(data);
     }
 

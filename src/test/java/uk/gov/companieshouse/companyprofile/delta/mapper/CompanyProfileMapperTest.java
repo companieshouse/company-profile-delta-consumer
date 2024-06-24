@@ -147,7 +147,7 @@ public class CompanyProfileMapperTest {
         Data expectedData = new Data();
 
         //Expected field
-        expectedData.setIsCommunityInterestCompany(false);
+        expectedData.setIsCommunityInterestCompany(null);
         expectedProfile.setData(expectedData);
 
         //compare values
