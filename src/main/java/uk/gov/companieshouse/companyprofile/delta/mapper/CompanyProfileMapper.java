@@ -633,6 +633,22 @@ public abstract class CompanyProfileMapper {
         if (Objects.equals(data.getServiceAddress(), new RegisteredOfficeAddress())) {
             data.setServiceAddress(null);
         }
+
+        if (data.getRegisteredOfficeAddress() != null) {
+            RegisteredOfficeAddress registeredOfficeAddress = data.getRegisteredOfficeAddress();
+            if (Objects.equals(registeredOfficeAddress.getAddressLine1(), "")) {
+                data.getRegisteredOfficeAddress().setAddressLine1(null);
+            }
+            if (Objects.equals(registeredOfficeAddress.getAddressLine2(), "")) {
+                data.getRegisteredOfficeAddress().setAddressLine2(null);
+            }
+            if (Objects.equals(registeredOfficeAddress.getPostalCode(), "")) {
+                data.getRegisteredOfficeAddress().setPostalCode(null);
+            }
+            if (Objects.equals(registeredOfficeAddress.getLocality(), "")) {
+                data.getRegisteredOfficeAddress().setLocality(null);
+            }
+        }
         if (Objects.equals(data.getRegisteredOfficeAddress(), new RegisteredOfficeAddress())) {
             data.setRegisteredOfficeAddress(null);
         }
