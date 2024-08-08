@@ -22,7 +22,11 @@ import uk.gov.companieshouse.api.company.NextAccounts;
 import uk.gov.companieshouse.api.company.OriginatingRegistry;
 import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.company.RegisteredOfficeAddress;
-import uk.gov.companieshouse.api.delta.*;
+import uk.gov.companieshouse.api.delta.BooleanFlag;
+import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.api.delta.CorporateAnnotation;
+import uk.gov.companieshouse.api.delta.ForeignCompany;
+import uk.gov.companieshouse.api.delta.SicCodes;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -316,7 +320,7 @@ public abstract class CompanyProfileMapper {
         HashMap<String,String> corporateAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
         @Valid List<uk.gov.companieshouse.api.delta.CorporateAnnotation> annotations = source.getCorporateAnnotation();
         System.out.println(annotations.get(0));
-        for(uk.gov.companieshouse.api.delta.CorporateAnnotation corporateAnnotation : annotations){
+        for (uk.gov.companieshouse.api.delta.CorporateAnnotation corporateAnnotation : annotations) {
             String newType = corporateAnnotationMap
                     .getOrDefault(corporateAnnotation.getType(), String.valueOf(corporateAnnotation.getType()));
             corporateAnnotation.setType(CorporateAnnotation.TypeEnum.valueOf(newType));
@@ -639,6 +643,22 @@ public abstract class CompanyProfileMapper {
         }
         if (Objects.equals(data.getServiceAddress(), new RegisteredOfficeAddress())) {
             data.setServiceAddress(null);
+        }
+
+        if (data.getRegisteredOfficeAddress() != null) {
+            RegisteredOfficeAddress registeredOfficeAddress = data.getRegisteredOfficeAddress();
+            if (Objects.equals(registeredOfficeAddress.getAddressLine1(), "")) {
+                data.getRegisteredOfficeAddress().setAddressLine1(null);
+            }
+            if (Objects.equals(registeredOfficeAddress.getAddressLine2(), "")) {
+                data.getRegisteredOfficeAddress().setAddressLine2(null);
+            }
+            if (Objects.equals(registeredOfficeAddress.getPostalCode(), "")) {
+                data.getRegisteredOfficeAddress().setPostalCode(null);
+            }
+            if (Objects.equals(registeredOfficeAddress.getLocality(), "")) {
+                data.getRegisteredOfficeAddress().setLocality(null);
+            }
         }
         if (Objects.equals(data.getRegisteredOfficeAddress(), new RegisteredOfficeAddress())) {
             data.setRegisteredOfficeAddress(null);
