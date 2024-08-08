@@ -29,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static uk.gov.companieshouse.api.company.CorporateAnnotation.TypeEnum._100;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = { CompanyProfileMapperImpl.class})
@@ -213,11 +214,11 @@ public class CompanyProfileMapperTest {
         CompanyProfile expectedProfile = new CompanyProfile();
         Data expectedData = new Data();
 
-        expectedData.setCorporateAnnotationType("other");
+        expectedData.getCorporateAnnotation().get(0).setType(_100);
         expectedProfile.setData(expectedData);
 
-        assertEquals(expectedProfile.getData().getCorporateAnnotationType(),
-                resultProfile.getData().getCorporateAnnotationType());
+        assertEquals(expectedProfile.getData().getCorporateAnnotation().get(0).getType(),
+                resultProfile.getData().getCorporateAnnotation().get(0).getType());
     }
 
     @Test

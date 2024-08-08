@@ -120,5 +120,8 @@
     "officer_summary" : null,
     "partial_data_available" : null,
     "super_secure_managing_officer_count": "0",
-    "corporate_annotation_type": "other"
+    "corporate_annotation": [
+        {
+            "type" : "100"
+        }]
 }

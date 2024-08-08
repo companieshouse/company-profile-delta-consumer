@@ -86,5 +86,7 @@
   "parent_company_number": "1234543",
   "parent_company_name": "something",
   "business_activity": "beepboop",
-  "corporate_annotation_type": "100"
+  "corporate_annotation": [{
+    "type" : "100"
+  }]
 }
