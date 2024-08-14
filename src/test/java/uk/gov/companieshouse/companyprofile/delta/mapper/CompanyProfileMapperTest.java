@@ -209,6 +209,13 @@ public class CompanyProfileMapperTest {
         CompanyProfile expectedProfile = new CompanyProfile();
         Data expectedData = new Data();
 
+        List<CorporateAnnotation> corporateAnnotationList = new ArrayList<>();
+        CorporateAnnotation corporateAnnotation = new CorporateAnnotation();
+        corporateAnnotation.setType(_100);
+        corporateAnnotation.setCreatedOn(LocalDate.parse("20160630", DateTimeFormatter.ofPattern("yyyyMMdd")));
+        corporateAnnotationList.add(corporateAnnotation);
+        expectedData.setCorporateAnnotation(corporateAnnotationList);
+
         expectedProfile.setData(expectedData);
 
         assertEquals(expectedProfile.getData().getCorporateAnnotation().get(0).getType(),

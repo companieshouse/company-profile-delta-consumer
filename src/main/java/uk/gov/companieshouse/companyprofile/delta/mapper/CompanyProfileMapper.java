@@ -340,15 +340,20 @@ public abstract class CompanyProfileMapper {
     @AfterMapping
     public void mapEnumsCorpAnnotationType(@MappingTarget CompanyProfile target, CompanyDelta source) {
         if (source.getCorporateAnnotation() != null) {
-            List<uk.gov.companieshouse.api.company.CorporateAnnotation> corporateAnnotationList = source.getCorporateAnnotation()
+            List<uk.gov.companieshouse.api.company.CorporateAnnotation>
+                    corporateAnnotationList = source.getCorporateAnnotation()
                     .stream()
                     .map(corporateAnnotation -> {
-                        uk.gov.companieshouse.api.company.CorporateAnnotation annotation = new uk.gov.companieshouse.api.company.CorporateAnnotation();
-                        annotation.setType(corporateAnnotation.getType());
-                        annotation.setCreatedOn(LocalDate.parse(corporateAnnotation.getCreatedOn(),
-                                DateTimeFormatter.ofPattern("yyyyMMdd")));
+                        uk.gov.companieshouse.api.company.CorporateAnnotation annotation =
+                                new uk.gov.companieshouse.api.company.CorporateAnnotation();
+
+                        annotation.setType(uk.gov.companieshouse.api.company.
+                                CorporateAnnotation.TypeEnum.valueOf(corporateAnnotation.getType().name()));
+                        annotation.setCreatedOn(LocalDate.parse(corporateAnnotation.getCreatedOn(),DateTimeFormatter.ofPattern("yyyyMMdd")));
                         annotation.setDescription(corporateAnnotation.getDescription());
+                        System.out.println(annotation);
                         return annotation;
+
                     }).collect(Collectors.toList());
             Data data = target.getData();
             data.setCorporateAnnotation(corporateAnnotationList);
