@@ -11,20 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
+import uk.gov.companieshouse.api.company.*;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-import uk.gov.companieshouse.api.company.AccountingRequirement;
-import uk.gov.companieshouse.api.company.Accounts;
-import uk.gov.companieshouse.api.company.AnnualReturn;
-import uk.gov.companieshouse.api.company.CompanyProfile;
-import uk.gov.companieshouse.api.company.ConfirmationStatement;
-import uk.gov.companieshouse.api.company.Data;
-import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
-import uk.gov.companieshouse.api.company.LastAccounts;
-import uk.gov.companieshouse.api.company.NextAccounts;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -208,13 +203,12 @@ public class CompanyProfileMapperTest {
     }
 
     @Test
-    public void shouldMapCorpAnnotationTypeEnumToCorrectValues() {
+    public void shouldMapCorpAnnotationTypeEnumToCorrectValues() throws IOException {
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
         Data expectedData = new Data();
 
-        expectedData.getCorporateAnnotation().get(0).setType(_100);
         expectedProfile.setData(expectedData);
 
         assertEquals(expectedProfile.getData().getCorporateAnnotation().get(0).getType(),

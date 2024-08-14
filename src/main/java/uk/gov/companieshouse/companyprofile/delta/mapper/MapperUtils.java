@@ -1,6 +1,6 @@
 package uk.gov.companieshouse.companyprofile.delta.mapper;
 
-import uk.gov.companieshouse.api.delta.BooleanFlag;
+import uk.gov.companieshouse.api.delta.CorporateAnnotation;
 
 import java.util.HashMap;
 
@@ -160,9 +160,11 @@ public class MapperUtils {
         return termsOfAccountPublication;
     }
 
-    /**Create a hashmap for corporate_annotation_type.*/
-    public static HashMap<String,String> getCorpAnnotationTypeMap() {
-        HashMap<String,String> corpAnnotationTypeMap = new HashMap<>();
+    /**
+     * Create a hashmap for corporate_annotation_type.
+     */
+    public static HashMap<String, String> getCorpAnnotationTypeMap() {
+        HashMap<String, String> corpAnnotationTypeMap = new HashMap<>();
         corpAnnotationTypeMap.put("100", "other");
         return corpAnnotationTypeMap;
     }
