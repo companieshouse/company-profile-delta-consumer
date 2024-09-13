@@ -4,27 +4,9 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import uk.gov.companieshouse.api.company.AccountPeriod;
-import uk.gov.companieshouse.api.company.AccountingReferenceDate;
-import uk.gov.companieshouse.api.company.AccountingRequirement;
-import uk.gov.companieshouse.api.company.Accounts;
-import uk.gov.companieshouse.api.company.AnnualReturn;
-import uk.gov.companieshouse.api.company.BranchCompanyDetails;
-import uk.gov.companieshouse.api.company.CompanyProfile;
-import uk.gov.companieshouse.api.company.ConfirmationStatement;
-import uk.gov.companieshouse.api.company.Data;
-import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
-import uk.gov.companieshouse.api.company.ForeignCompanyDetailsAccounts;
-import uk.gov.companieshouse.api.company.LastAccounts;
-import uk.gov.companieshouse.api.company.Links;
-import uk.gov.companieshouse.api.company.MustFileWithin;
-import uk.gov.companieshouse.api.company.NextAccounts;
-import uk.gov.companieshouse.api.company.OriginatingRegistry;
-import uk.gov.companieshouse.api.company.PreviousCompanyNames;
-import uk.gov.companieshouse.api.company.RegisteredOfficeAddress;
+import uk.gov.companieshouse.api.company.*;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-import uk.gov.companieshouse.api.delta.CorporateAnnotation;
 import uk.gov.companieshouse.api.delta.ForeignCompany;
 import uk.gov.companieshouse.api.delta.SicCodes;
 
@@ -333,6 +315,7 @@ public abstract class CompanyProfileMapper {
             corporateAnnotationList.add(corporateAnnotation)
         }
 
+
         data.setCorporateAnnotation();
         target.setData(data);
     }*/
@@ -346,15 +329,17 @@ public abstract class CompanyProfileMapper {
                     .map(corporateAnnotation -> {
                         uk.gov.companieshouse.api.company.CorporateAnnotation annotation =
                                 new uk.gov.companieshouse.api.company.CorporateAnnotation();
-
-                        annotation.setType(uk.gov.companieshouse.api.company.
-                                CorporateAnnotation.TypeEnum.valueOf(corporateAnnotation.getType().name()));
-                        annotation.setCreatedOn(LocalDate.parse(corporateAnnotation.getCreatedOn(),DateTimeFormatter.ofPattern("yyyyMMdd")));
+                        HashMap<String, String> corporateAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
+                        String newType = corporateAnnotationMap.getOrDefault(String.valueOf(corporateAnnotation.getType()),null);
+                        //annotation.setType(CorporateAnnotation.TypeEnum.valueOf(newType));
+                        annotation.setType(uk.gov.companieshouse.api.company.CorporateAnnotation.TypeEnum.valueOf(corporateAnnotation.getType().name()));
+                        //annotation.setCreatedOn(LocalDate.parse(corporateAnnotation.getCreatedOn(),DateTimeFormatter.ofPattern("yyyyMMdd")));
                         annotation.setDescription(corporateAnnotation.getDescription());
                         System.out.println(annotation);
                         return annotation;
 
                     }).collect(Collectors.toList());
+
             Data data = target.getData();
             data.setCorporateAnnotation(corporateAnnotationList);
             target.setData(data);

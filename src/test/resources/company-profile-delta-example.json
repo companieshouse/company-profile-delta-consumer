@@ -87,7 +87,6 @@
   "parent_company_name": "something",
   "business_activity": "beepboop",
   "corporate_annotation": [{
-    "type" : "100",
-    "created_on": "20160630"
+    "type" : "100"
   }]
 }
