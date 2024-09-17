@@ -1,13 +1,13 @@
 package uk.gov.companieshouse.companyprofile.delta.processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import consumer.exception.NonRetryableErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDeleteDelta;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
+import uk.gov.companieshouse.companyprofile.delta.exception.RetryableErrorException;
 import uk.gov.companieshouse.companyprofile.delta.logging.DataMapHolder;
 import uk.gov.companieshouse.companyprofile.delta.service.ApiClientService;
 import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileApiTransformer;
@@ -58,7 +58,7 @@ public class CompanyProfileDeltaProcessor {
             companyProfile.setDeltaAt(companyDelta.getDeltaAt());
         } catch (Exception ex) {
             logger.errorContext(contextId, ex.getMessage(), ex, DataMapHolder.getLogMap());
-            throw new NonRetryableErrorException(
+            throw new RetryableErrorException(
                     "Error when extracting company profile delta", ex);
         }
 
@@ -83,7 +83,7 @@ public class CompanyProfileDeltaProcessor {
                     .companyNumber(companyDeleteDelta.getCompanyNumber());
         } catch (Exception ex) {
             logger.errorContext(contextId, ex.getMessage(), ex, DataMapHolder.getLogMap());
-            throw new NonRetryableErrorException(
+            throw new RetryableErrorException(
                     "Error when extracting company profile delete delta", ex);
         }
         logger.infoContext(contextId, "Sending DELETE request to company-profile-api",
