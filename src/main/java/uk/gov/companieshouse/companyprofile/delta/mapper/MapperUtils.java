@@ -4,6 +4,8 @@ import uk.gov.companieshouse.api.delta.CorporateAnnotation;
 
 import java.util.HashMap;
 
+import static uk.gov.companieshouse.api.company.CorporateAnnotation.TypeEnum.OTHER;
+
 public class MapperUtils {
 
     /** Create a hashmap for IsCommunityInterestCompany. */
@@ -165,7 +167,7 @@ public class MapperUtils {
      */
     public static HashMap<String, String> getCorpAnnotationTypeMap() {
         HashMap<String, String> corpAnnotationTypeMap = new HashMap<>();
-        corpAnnotationTypeMap.put("100", "other");
+        corpAnnotationTypeMap.put("100", String.valueOf(OTHER));
         return corpAnnotationTypeMap;
     }
 

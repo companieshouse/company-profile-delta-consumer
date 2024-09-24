@@ -10,8 +10,8 @@ import uk.gov.companieshouse.api.company.AccountingRequirement;
 import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.AnnualReturn;
 import uk.gov.companieshouse.api.company.BranchCompanyDetails;
-import uk.gov.companieshouse.api.company.CorporateAnnotation;
 import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.company.CorporateAnnotation;
 import uk.gov.companieshouse.api.company.ConfirmationStatement;
 import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
@@ -313,30 +313,33 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
-/*    *//**Maps enum corporate_annotation_type to string. *//*
+    /**Maps enum corporate_annotation_type to string. */
+    /*
     @AfterMapping
     public void mapEnumsCorpAnnotationType(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
 
         HashMap<String, String> corporateAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
-        @Valid List<CorporateAnnotation> annotations = source.getCorporateAnnotation();
+        @Valid List<uk.gov.companieshouse.api.delta.CorporateAnnotation> annotations = source.getCorporateAnnotation();
         System.out.println(annotations.get(0));
 
 
         List<uk.gov.companieshouse.api.company.CorporateAnnotation> corporateAnnotationList = new ArrayList<>();
-        for (CorporateAnnotation corporateAnnotation : annotations) {
+        for (uk.gov.companieshouse.api.delta.CorporateAnnotation corporateAnnotation : annotations) {
 
             String newType = corporateAnnotationMap.getOrDefault(String.valueOf(corporateAnnotation.getType()),null);
             System.out.println(newType);
-            corporateAnnotation.setType(CorporateAnnotation.TypeEnum.valueOf(newType));
+            corporateAnnotation.setType(uk.gov.companieshouse.api.delta.CorporateAnnotation.TypeEnum.valueOf(newType));
             //System.out.println(corporateAnnotation.getType());
-            corporateAnnotationList.add(corporateAnnotation)
+            corporateAnnotationList.add(corporateAnnotation);
         }
 
 
-        data.setCorporateAnnotation();
+        data.setCorporateAnnotation(corporateAnnotationList);
         target.setData(data);
     }*/
+
+    /**Maps enum corporate_annotation_type to string. */
 
     @AfterMapping
     public void mapEnumsCorpAnnotationType(@MappingTarget CompanyProfile target, CompanyDelta source) {
@@ -348,26 +351,22 @@ public abstract class CompanyProfileMapper {
                         uk.gov.companieshouse.api.company.CorporateAnnotation annotation =
                                 new uk.gov.companieshouse.api.company.CorporateAnnotation();
 
-                        System.out.println(uk.gov.companieshouse.api.company.CorporateAnnotation
-                                .TypeEnum.valueOf(corporateAnnotation.getType().name()));
-
                         HashMap<String, String> corporateAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
 
-                        String newType = corporateAnnotationMap.getOrDefault(String
+                        /*String newType = corporateAnnotationMap.getOrDefault(String
                                 .valueOf(uk.gov.companieshouse.api.company.CorporateAnnotation
-                                        .TypeEnum.valueOf(corporateAnnotation.getType().name())),
+                                        .TypeEnum.valueOf(corporateAnnotation.getType())),
                                 null);
-                        System.out.println(newType);
+                        System.out.println(newType);*/
+                        String enumType = corporateAnnotation.getType();
+                        annotation.setType(CorporateAnnotation.TypeEnum.valueOf(enumType));
 
-                        //CorporateAnnotation.TypeEnum typeEnum = CorporateAnnotation.TypeEnum.fromValue(newType);
-                        //System.out.println(typeEnum);
-                        annotation.setType(CorporateAnnotation.TypeEnum.fromValue(newType));
-
-                        annotation.setCreatedOn(LocalDate.parse(corporateAnnotation.getCreatedOn()
-                            ,DateTimeFormatter.ofPattern("yyyyMMdd")));
+                        //annotation.setCreatedOn(corporateAnnotation.getCreatedOn());
+                        annotation.setCreatedOn(LocalDate.parse(corporateAnnotation
+                                .getCreatedOn().toString(), DateTimeFormatter.ofPattern("yyyyMMdd")));
                         annotation.setDescription(corporateAnnotation.getDescription());
 
-                        System.out.println(annotation);
+                        System.out.println("xyz: " + annotation);
                         return annotation;
 
                     }).collect(Collectors.toList());
