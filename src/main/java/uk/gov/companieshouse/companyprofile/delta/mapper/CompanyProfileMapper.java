@@ -362,8 +362,8 @@ public abstract class CompanyProfileMapper {
                         annotation.setType(CorporateAnnotation.TypeEnum.valueOf(enumType));
 
                         //annotation.setCreatedOn(corporateAnnotation.getCreatedOn());
-                        annotation.setCreatedOn(LocalDate.parse(corporateAnnotation
-                                .getCreatedOn().toString(), DateTimeFormatter.ofPattern("yyyyMMdd")));
+                        annotation.setCreatedOn(LocalDate.parse(corporateAnnotation.getCreatedOn(),
+                                DateTimeFormatter.ofPattern("yyyyMMdd")));
                         annotation.setDescription(corporateAnnotation.getDescription());
 
                         System.out.println("xyz: " + annotation);
