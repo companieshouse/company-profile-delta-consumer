@@ -133,7 +133,8 @@ public class CompanyProfileSteps {
     }
 
     @Then("^the message should retry (\\d*) times and then error$")
-    public void theMessageShouldRetryAndError(int retries) {
+    public void theMessageShouldRetryAndError(int retries) throws InterruptedException {
+        Thread.sleep(500);
         ConsumerRecords<String, Object> records = KafkaTestUtils.getRecords(kafkaConsumer);
         Iterable<ConsumerRecord<String, Object>> retryRecords =  records.records("company-profile-delta-retry");
         Iterable<ConsumerRecord<String, Object>> errorRecords =  records.records("company-profile-delta-error");

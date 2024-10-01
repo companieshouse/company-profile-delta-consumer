@@ -1,6 +1,5 @@
 package uk.gov.companieshouse.companyprofile.delta.processor;
 
-import consumer.exception.NonRetryableErrorException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +12,7 @@ import org.springframework.messaging.Message;
 
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-import uk.gov.companieshouse.companyprofile.delta.processor.CompanyProfileDeltaProcessor;
+import uk.gov.companieshouse.companyprofile.delta.exception.RetryableErrorException;
 import uk.gov.companieshouse.companyprofile.delta.service.ApiClientService;
 import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileApiTransformer;
 import uk.gov.companieshouse.companyprofile.delta.utils.TestHelper;
@@ -46,9 +45,9 @@ public class CompanyProfileDeltaProcessorTest {
     }
 
     @Test
-    void When_InvalidChsDeltaMessage_Expect_NonRetryableError() {
+    void When_InvalidChsDeltaMessage_Expect_RetryableError() {
         Message<ChsDelta> mockChsDeltaMessage = testHelper.createInvalidChsDeltaMessage();
-        assertThrows(NonRetryableErrorException.class, ()->processor.processDelta(mockChsDeltaMessage));
+        assertThrows(RetryableErrorException.class, ()->processor.processDelta(mockChsDeltaMessage));
     }
 
     @Test
@@ -60,9 +59,9 @@ public class CompanyProfileDeltaProcessorTest {
     }
 
     @Test
-    void When_InvalidChsDeleteDeltaMessage_Expect_NonRetryableError() {
+    void When_InvalidChsDeleteDeltaMessage_Expect_RetryableError() {
         Message<ChsDelta> mockChsDeltaMessage = testHelper.createInvalidChsDeltaMessage();
-        assertThrows(NonRetryableErrorException.class, ()->processor.processDeleteDelta(mockChsDeltaMessage));
+        assertThrows(RetryableErrorException.class, ()->processor.processDeleteDelta(mockChsDeltaMessage));
         Mockito.verify(apiClientService, times(0)).invokeCompanyProfileDeleteHandler(any(), any());
 
     }
