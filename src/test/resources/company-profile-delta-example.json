@@ -86,9 +86,11 @@
   "parent_company_number": "1234543",
   "parent_company_name": "something",
   "business_activity": "beepboop",
-  "corporate_annotation": [{
-    "type" : "OTHER",
-    "created_on": "20160630",
-    "description": "20160630"
-  }]
+  "corporate_annotation": [
+    {
+      "type" : "100",
+      "created_on" : "20160606",
+      "description": "desc"
+    }
+  ]
 }

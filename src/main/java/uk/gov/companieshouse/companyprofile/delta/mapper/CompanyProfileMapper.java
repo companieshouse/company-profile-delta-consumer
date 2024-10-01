@@ -57,7 +57,7 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.companyNumber", source = "companyNumber")
     @Mapping(target = "data.companyStatus", source = "status")
     @Mapping(target = "data.companyStatusDetail", source = "status")
-    @Mapping(target = "data.corporateAnnotation", source = "corporateAnnotation")
+
 
     @Mapping(target = "deltaAt", source = "deltaAt")
     @Mapping(target = "data.externalRegistrationNumber", source = "externalRegistrationNumber")
@@ -313,33 +313,7 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
-    /**Maps enum corporate_annotation_type to string. */
-    /*
-    @AfterMapping
-    public void mapEnumsCorpAnnotationType(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        Data data = target.getData();
-
-        HashMap<String, String> corporateAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
-        @Valid List<uk.gov.companieshouse.api.delta.CorporateAnnotation> annotations = source.getCorporateAnnotation();
-        System.out.println(annotations.get(0));
-
-
-        List<uk.gov.companieshouse.api.company.CorporateAnnotation> corporateAnnotationList = new ArrayList<>();
-        for (uk.gov.companieshouse.api.delta.CorporateAnnotation corporateAnnotation : annotations) {
-
-            String newType = corporateAnnotationMap.getOrDefault(String.valueOf(corporateAnnotation.getType()),null);
-            System.out.println(newType);
-            corporateAnnotation.setType(uk.gov.companieshouse.api.delta.CorporateAnnotation.TypeEnum.valueOf(newType));
-            //System.out.println(corporateAnnotation.getType());
-            corporateAnnotationList.add(corporateAnnotation);
-        }
-
-
-        data.setCorporateAnnotation(corporateAnnotationList);
-        target.setData(data);
-    }*/
-
-    /**Maps enum corporate_annotation_type to string. */
+    /**Maps enum corporate_annotation to string. */
 
     @AfterMapping
     public void mapEnumsCorpAnnotationType(@MappingTarget CompanyProfile target, CompanyDelta source) {
@@ -350,23 +324,19 @@ public abstract class CompanyProfileMapper {
                     .map(corporateAnnotation -> {
                         uk.gov.companieshouse.api.company.CorporateAnnotation annotation =
                                 new uk.gov.companieshouse.api.company.CorporateAnnotation();
-
                         HashMap<String, String> corporateAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
 
-                        /*String newType = corporateAnnotationMap.getOrDefault(String
-                                .valueOf(uk.gov.companieshouse.api.company.CorporateAnnotation
-                                        .TypeEnum.valueOf(corporateAnnotation.getType())),
-                                null);
-                        System.out.println(newType);*/
-                        String enumType = corporateAnnotation.getType();
-                        annotation.setType(CorporateAnnotation.TypeEnum.valueOf(enumType));
+                        String enumType = String.valueOf(corporateAnnotation.getType());
+                        annotation.setType(corporateAnnotationMap.getOrDefault(enumType,null));
 
-                        //annotation.setCreatedOn(corporateAnnotation.getCreatedOn());
-                        annotation.setCreatedOn(LocalDate.parse(corporateAnnotation.getCreatedOn(),
-                                DateTimeFormatter.ofPattern("yyyyMMdd")));
+                        //System.out.println("date: "+corporateAnnotation.getCreatedOn());
+
+                        LocalDate parsedCreationDate = getParsedDate(corporateAnnotation.getCreatedOn());
+                        annotation.setCreatedOn(parsedCreationDate);
+                        //annotation.setCreatedOn(LocalDate.parse(corporateAnnotation.getCreatedOn(), DateTimeFormatter.ofPattern("yyyyMMdd")));
                         annotation.setDescription(corporateAnnotation.getDescription());
 
-                        System.out.println("xyz: " + annotation);
+                        System.out.println("corp: " + annotation);
                         return annotation;
 
                     }).collect(Collectors.toList());

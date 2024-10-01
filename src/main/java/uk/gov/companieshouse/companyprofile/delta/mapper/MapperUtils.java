@@ -4,7 +4,6 @@ import uk.gov.companieshouse.api.delta.CorporateAnnotation;
 
 import java.util.HashMap;
 
-import static uk.gov.companieshouse.api.company.CorporateAnnotation.TypeEnum.OTHER;
 
 public class MapperUtils {
 
@@ -163,11 +162,13 @@ public class MapperUtils {
     }
 
     /**
-     * Create a hashmap for corporate_annotation_type.
+     * Create a hashmap for corporate_annotation.
      */
     public static HashMap<String, String> getCorpAnnotationTypeMap() {
         HashMap<String, String> corpAnnotationTypeMap = new HashMap<>();
-        corpAnnotationTypeMap.put("100", String.valueOf(OTHER));
+        corpAnnotationTypeMap.put("1", "confirmed-intelligence-of-unusual-behaviour-from-the-fca");
+        corpAnnotationTypeMap.put("2", "directors-unverified");
+        corpAnnotationTypeMap.put("100", "other");
         return corpAnnotationTypeMap;
     }
 

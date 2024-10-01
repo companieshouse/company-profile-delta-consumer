@@ -24,7 +24,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static uk.gov.companieshouse.api.company.CorporateAnnotation.TypeEnum.OTHER;
+import static uk.gov.companieshouse.api.delta.CorporateAnnotation.TypeEnum._100;
 
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
@@ -213,9 +213,10 @@ public class CompanyProfileMapperTest {
 
         List<CorporateAnnotation> corporateAnnotationList = new ArrayList<>();
         CorporateAnnotation corporateAnnotation = new CorporateAnnotation();
-        corporateAnnotation.setType(OTHER);
-        corporateAnnotation.setDescription("20160630");
-        corporateAnnotation.setCreatedOn(LocalDate.parse("20160630", DateTimeFormatter.ofPattern("yyyyMMdd")));
+        corporateAnnotation.setType("other");
+        corporateAnnotation.setDescription("desc");
+        LocalDate localDate = LocalDate.parse("20160606", DateTimeFormatter.ofPattern("yyyyMMdd"));
+        corporateAnnotation.setCreatedOn(localDate);
 
         corporateAnnotationList.add(corporateAnnotation);
         expectedData.setCorporateAnnotation(corporateAnnotationList);

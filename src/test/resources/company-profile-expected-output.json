@@ -122,6 +122,8 @@
     "super_secure_managing_officer_count": "0",
     "corporate_annotation": [
         {
-            "type" : "other"
+            "type" : "other",
+            "created_on" : [ 2016, 6, 6 ],
+            "description" : "desc"
         }]
 }
