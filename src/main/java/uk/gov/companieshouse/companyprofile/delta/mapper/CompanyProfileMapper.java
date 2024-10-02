@@ -328,12 +328,8 @@ public abstract class CompanyProfileMapper {
 
                         String enumType = String.valueOf(corporateAnnotation.getType());
                         annotation.setType(corporateAnnotationMap.getOrDefault(enumType,null));
-
-                        //System.out.println("date: "+corporateAnnotation.getCreatedOn());
-
                         LocalDate parsedCreationDate = getParsedDate(corporateAnnotation.getCreatedOn());
                         annotation.setCreatedOn(parsedCreationDate);
-                        //annotation.setCreatedOn(LocalDate.parse(corporateAnnotation.getCreatedOn(), DateTimeFormatter.ofPattern("yyyyMMdd")));
                         annotation.setDescription(corporateAnnotation.getDescription());
 
                         System.out.println("corp: " + annotation);
