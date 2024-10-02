@@ -11,6 +11,7 @@ import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.AnnualReturn;
 import uk.gov.companieshouse.api.company.BranchCompanyDetails;
 import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.company.CorporateAnnotation;
 import uk.gov.companieshouse.api.company.ConfirmationStatement;
 import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
@@ -27,6 +28,7 @@ import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.api.delta.ForeignCompany;
 import uk.gov.companieshouse.api.delta.SicCodes;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -55,7 +57,7 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.companyNumber", source = "companyNumber")
     @Mapping(target = "data.companyStatus", source = "status")
     @Mapping(target = "data.companyStatusDetail", source = "status")
-    @Mapping(target = "data.corporateAnnotationType", source = "corporateAnnotationType")
+
 
     @Mapping(target = "deltaAt", source = "deltaAt")
     @Mapping(target = "data.externalRegistrationNumber", source = "externalRegistrationNumber")
@@ -311,14 +313,34 @@ public abstract class CompanyProfileMapper {
         target.setData(data);
     }
 
-    /**Maps enum corporate_annotation_type to string. */
+    /**Maps enum corporate_annotation to string. */
+
     @AfterMapping
     public void mapEnumsCorpAnnotationType(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        Data data = target.getData();
-        String corpAnnotationType = String.valueOf(source.getCorporateAnnotationType());
-        HashMap<String,String> corpAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
-        data.setCorporateAnnotationType(corpAnnotationMap.getOrDefault(corpAnnotationType, null));
-        target.setData(data);
+        if (source.getCorporateAnnotation() != null) {
+            List<uk.gov.companieshouse.api.company.CorporateAnnotation>
+                    corporateAnnotationList = source.getCorporateAnnotation()
+                    .stream()
+                    .map(corporateAnnotation -> {
+                        uk.gov.companieshouse.api.company.CorporateAnnotation annotation =
+                                new uk.gov.companieshouse.api.company.CorporateAnnotation();
+                        HashMap<String, String> corporateAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
+
+                        String enumType = String.valueOf(corporateAnnotation.getType());
+                        annotation.setType(corporateAnnotationMap.getOrDefault(enumType,null));
+                        LocalDate parsedCreationDate = getParsedDate(corporateAnnotation.getCreatedOn());
+                        annotation.setCreatedOn(parsedCreationDate);
+                        annotation.setDescription(corporateAnnotation.getDescription());
+
+                        System.out.println("corp: " + annotation);
+                        return annotation;
+
+                    }).collect(Collectors.toList());
+
+            Data data = target.getData();
+            data.setCorporateAnnotation(corporateAnnotationList);
+            target.setData(data);
+        }
     }
 
     /**Maps enum proof_status to string. */

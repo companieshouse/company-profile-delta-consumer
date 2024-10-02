@@ -44,7 +44,7 @@
             "next_made_up_to" : [ 2016, 5, 23 ],
             "overdue" : null
         },
-        "corporate_annotation_type": "other",
+        "corporate_annotation_type": null,
         "date_of_cessation" : null,
         "date_of_creation" : null,
         "date_of_dissolution" : [ 2019, 1, 1 ],
@@ -128,9 +128,17 @@
         "proof_status" : "paper",
         "officer_summary" : null,
         "partial_data_available" : null,
-        "super_secure_managing_officer_count": null
+        "super_secure_managing_officer_count": null,
+        "corporate_annotation": [
+            {
+                "type" : "other",
+                "created_on" : [ 2016, 6, 6 ],
+                "description": "desc"
+            }
+        ]
     },
     "parent_company_number": "112233",
     "delta_at": "20190612181928152002",
     "has_mortgages": false
+
 }

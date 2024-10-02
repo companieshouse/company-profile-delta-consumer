@@ -11,24 +11,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
+import uk.gov.companieshouse.api.company.*;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-import uk.gov.companieshouse.api.company.AccountingRequirement;
-import uk.gov.companieshouse.api.company.Accounts;
-import uk.gov.companieshouse.api.company.AnnualReturn;
-import uk.gov.companieshouse.api.company.CompanyProfile;
-import uk.gov.companieshouse.api.company.ConfirmationStatement;
-import uk.gov.companieshouse.api.company.Data;
-import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
-import uk.gov.companieshouse.api.company.LastAccounts;
-import uk.gov.companieshouse.api.company.NextAccounts;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static uk.gov.companieshouse.api.delta.CorporateAnnotation.TypeEnum._100;
+
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = { CompanyProfileMapperImpl.class})
@@ -207,17 +204,26 @@ public class CompanyProfileMapperTest {
     }
 
     @Test
-    public void shouldMapCorpAnnotationTypeEnumToCorrectValues() {
+    public void shouldMapCorpAnnotationTypeEnumToCorrectValues() throws IOException {
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
         Data expectedData = new Data();
 
-        expectedData.setCorporateAnnotationType("other");
-        expectedProfile.setData(expectedData);
 
-        assertEquals(expectedProfile.getData().getCorporateAnnotationType(),
-                resultProfile.getData().getCorporateAnnotationType());
+        List<CorporateAnnotation> corporateAnnotationList = new ArrayList<>();
+        CorporateAnnotation corporateAnnotation = new CorporateAnnotation();
+        corporateAnnotation.setType("other");
+        corporateAnnotation.setDescription("desc");
+        LocalDate localDate = LocalDate.parse("20160606", DateTimeFormatter.ofPattern("yyyyMMdd"));
+        corporateAnnotation.setCreatedOn(localDate);
+
+        corporateAnnotationList.add(corporateAnnotation);
+        expectedData.setCorporateAnnotation(corporateAnnotationList);
+
+        expectedProfile.setData(expectedData);
+        assertEquals(expectedProfile.getData().getCorporateAnnotation().get(0),
+                resultProfile.getData().getCorporateAnnotation().get(0));
     }
 
     @Test

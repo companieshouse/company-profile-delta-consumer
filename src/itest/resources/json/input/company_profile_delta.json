@@ -85,5 +85,11 @@
   "parent_company_name": "name",
   "parent_company_number": "112233",
   "business_activity": "activity",
-  "corporate_annotation_type": "100"
+  "corporate_annotation": [
+    {
+      "type" : "100",
+      "created_on" : "20160606",
+      "description": "desc"
+    }
+  ]
 }
