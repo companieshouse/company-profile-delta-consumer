@@ -325,7 +325,6 @@ public abstract class CompanyProfileMapper {
                         uk.gov.companieshouse.api.company.CorporateAnnotation annotation =
                                 new uk.gov.companieshouse.api.company.CorporateAnnotation();
                         HashMap<String, String> corporateAnnotationMap = MapperUtils.getCorpAnnotationTypeMap();
-
                         String enumType = String.valueOf(corporateAnnotation.getType());
                         annotation.setType(corporateAnnotationMap.getOrDefault(enumType,null));
                         LocalDate parsedCreationDate = getParsedDate(corporateAnnotation.getCreatedOn());
