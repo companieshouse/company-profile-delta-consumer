@@ -317,7 +317,7 @@ public abstract class CompanyProfileMapper {
 
     @AfterMapping
     public void mapEnumsCorpAnnotationType(@MappingTarget CompanyProfile target, CompanyDelta source) {
-        if (source.getCorporateAnnotation() != null) {
+        if (source.getCorporateAnnotation() != null && !source.getCorporateAnnotation().isEmpty()) {
             List<uk.gov.companieshouse.api.company.CorporateAnnotation>
                     corporateAnnotationList = source.getCorporateAnnotation()
                     .stream()
