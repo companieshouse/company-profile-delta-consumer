@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -571,6 +572,7 @@ public class CompanyProfileMapperTest {
     public void shouldNotReturnEmptyObjects() throws IOException {
         CompanyDelta emptyDelta = new CompanyDelta();
         emptyDelta.setSubtype("1");
+        emptyDelta.setCorporateAnnotation(Collections.emptyList());
 
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(emptyDelta);
 
@@ -582,6 +584,7 @@ public class CompanyProfileMapperTest {
         assertNull(resultProfile.getData().getRegisteredOfficeAddress());
         assertNull(resultProfile.getData().getServiceAddress());
         assertNull(resultProfile.getData().getAccounts());
+        assertNull(resultProfile.getData().getCorporateAnnotation());
     }
 
     @Test
