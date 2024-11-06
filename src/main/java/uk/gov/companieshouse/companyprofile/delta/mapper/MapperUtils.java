@@ -166,8 +166,6 @@ public class MapperUtils {
      */
     public static HashMap<String, String> getCorpAnnotationTypeMap() {
         HashMap<String, String> corpAnnotationTypeMap = new HashMap<>();
-        corpAnnotationTypeMap.put("1", "confirmed-intelligence-of-unusual-behaviour-from-the-fca");
-        corpAnnotationTypeMap.put("2", "directors-unverified");
         corpAnnotationTypeMap.put("100", "other");
         corpAnnotationTypeMap.put("20", "strike-off-under-section-1002a-of-the-companies-act-2006-incorporation");
         corpAnnotationTypeMap.put("21", "strike-off-under-section-1002a-of-the-companies-act-2006-restoration");
