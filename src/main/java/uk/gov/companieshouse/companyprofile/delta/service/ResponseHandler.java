@@ -1,59 +1,53 @@
 package uk.gov.companieshouse.companyprofile.delta.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
+import static uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication.NAMESPACE;
 
 import consumer.exception.NonRetryableErrorException;
 import consumer.exception.RetryableErrorException;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.handler.Executor;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.companyprofile.delta.logging.DataMapHolder;
 import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
 
-@SuppressWarnings("unchecked")
 @Service
-public class ResponseHandler<T> {
+public class ResponseHandler {
 
-    /**
-     * Handle response from data api.
-     */
-    public ApiResponse<Void> handleApiResponse(Logger logger, String context, String operation,
-                                               String uri, T executor) {
+    private static final Logger logger = LoggerFactory.getLogger(NAMESPACE);
+    private static final String API_ERROR_MSG = "%s response received from company-profile-api";
+
+    public ApiResponse<Void> handleApiResponse(String context, String operation, String uri,
+            Executor<ApiResponse<Void>> executor) {
         final Map<String, Object> logMap = new HashMap<>();
         logMap.put("operation_name", operation);
         logMap.put("path", uri);
-
         try {
-            return (ApiResponse<Void>) ((Executor<T>) executor).execute();
-
+            return executor.execute();
         } catch (URIValidationException ex) {
             String msg = "Invalid path specified";
             logger.errorContext(context, msg, ex, logMap);
-
             throw new RetryableErrorException(msg, ex);
         } catch (ApiErrorResponseException ex) {
+            HttpStatus httpStatus = HttpStatus.valueOf(ex.getStatusCode());
+            String errMsg = String.format(API_ERROR_MSG, ex.getStatusCode());
 
-            if (ex.getStatusCode() == 400) {
-                // 400 bad request cannot be retried
-                String msg = "400 BAD_REQUEST response received from company-profile-api";
-                logMap.put("status", ex.getStatusCode());
-                logger.errorContext(context, msg, ex, logMap);
-                throw new NonRetryableErrorException(msg, ex);
-            } else if (ex.getStatusCode() == 404) {
-                String msg = "server error with 404 NOT_FOUND returned from company-profile-api";
-                throw new RetryableErrorException(msg, ex);
+            if (HttpStatus.CONFLICT.equals(httpStatus) || HttpStatus.BAD_REQUEST.equals(httpStatus)) {
+                logger.errorContext(context, errMsg, ex, DataMapHolder.getLogMap());
+                throw new NonRetryableErrorException(errMsg, ex);
+            } else {
+                logger.infoContext(context, errMsg, DataMapHolder.getLogMap());
+                throw new RetryableErrorException(errMsg, ex);
             }
-            String msg = "Unsuccessful response received from company-profile-api";
-            logger.errorContext(context, msg, ex, logMap);
-            throw new RetryableErrorException(ex);
         } catch (Exception ex) {
             String msg = "error response";
             logger.errorContext(context, msg, ex, logMap);
             throw new RetryableErrorException(ex);
         }
     }
-    
 }
