@@ -149,14 +149,14 @@ public class CompanyProfileSteps {
     @Then("a DELETE request is sent to the company profile api")
     public void deleteRequestIsSent() {
         verify(1, deleteRequestedFor(urlMatching(
-                "/company/00358948")));
+                "/company/00358948/internal")));
     }
 
     @Then("a PUT request is sent to the company profile api with the transformed data")
     public void aPutRequestIsSent() {
         output = getOutputData();
         verify(1, requestMadeFor(new RequestMatcher(logger, output,
-                "/company/00358948",
+                "/company/00358948/internal",
                 List.of("data.etag", "deltaAt"))));
     }
 
@@ -173,13 +173,13 @@ public class CompanyProfileSteps {
 
     private void stubPutStatement(int responseCode) {
         stubFor(put(urlEqualTo(
-                "/company/00358948"))
+                "/company/00358948/internal"))
                 .willReturn(aResponse().withStatus(responseCode)));
     }
 
     private void stubDeleteStatement(int responseCode) {
         stubFor(delete(urlEqualTo(
-                "/company/00358948"))
+                "/company/00358948/internal"))
                 .willReturn(aResponse().withStatus(responseCode)));
     }
 

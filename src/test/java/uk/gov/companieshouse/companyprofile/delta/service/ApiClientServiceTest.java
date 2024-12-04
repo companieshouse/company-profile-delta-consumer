@@ -25,7 +25,8 @@ class ApiClientServiceTest {
 
     private final String contextId = "testContext";
     private final String companyNumber = "test12345";
-    private final String uri = "/company/%s";
+    private final String uri = "/company/%s/internal";
+    private final String deltaAt = "20151025185208001000";
 
     private ApiClientService apiClientService;
     @Mock
@@ -47,7 +48,7 @@ class ApiClientServiceTest {
         when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
                 any(CompanyProfileDelete.class))).thenReturn(apiResponse);
 
-        ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber);
+        ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt);
 
         assertEquals(apiResponse, actualResponse);
         verify(responseHandler).handleApiResponse(eq("testContext"), eq("deleteCompanyProfile"), eq(expectedUri),
@@ -60,7 +61,7 @@ class ApiClientServiceTest {
                 any(CompanyProfileDelete.class))).thenThrow(NonRetryableErrorException.class);
 
         assertThrows(NonRetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber));
+                () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt));
     }
 
     @Test
@@ -69,7 +70,7 @@ class ApiClientServiceTest {
                 any(CompanyProfileDelete.class))).thenThrow(RetryableErrorException.class);
 
         assertThrows(RetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber));
+                () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt));
     }
 
     @Test

@@ -61,9 +61,8 @@ public class CompanyProfileDeltaProcessorTest {
     @Test
     void When_InvalidChsDeleteDeltaMessage_Expect_RetryableError() {
         Message<ChsDelta> mockChsDeltaMessage = testHelper.createInvalidChsDeltaMessage();
-        assertThrows(RetryableErrorException.class, ()->processor.processDeleteDelta(mockChsDeltaMessage));
-        Mockito.verify(apiClientService, times(0)).invokeCompanyProfileDeleteHandler(any(), any());
-
+        assertThrows(RetryableErrorException.class, () -> processor.processDeleteDelta(mockChsDeltaMessage));
+        Mockito.verifyNoInteractions(apiClientService);
     }
 
     @Test
@@ -71,6 +70,6 @@ public class CompanyProfileDeltaProcessorTest {
     void When_ValidChsDeleteDeltaMessage_Expect_ProcessorDoesNotThrow() throws IOException {
         Message<ChsDelta> mockChsDeltaMessage = testHelper.createChsDeltaMessage(true);
         Assertions.assertDoesNotThrow(() -> processor.processDeleteDelta(mockChsDeltaMessage));
-        Mockito.verify(apiClientService, times(1)).invokeCompanyProfileDeleteHandler(any(), any());
+        Mockito.verify(apiClientService).invokeCompanyProfileDeleteHandler(any(), any(), any());
     }
 }

@@ -19,7 +19,7 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 public class ApiClientService {
 
     private static final Logger logger = LoggerFactory.getLogger(NAMESPACE);
-    private static final String URI = "/company/%s";
+    private static final String URI = "/company/%s/internal";
 
     private final String apiKey;
     private final String url;
@@ -35,12 +35,12 @@ public class ApiClientService {
     /**
      * Invokes delete handler for company profile.
      */
-    public ApiResponse<Void> invokeCompanyProfileDeleteHandler(String context, String companyNumber) {
+    public ApiResponse<Void> invokeCompanyProfileDeleteHandler(String context, String companyNumber, String deltaAt) {
         final String uri = String.format(URI, companyNumber);
 
         CompanyProfileDelete deleteExecuteOp = getApiClient(context)
                 .privateDeltaResourceHandler()
-                .deleteCompanyProfile(uri);
+                .deleteCompanyProfile(uri, deltaAt);
 
         Map<String, Object> logMap = createLogMap(companyNumber, "DELETE", uri);
         logger.infoContext(context, String.format("DELETE: %s", uri), logMap);
