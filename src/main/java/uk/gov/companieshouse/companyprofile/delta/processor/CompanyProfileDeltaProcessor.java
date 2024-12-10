@@ -89,6 +89,6 @@ public class CompanyProfileDeltaProcessor {
         logger.infoContext(contextId, "Sending DELETE request to company-profile-api",
                 DataMapHolder.getLogMap());
         apiClientService.invokeCompanyProfileDeleteHandler(
-                contextId, companyDeleteDelta.getCompanyNumber());
+                contextId, companyDeleteDelta.getCompanyNumber(), companyDeleteDelta.getDeltaAt());
     }
 }
