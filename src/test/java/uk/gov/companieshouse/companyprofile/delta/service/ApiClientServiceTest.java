@@ -45,19 +45,19 @@ class ApiClientServiceTest {
     @Test
     void returnOkResponseWhenValidDeleteRequestSentToApi() {
         String expectedUri = String.format(uri, companyNumber);
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
+        when(responseHandler.handleApiResponse(anyString(), anyString(),
                 any(CompanyProfileDelete.class))).thenReturn(apiResponse);
 
         ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt);
 
         assertEquals(apiResponse, actualResponse);
-        verify(responseHandler).handleApiResponse(eq("testContext"), eq("deleteCompanyProfile"), eq(expectedUri),
+        verify(responseHandler).handleApiResponse(eq("deleteCompanyProfile"), eq(expectedUri),
                 any(CompanyProfileDelete.class));
     }
 
     @Test
     void return404ResponseWhenInvalidDeleteRequestSentToApi() {
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
+        when(responseHandler.handleApiResponse(anyString(), anyString(),
                 any(CompanyProfileDelete.class))).thenThrow(NonRetryableErrorException.class);
 
         assertThrows(NonRetryableErrorException.class,
@@ -66,7 +66,7 @@ class ApiClientServiceTest {
 
     @Test
     void return503ResponseWhenInvalidDeleteRequestSentToApi() {
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
+        when(responseHandler.handleApiResponse(anyString(), anyString(),
                 any(CompanyProfileDelete.class))).thenThrow(RetryableErrorException.class);
 
         assertThrows(RetryableErrorException.class,
@@ -76,20 +76,20 @@ class ApiClientServiceTest {
     @Test
     void returnOkResponseWhenValidPutRequestSentToApi() {
         String expectedUri = String.format(uri, companyNumber);
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
+        when(responseHandler.handleApiResponse(anyString(), anyString(),
                 any(CompanyProfilePut.class))).thenReturn(apiResponse);
 
         ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber,
                 companyProfile);
 
         assertEquals(apiResponse, actualResponse);
-        verify(responseHandler).handleApiResponse(eq("testContext"), eq("putCompanyProfile"), eq(expectedUri),
+        verify(responseHandler).handleApiResponse(eq("putCompanyProfile"), eq(expectedUri),
                 any(CompanyProfilePut.class));
     }
 
     @Test
     void return404ResponseWhenInvalidPutRequestSentToApi() {
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
+        when(responseHandler.handleApiResponse(anyString(), anyString(),
                 any(CompanyProfilePut.class))).thenThrow(NonRetryableErrorException.class);
 
         assertThrows(NonRetryableErrorException.class,
@@ -98,7 +98,7 @@ class ApiClientServiceTest {
 
     @Test
     void return503ResponseWhenInvalidPutRequestSentToApi() {
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
+        when(responseHandler.handleApiResponse(anyString(), anyString(),
                 any(CompanyProfilePut.class))).thenThrow(RetryableErrorException.class);
 
         assertThrows(RetryableErrorException.class,

@@ -17,24 +17,24 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 
 import uk.gov.companieshouse.companyprofile.delta.data.TestData;
 import uk.gov.companieshouse.delta.ChsDelta;
-import uk.gov.companieshouse.logging.Logger;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.StreamSupport;
+import uk.gov.companieshouse.logging.Logger;
+import uk.gov.companieshouse.logging.LoggerFactory;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication.NAMESPACE;
 import static uk.gov.companieshouse.companyprofile.delta.data.TestData.getOutputData;
 
 public class CompanyProfileSteps {
 
     private static WireMockServer wireMockServer;
+    private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
     private String output;
-
-    @Autowired
-    private Logger logger;
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
@@ -155,7 +155,8 @@ public class CompanyProfileSteps {
     @Then("a PUT request is sent to the company profile api with the transformed data")
     public void aPutRequestIsSent() {
         output = getOutputData();
-        verify(1, requestMadeFor(new RequestMatcher(logger, output,
+        verify(1, requestMadeFor(new RequestMatcher(LOGGER,
+                output,
                 "/company/00358948/internal",
                 List.of("data.etag", "deltaAt"))));
     }

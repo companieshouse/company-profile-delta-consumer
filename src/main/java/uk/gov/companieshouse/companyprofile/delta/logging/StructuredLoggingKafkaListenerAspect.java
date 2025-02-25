@@ -1,5 +1,7 @@
 package uk.gov.companieshouse.companyprofile.delta.logging;
 
+import static uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication.NAMESPACE;
+
 import java.util.Optional;
 import java.util.UUID;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -7,7 +9,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
-import uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication;
 import uk.gov.companieshouse.delta.ChsDelta;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
@@ -16,8 +17,7 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 @Aspect
 class StructuredLoggingKafkaListenerAspect {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(
-            CompanyProfileDeltaConsumerApplication.NAMESPACE);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
 
     private static final String LOG_MESSAGE_RECEIVED = "Processing delta";
     private static final String LOG_MESSAGE_PROCESSED = "Processed delta";
@@ -37,16 +37,15 @@ class StructuredLoggingKafkaListenerAspect {
                     .partition((Integer) message.getHeaders().get("kafka_receivedPartitionId"))
                     .offset((Long)message.getHeaders().get("kafka_offset"));
 
-            LOGGER.debug(LOG_MESSAGE_RECEIVED, DataMapHolder.getLogMap());
+            LOGGER.info(LOG_MESSAGE_RECEIVED, DataMapHolder.getLogMap());
 
             Object result = joinPoint.proceed();
 
-            LOGGER.debug(LOG_MESSAGE_PROCESSED, DataMapHolder.getLogMap());
+            LOGGER.info(LOG_MESSAGE_PROCESSED, DataMapHolder.getLogMap());
 
             return result;
         } catch (Exception ex) {
-            LOGGER.debug(String.format(EXCEPTION_MESSAGE,
-                            ex.getClass().getSimpleName(), ex.getMessage()),
+            LOGGER.error(String.format(EXCEPTION_MESSAGE, ex.getClass().getSimpleName(), ex.getMessage()),
                     DataMapHolder.getLogMap());
             throw ex;
         } finally {

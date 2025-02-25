@@ -12,21 +12,17 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
 
-import uk.gov.companieshouse.companyprofile.delta.logging.DataMapHolder;
 import uk.gov.companieshouse.companyprofile.delta.processor.CompanyProfileDeltaProcessor;
 import uk.gov.companieshouse.delta.ChsDelta;
-import uk.gov.companieshouse.logging.Logger;
 
 @Component
 public class CompanyProfileDeltaConsumer {
 
-    private final Logger logger;
     private final CompanyProfileDeltaProcessor deltaProcessor;
 
     @Autowired
-    public CompanyProfileDeltaConsumer(CompanyProfileDeltaProcessor deltaProcessor, Logger logger) {
+    public CompanyProfileDeltaConsumer(CompanyProfileDeltaProcessor deltaProcessor) {
         this.deltaProcessor = deltaProcessor;
-        this.logger = logger;
     }
 
     /**
@@ -48,8 +44,6 @@ public class CompanyProfileDeltaConsumer {
                                     @Header(KafkaHeaders.RECEIVED_PARTITION_ID) String partition,
                                     @Header(KafkaHeaders.OFFSET) String offset) {
         ChsDelta chsDelta = message.getPayload();
-        logger.infoContext(chsDelta.getContextId(),
-                "Started processing a company profile delta", DataMapHolder.getLogMap());
         if (chsDelta.getIsDelete()) {
             deltaProcessor.processDeleteDelta(message);
         } else {

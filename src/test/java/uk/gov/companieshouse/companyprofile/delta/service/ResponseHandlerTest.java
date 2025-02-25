@@ -32,7 +32,7 @@ class ResponseHandlerTest {
         ApiResponse<Void> expectedResponse = new ApiResponse<>(200, null, null);
         when(companyProfileDelete.execute()).thenReturn(expectedResponse);
 
-        ApiResponse<Void> response = responseHandler.handleApiResponse(null, null, null, companyProfileDelete);
+        ApiResponse<Void> response = responseHandler.handleApiResponse(null, null, companyProfileDelete);
         assertEquals(response, expectedResponse);
     }
 
@@ -41,7 +41,7 @@ class ResponseHandlerTest {
         when(companyProfileDelete.execute()).thenThrow(new URIValidationException("invalid path"));
 
         RetryableErrorException thrown = assertThrows(RetryableErrorException.class,
-                () -> responseHandler.handleApiResponse(null, null, null, companyProfileDelete));
+                () -> responseHandler.handleApiResponse(null, null, companyProfileDelete));
         assertEquals("Invalid path specified", thrown.getMessage());
     }
 
@@ -52,7 +52,7 @@ class ResponseHandlerTest {
         when(companyProfileDelete.execute()).thenThrow(new ApiErrorResponseException(builder));
 
         NonRetryableErrorException thrown = assertThrows(NonRetryableErrorException.class,
-                () -> responseHandler.handleApiResponse(null, null, null, companyProfileDelete));
+                () -> responseHandler.handleApiResponse(null, null, companyProfileDelete));
         assertEquals("400 response received from company-profile-api", thrown.getMessage());
     }
 
@@ -63,7 +63,7 @@ class ResponseHandlerTest {
         when(companyProfileDelete.execute()).thenThrow(new ApiErrorResponseException(builder));
 
         NonRetryableErrorException thrown = assertThrows(NonRetryableErrorException.class,
-                () -> responseHandler.handleApiResponse(null, null, null, companyProfileDelete));
+                () -> responseHandler.handleApiResponse(null, null, companyProfileDelete));
         assertEquals("409 response received from company-profile-api", thrown.getMessage());
     }
 
@@ -74,17 +74,17 @@ class ResponseHandlerTest {
         when(companyProfileDelete.execute()).thenThrow(new ApiErrorResponseException(builder));
 
         RetryableErrorException thrown = assertThrows(RetryableErrorException.class,
-                () -> responseHandler.handleApiResponse(null, null, null, companyProfileDelete));
+                () -> responseHandler.handleApiResponse(null, null, companyProfileDelete));
         assertEquals("404 response received from company-profile-api", thrown.getMessage());
     }
 
     @Test
     void throwERetryableErrorOn500() {
         ResponseHandler spyHandler = spy(responseHandler);
-        doThrow(RetryableErrorException.class).when(spyHandler).handleApiResponse(null,
+        doThrow(RetryableErrorException.class).when(spyHandler).handleApiResponse(
                 null, null, companyProfileDelete);
 
         assertThrows(RetryableErrorException.class,
-                () -> spyHandler.handleApiResponse(null, null, null, companyProfileDelete));
+                () -> spyHandler.handleApiResponse(null, null, companyProfileDelete));
     }
 }
