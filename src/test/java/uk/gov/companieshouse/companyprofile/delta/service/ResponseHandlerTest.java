@@ -40,7 +40,7 @@ class ResponseHandlerTest {
     void throwValidationErrorResponse() throws ApiErrorResponseException, URIValidationException {
         when(companyProfileDelete.execute()).thenThrow(new URIValidationException("invalid path"));
 
-        RetryableErrorException thrown = assertThrows(RetryableErrorException.class,
+        NonRetryableErrorException thrown = assertThrows(NonRetryableErrorException.class,
                 () -> responseHandler.handleApiResponse(null, null, companyProfileDelete));
         assertEquals("Invalid path specified", thrown.getMessage());
     }
