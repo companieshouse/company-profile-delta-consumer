@@ -32,8 +32,7 @@ public class CompanyProfileApiTransformer {
     /**transforms CompanyDelta into CompanyProfile. */
     public CompanyProfile transform(CompanyDelta companyDelta) {
         try {
-            CompanyProfile companyProfile = mapper.companyDeltaToCompanyProfile(companyDelta);
-            return companyProfile;
+            return mapper.companyDeltaToCompanyProfile(companyDelta);
         } catch (Exception exception) {
             LOGGER.error(TRANSFORM_ERROR_MESSAGE, DataMapHolder.getLogMap());
             throw new NonRetryableErrorException(exception);

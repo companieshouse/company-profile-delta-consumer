@@ -8,6 +8,7 @@ import uk.gov.companieshouse.api.handler.delta.companyprofile.request.CompanyPro
 import uk.gov.companieshouse.api.handler.delta.companyprofile.request.CompanyProfilePut;
 import uk.gov.companieshouse.api.http.ApiKeyHttpClient;
 import uk.gov.companieshouse.api.model.ApiResponse;
+import uk.gov.companieshouse.companyprofile.delta.logging.DataMapHolder;
 
 @Service
 public class ApiClientService {
@@ -28,10 +29,10 @@ public class ApiClientService {
     /**
      * Invokes delete handler for company profile.
      */
-    public ApiResponse<Void> invokeCompanyProfileDeleteHandler(String context, String companyNumber, String deltaAt) {
+    public ApiResponse<Void> invokeCompanyProfileDeleteHandler(String companyNumber, String deltaAt) {
         final String uri = String.format(URI, companyNumber);
 
-        CompanyProfileDelete deleteExecuteOp = getApiClient(context)
+        CompanyProfileDelete deleteExecuteOp = getApiClient()
                 .privateDeltaResourceHandler()
                 .deleteCompanyProfile(uri, deltaAt);
 
@@ -44,19 +45,19 @@ public class ApiClientService {
     /**
      * Invokes put handler for company profile.
      */
-    public ApiResponse<Void> invokeCompanyProfilePutHandler(String context, String companyNumber,
+    public ApiResponse<Void> invokeCompanyProfilePutHandler(String companyNumber,
             CompanyProfile profile) {
         final String uri = String.format(URI, companyNumber);
-        CompanyProfilePut putExecuteOp = getApiClient(context)
+        CompanyProfilePut putExecuteOp = getApiClient()
                 .privateDeltaResourceHandler()
                 .putCompanyProfile(uri, profile);
 
         return responseHandler.handleApiResponse("putCompanyProfile", uri, putExecuteOp);
     }
 
-    private InternalApiClient getApiClient(String context) {
+    private InternalApiClient getApiClient() {
         ApiKeyHttpClient httpClient = new ApiKeyHttpClient(apiKey);
-        httpClient.setRequestId(context);
+        httpClient.setRequestId(DataMapHolder.getRequestId());
         InternalApiClient apiClient = new InternalApiClient(httpClient);
         apiClient.setBasePath(url);
         return apiClient;

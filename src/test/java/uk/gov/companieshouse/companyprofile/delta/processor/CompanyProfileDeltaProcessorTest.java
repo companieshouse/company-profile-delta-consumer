@@ -27,9 +27,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CompanyProfileDeltaProcessorTest {
     private CompanyProfileDeltaProcessor processor;
-    private CompanyProfileDeltaDeserialiser deserialiser;
 
-    private TestHelper testHelper = new TestHelper();
+    private final TestHelper testHelper = new TestHelper();
 
     @Mock
     private ApiClientService apiClientService;
@@ -39,7 +38,7 @@ class CompanyProfileDeltaProcessorTest {
     @BeforeEach
     public void setUp() {
         ObjectMapper mapper = new ObjectMapper();
-        deserialiser = new CompanyProfileDeltaDeserialiser(mapper);
+        CompanyProfileDeltaDeserialiser deserialiser = new CompanyProfileDeltaDeserialiser(mapper);
         processor = new CompanyProfileDeltaProcessor(apiClientService, transformer, deserialiser);
     }
 
@@ -56,6 +55,6 @@ class CompanyProfileDeltaProcessorTest {
     void When_ValidChsDeleteDeltaMessage_Expect_ProcessorDoesNotThrow() throws IOException {
         Message<ChsDelta> mockChsDeltaMessage = testHelper.createChsDeltaMessage(true);
         Assertions.assertDoesNotThrow(() -> processor.processDeleteDelta(mockChsDeltaMessage));
-        Mockito.verify(apiClientService).invokeCompanyProfileDeleteHandler(any(), any(), any());
+        Mockito.verify(apiClientService).invokeCompanyProfileDeleteHandler(any(), any());
     }
 }

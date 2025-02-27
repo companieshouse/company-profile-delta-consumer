@@ -1,19 +1,16 @@
 package uk.gov.companieshouse.companyprofile.delta.processor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Component;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDeleteDelta;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-import uk.gov.companieshouse.companyprofile.delta.exception.RetryableErrorException;
 import uk.gov.companieshouse.companyprofile.delta.logging.DataMapHolder;
 import uk.gov.companieshouse.companyprofile.delta.service.ApiClientService;
 import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileApiTransformer;
 import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileDeltaDeserialiser;
 import uk.gov.companieshouse.delta.ChsDelta;
-import uk.gov.companieshouse.logging.Logger;
 
 @Component
 public class CompanyProfileDeltaProcessor {
@@ -47,7 +44,7 @@ public class CompanyProfileDeltaProcessor {
         CompanyProfile companyProfile = transformer.transform(companyDelta);
         companyProfile.setDeltaAt(companyDelta.getDeltaAt());
 
-        apiClientService.invokeCompanyProfilePutHandler(contextId,
+        apiClientService.invokeCompanyProfilePutHandler(
                 companyDelta.getCompanyNumber(), companyProfile);
     }
 
@@ -62,6 +59,6 @@ public class CompanyProfileDeltaProcessor {
         DataMapHolder.get().companyNumber(companyDeleteDelta.getCompanyNumber());
 
         apiClientService.invokeCompanyProfileDeleteHandler(
-                contextId, companyDeleteDelta.getCompanyNumber(), companyDeleteDelta.getDeltaAt());
+                companyDeleteDelta.getCompanyNumber(), companyDeleteDelta.getDeltaAt());
     }
 }

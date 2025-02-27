@@ -48,7 +48,7 @@ class ApiClientServiceTest {
         when(responseHandler.handleApiResponse(anyString(), anyString(),
                 any(CompanyProfileDelete.class))).thenReturn(apiResponse);
 
-        ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt);
+        ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfileDeleteHandler(companyNumber, deltaAt);
 
         assertEquals(apiResponse, actualResponse);
         verify(responseHandler).handleApiResponse(eq("deleteCompanyProfile"), eq(expectedUri),
@@ -61,7 +61,7 @@ class ApiClientServiceTest {
                 any(CompanyProfileDelete.class))).thenThrow(NonRetryableErrorException.class);
 
         assertThrows(NonRetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt));
+                () -> apiClientService.invokeCompanyProfileDeleteHandler(companyNumber, deltaAt));
     }
 
     @Test
@@ -70,7 +70,7 @@ class ApiClientServiceTest {
                 any(CompanyProfileDelete.class))).thenThrow(RetryableErrorException.class);
 
         assertThrows(RetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt));
+                () -> apiClientService.invokeCompanyProfileDeleteHandler(companyNumber, deltaAt));
     }
 
     @Test
@@ -79,7 +79,7 @@ class ApiClientServiceTest {
         when(responseHandler.handleApiResponse(anyString(), anyString(),
                 any(CompanyProfilePut.class))).thenReturn(apiResponse);
 
-        ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber,
+        ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfilePutHandler(companyNumber,
                 companyProfile);
 
         assertEquals(apiResponse, actualResponse);
@@ -93,7 +93,7 @@ class ApiClientServiceTest {
                 any(CompanyProfilePut.class))).thenThrow(NonRetryableErrorException.class);
 
         assertThrows(NonRetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber, companyProfile));
+                () -> apiClientService.invokeCompanyProfilePutHandler(companyNumber, companyProfile));
     }
 
     @Test
@@ -102,6 +102,6 @@ class ApiClientServiceTest {
                 any(CompanyProfilePut.class))).thenThrow(RetryableErrorException.class);
 
         assertThrows(RetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber, companyProfile));
+                () -> apiClientService.invokeCompanyProfilePutHandler(companyNumber, companyProfile));
     }
 }
