@@ -3,6 +3,8 @@ package uk.gov.companieshouse.companyprofile.delta.config;
 import consumer.deserialization.AvroDeserializer;
 import consumer.exception.TopicErrorInterceptor;
 import consumer.serialization.AvroSerializer;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -22,9 +24,6 @@ import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import uk.gov.companieshouse.delta.ChsDelta;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableKafka

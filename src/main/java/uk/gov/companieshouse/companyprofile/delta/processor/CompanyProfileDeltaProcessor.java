@@ -36,7 +36,6 @@ public class CompanyProfileDeltaProcessor {
      */
     public void processDelta(Message<ChsDelta> message) {
         final ChsDelta payload = message.getPayload();
-        final String contextId = payload.getContextId();
         CompanyDelta companyDelta = deserialiser.deserialiseCompanyDelta(payload.getData());
 
         DataMapHolder.get().companyNumber(companyDelta.getCompanyNumber());
@@ -53,7 +52,6 @@ public class CompanyProfileDeltaProcessor {
      */
     public void processDeleteDelta(Message<ChsDelta> message) {
         final ChsDelta payload = message.getPayload();
-        final String contextId = payload.getContextId();
         CompanyDeleteDelta companyDeleteDelta = deserialiser.deserialiseCompanyDeleteDelta(payload.getData());
 
         DataMapHolder.get().companyNumber(companyDeleteDelta.getCompanyNumber());

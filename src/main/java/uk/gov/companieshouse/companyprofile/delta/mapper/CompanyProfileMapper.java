@@ -1,5 +1,13 @@
 package uk.gov.companieshouse.companyprofile.delta.mapper;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,7 +19,6 @@ import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.AnnualReturn;
 import uk.gov.companieshouse.api.company.BranchCompanyDetails;
 import uk.gov.companieshouse.api.company.CompanyProfile;
-import uk.gov.companieshouse.api.company.CorporateAnnotation;
 import uk.gov.companieshouse.api.company.ConfirmationStatement;
 import uk.gov.companieshouse.api.company.Data;
 import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
@@ -25,18 +32,7 @@ import uk.gov.companieshouse.api.company.PreviousCompanyNames;
 import uk.gov.companieshouse.api.company.RegisteredOfficeAddress;
 import uk.gov.companieshouse.api.delta.BooleanFlag;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
-import uk.gov.companieshouse.api.delta.ForeignCompany;
 import uk.gov.companieshouse.api.delta.SicCodes;
-
-import javax.validation.Valid;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class CompanyProfileMapper {

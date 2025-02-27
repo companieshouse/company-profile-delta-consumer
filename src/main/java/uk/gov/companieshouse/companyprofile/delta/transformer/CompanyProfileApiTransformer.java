@@ -2,10 +2,9 @@ package uk.gov.companieshouse.companyprofile.delta.transformer;
 
 import static uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication.NAMESPACE;
 
+import consumer.exception.NonRetryableErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import consumer.exception.NonRetryableErrorException;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.companyprofile.delta.logging.DataMapHolder;

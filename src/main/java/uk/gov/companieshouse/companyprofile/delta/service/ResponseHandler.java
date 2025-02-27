@@ -4,12 +4,11 @@ import static uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaCons
 
 import consumer.exception.NonRetryableErrorException;
 import consumer.exception.RetryableErrorException;
+import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.handler.Executor;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
-import uk.gov.companieshouse.api.model.ApiResponse;
 import uk.gov.companieshouse.companyprofile.delta.logging.DataMapHolder;
 import uk.gov.companieshouse.logging.Logger;
 import uk.gov.companieshouse.logging.LoggerFactory;
@@ -17,32 +16,27 @@ import uk.gov.companieshouse.logging.LoggerFactory;
 @Service
 public class ResponseHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(NAMESPACE);
-    private static final String API_ERROR_MSG = "%s response received from company-profile-api";
+    private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
+    private static final String API_INFO_RESPONSE_MESSAGE = "Call to API failed, status code: %d. %s";
+    private static final String API_ERROR_RESPONSE_MESSAGE = "Call to API failed, status code: %d";
+    private static final String URI_VALIDATION_EXCEPTION_MESSAGE = "Invalid URI";
 
-    public ApiResponse<Void> handleApiResponse(String operation, String uri,
-            Executor<ApiResponse<Void>> executor) {
-        try {
-            return executor.execute();
-        } catch (URIValidationException ex) {
-            String msg = "Invalid path specified";
-            logger.error(msg, ex, DataMapHolder.getLogMap());
-            throw new NonRetryableErrorException(msg, ex);
-        } catch (ApiErrorResponseException ex) {
-            HttpStatus httpStatus = HttpStatus.valueOf(ex.getStatusCode());
-            String errMsg = String.format(API_ERROR_MSG, ex.getStatusCode());
+    public void handle(ApiErrorResponseException ex) {
+        final int statusCode = ex.getStatusCode();
+        final HttpStatus httpStatus = HttpStatus.valueOf(statusCode);
 
-            if (HttpStatus.CONFLICT.equals(httpStatus) || HttpStatus.BAD_REQUEST.equals(httpStatus)) {
-                logger.error(errMsg, ex, DataMapHolder.getLogMap());
-                throw new NonRetryableErrorException(errMsg, ex);
-            } else {
-                logger.info(errMsg, DataMapHolder.getLogMap());
-                throw new RetryableErrorException(errMsg, ex);
-            }
-        } catch (Exception ex) {
-            String msg = "error response";
-            logger.error(msg, ex, DataMapHolder.getLogMap());
-            throw new RetryableErrorException(ex);
+        if (HttpStatus.CONFLICT.equals(httpStatus) || HttpStatus.BAD_REQUEST.equals(httpStatus)) {
+            LOGGER.error(String.format(API_ERROR_RESPONSE_MESSAGE, statusCode), ex, DataMapHolder.getLogMap());
+            throw new NonRetryableErrorException(String.format(API_ERROR_RESPONSE_MESSAGE, statusCode), ex);
+        } else {
+            LOGGER.info(String.format(API_INFO_RESPONSE_MESSAGE, statusCode, Arrays.toString(ex.getStackTrace())),
+                    DataMapHolder.getLogMap());
+            throw new RetryableErrorException(String.format(API_ERROR_RESPONSE_MESSAGE, statusCode), ex);
         }
+    }
+
+    public void handle(URIValidationException ex) {
+        LOGGER.error(URI_VALIDATION_EXCEPTION_MESSAGE, DataMapHolder.getLogMap());
+        throw new NonRetryableErrorException(URI_VALIDATION_EXCEPTION_MESSAGE, ex);
     }
 }

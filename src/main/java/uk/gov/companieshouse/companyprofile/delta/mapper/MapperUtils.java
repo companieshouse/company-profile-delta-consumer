@@ -1,7 +1,5 @@
 package uk.gov.companieshouse.companyprofile.delta.mapper;
 
-import uk.gov.companieshouse.api.delta.CorporateAnnotation;
-
 import java.util.HashMap;
 
 

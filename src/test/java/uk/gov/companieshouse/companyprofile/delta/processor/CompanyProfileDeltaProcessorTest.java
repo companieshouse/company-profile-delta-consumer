@@ -1,6 +1,10 @@
 package uk.gov.companieshouse.companyprofile.delta.processor;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.Message;
-
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.companyprofile.delta.service.ApiClientService;
@@ -18,11 +21,6 @@ import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileApiT
 import uk.gov.companieshouse.companyprofile.delta.transformer.CompanyProfileDeltaDeserialiser;
 import uk.gov.companieshouse.companyprofile.delta.utils.TestHelper;
 import uk.gov.companieshouse.delta.ChsDelta;
-
-import java.io.IOException;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CompanyProfileDeltaProcessorTest {
