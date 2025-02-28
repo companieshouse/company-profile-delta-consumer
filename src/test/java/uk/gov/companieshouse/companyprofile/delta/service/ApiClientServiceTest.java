@@ -1,107 +1,160 @@
 package uk.gov.companieshouse.companyprofile.delta.service;
 
-import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import consumer.exception.NonRetryableErrorException;
-import consumer.exception.RetryableErrorException;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.companieshouse.api.InternalApiClient;
 import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.error.ApiErrorResponseException;
+import uk.gov.companieshouse.api.handler.delta.PrivateDeltaResourceHandler;
 import uk.gov.companieshouse.api.handler.delta.companyprofile.request.CompanyProfileDelete;
 import uk.gov.companieshouse.api.handler.delta.companyprofile.request.CompanyProfilePut;
+import uk.gov.companieshouse.api.handler.exception.URIValidationException;
 import uk.gov.companieshouse.api.model.ApiResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ApiClientServiceTest {
+    private static final String COMPANY_NUMBER = "test12345";
+    private static final String URI = "/company/%s/internal";
+    private static final String DELTA_AT = "20151025185208001000";
+    private static final ApiResponse<Void> SUCCESS_RESPONSE = new ApiResponse<>(200, null);
 
-    private final String contextId = "testContext";
-    private final String companyNumber = "test12345";
-    private final String uri = "/company/%s/internal";
-    private final String deltaAt = "20151025185208001000";
-
+    @InjectMocks
     private ApiClientService apiClientService;
+
     @Mock
     private ResponseHandler responseHandler;
-
     @Mock
-    private ApiResponse<Void> apiResponse;
+    private Supplier<InternalApiClient> internalApiClientSupplier;
+
     @Mock
     private CompanyProfile companyProfile;
+    @Mock
+    private InternalApiClient internalApiClient;
+    @Mock
+    private PrivateDeltaResourceHandler privateDeltaResourceHandler;
+    @Mock
+    private CompanyProfilePut companyProfilePut;
+    @Mock
+    private CompanyProfileDelete companyProfileDelete;
 
-    @BeforeEach
-    void setUp() {
-        apiClientService = new ApiClientService("testKey", "http://localhost:8888", responseHandler);
+    @Test
+    void shouldSuccessfullySendPutRequestToApi() throws Exception {
+        // given
+        when(internalApiClientSupplier.get()).thenReturn(internalApiClient);
+        when(internalApiClient.privateDeltaResourceHandler()).thenReturn(privateDeltaResourceHandler);
+        when(privateDeltaResourceHandler.putCompanyProfile(anyString(), any(CompanyProfile.class))).thenReturn(
+                companyProfilePut);
+        when(companyProfilePut.execute()).thenReturn(SUCCESS_RESPONSE);
+
+        final String formattedUri = String.format(URI, COMPANY_NUMBER);
+
+        // when
+        apiClientService.invokeCompanyProfilePutHandler(COMPANY_NUMBER, companyProfile);
+
+        // then
+        verify(privateDeltaResourceHandler).putCompanyProfile(formattedUri, companyProfile);
+        verifyNoMoreInteractions(responseHandler);
     }
 
     @Test
-    void returnOkResponseWhenValidDeleteRequestSentToApi() {
-        String expectedUri = String.format(uri, companyNumber);
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
-                any(CompanyProfileDelete.class))).thenReturn(apiResponse);
+    void shouldSendPutRequestAndHandleNon200ResponseFromApi() throws Exception {
+        // given
+        when(internalApiClientSupplier.get()).thenReturn(internalApiClient);
+        when(internalApiClient.privateDeltaResourceHandler()).thenReturn(privateDeltaResourceHandler);
+        when(privateDeltaResourceHandler.putCompanyProfile(anyString(), any(CompanyProfile.class))).thenReturn(
+                companyProfilePut);
+        when(companyProfilePut.execute()).thenThrow(ApiErrorResponseException.class);
 
-        ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt);
+        final String formattedUri = String.format(URI, COMPANY_NUMBER);
 
-        assertEquals(apiResponse, actualResponse);
-        verify(responseHandler).handleApiResponse(eq("testContext"), eq("deleteCompanyProfile"), eq(expectedUri),
-                any(CompanyProfileDelete.class));
+        // when
+        apiClientService.invokeCompanyProfilePutHandler(COMPANY_NUMBER, companyProfile);
+
+        // then
+        verify(privateDeltaResourceHandler).putCompanyProfile(formattedUri, companyProfile);
+        verify(responseHandler).handle(any(ApiErrorResponseException.class));
     }
 
     @Test
-    void return404ResponseWhenInvalidDeleteRequestSentToApi() {
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
-                any(CompanyProfileDelete.class))).thenThrow(NonRetryableErrorException.class);
+    void shouldSendPutRequestAndHandleURIValidationExceptionFromApi() throws Exception {
+        // given
+        when(internalApiClientSupplier.get()).thenReturn(internalApiClient);
+        when(internalApiClient.privateDeltaResourceHandler()).thenReturn(privateDeltaResourceHandler);
+        when(privateDeltaResourceHandler.putCompanyProfile(anyString(), any(CompanyProfile.class))).thenReturn(
+                companyProfilePut);
+        when(companyProfilePut.execute()).thenThrow(URIValidationException.class);
 
-        assertThrows(NonRetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt));
+        final String formattedUri = String.format(URI, COMPANY_NUMBER);
+
+        // when
+        apiClientService.invokeCompanyProfilePutHandler(COMPANY_NUMBER, companyProfile);
+
+        // then
+        verify(privateDeltaResourceHandler).putCompanyProfile(formattedUri, companyProfile);
+        verify(responseHandler).handle(any(URIValidationException.class));
     }
 
     @Test
-    void return503ResponseWhenInvalidDeleteRequestSentToApi() {
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
-                any(CompanyProfileDelete.class))).thenThrow(RetryableErrorException.class);
+    void shouldSuccessfullySendDeleteRequestToApi() throws Exception {
+        // given
+        when(internalApiClientSupplier.get()).thenReturn(internalApiClient);
+        when(internalApiClient.privateDeltaResourceHandler()).thenReturn(privateDeltaResourceHandler);
+        when(privateDeltaResourceHandler.deleteCompanyProfile(anyString(), anyString())).thenReturn(companyProfileDelete);
+        when(companyProfileDelete.execute()).thenReturn(SUCCESS_RESPONSE);
 
-        assertThrows(RetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfileDeleteHandler(contextId, companyNumber, deltaAt));
+        final String formattedUri = String.format(URI, COMPANY_NUMBER);
+
+        // when
+        apiClientService.invokeCompanyProfileDeleteHandler(COMPANY_NUMBER, DELTA_AT);
+
+        // then
+        verify(privateDeltaResourceHandler).deleteCompanyProfile(formattedUri, DELTA_AT);
+        verifyNoMoreInteractions(responseHandler);
     }
 
     @Test
-    void returnOkResponseWhenValidPutRequestSentToApi() {
-        String expectedUri = String.format(uri, companyNumber);
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
-                any(CompanyProfilePut.class))).thenReturn(apiResponse);
+    void shouldSendDeleteRequestAndHandleNon200ResponseFromApi() throws Exception {
+        // given
+        when(internalApiClientSupplier.get()).thenReturn(internalApiClient);
+        when(internalApiClient.privateDeltaResourceHandler()).thenReturn(privateDeltaResourceHandler);
+        when(privateDeltaResourceHandler.deleteCompanyProfile(anyString(), anyString())).thenReturn(companyProfileDelete);
+        when(companyProfileDelete.execute()).thenThrow(ApiErrorResponseException.class);
 
-        ApiResponse<Void> actualResponse = apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber,
-                companyProfile);
+        final String formattedUri = String.format(URI, COMPANY_NUMBER);
 
-        assertEquals(apiResponse, actualResponse);
-        verify(responseHandler).handleApiResponse(eq("testContext"), eq("putCompanyProfile"), eq(expectedUri),
-                any(CompanyProfilePut.class));
+        // when
+        apiClientService.invokeCompanyProfileDeleteHandler(COMPANY_NUMBER, DELTA_AT);
+
+        // then
+        verify(privateDeltaResourceHandler).deleteCompanyProfile(formattedUri, DELTA_AT);
+        verify(responseHandler).handle(any(ApiErrorResponseException.class));
     }
 
     @Test
-    void return404ResponseWhenInvalidPutRequestSentToApi() {
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
-                any(CompanyProfilePut.class))).thenThrow(NonRetryableErrorException.class);
+    void shouldSendDeleteRequestAndHandleURIValidationExceptionFromApi() throws Exception {
+        // given
+        when(internalApiClientSupplier.get()).thenReturn(internalApiClient);
+        when(internalApiClient.privateDeltaResourceHandler()).thenReturn(privateDeltaResourceHandler);
+        when(privateDeltaResourceHandler.deleteCompanyProfile(anyString(), anyString())).thenReturn(companyProfileDelete);
+        when(companyProfileDelete.execute()).thenThrow(URIValidationException.class);
 
-        assertThrows(NonRetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber, companyProfile));
-    }
+        final String formattedUri = String.format(URI, COMPANY_NUMBER);
 
-    @Test
-    void return503ResponseWhenInvalidPutRequestSentToApi() {
-        when(responseHandler.handleApiResponse(anyString(), anyString(), anyString(),
-                any(CompanyProfilePut.class))).thenThrow(RetryableErrorException.class);
+        // when
+        apiClientService.invokeCompanyProfileDeleteHandler(COMPANY_NUMBER, DELTA_AT);
 
-        assertThrows(RetryableErrorException.class,
-                () -> apiClientService.invokeCompanyProfilePutHandler(contextId, companyNumber, companyProfile));
+        // then
+        verify(privateDeltaResourceHandler).deleteCompanyProfile(formattedUri, DELTA_AT);
+        verify(responseHandler).handle(any(URIValidationException.class));
     }
 }

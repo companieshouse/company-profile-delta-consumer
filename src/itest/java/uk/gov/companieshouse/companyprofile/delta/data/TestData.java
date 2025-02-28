@@ -1,11 +1,10 @@
 package uk.gov.companieshouse.companyprofile.delta.data;
 
-import org.springframework.util.FileCopyUtils;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import org.springframework.util.FileCopyUtils;
 
 public class TestData {
     public static String getCompanyDelta() {

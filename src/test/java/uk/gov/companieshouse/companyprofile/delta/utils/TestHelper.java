@@ -1,5 +1,9 @@
 package uk.gov.companieshouse.companyprofile.delta.utils;
 
+import static org.springframework.kafka.support.KafkaHeaders.EXCEPTION_CAUSE_FQCN;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.internals.RecordHeader;
 import org.apache.kafka.common.header.internals.RecordHeaders;
@@ -8,11 +12,6 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.util.FileCopyUtils;
 import uk.gov.companieshouse.delta.ChsDelta;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import static org.springframework.kafka.support.KafkaHeaders.EXCEPTION_CAUSE_FQCN;
 
 public class TestHelper {
 

@@ -1,90 +1,66 @@
 package uk.gov.companieshouse.companyprofile.delta.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.HttpResponseException.Builder;
 import consumer.exception.NonRetryableErrorException;
 import consumer.exception.RetryableErrorException;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
+import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import uk.gov.companieshouse.api.error.ApiErrorResponseException;
-import uk.gov.companieshouse.api.handler.delta.companyprofile.request.CompanyProfileDelete;
 import uk.gov.companieshouse.api.handler.exception.URIValidationException;
-import uk.gov.companieshouse.api.model.ApiResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ResponseHandlerTest {
 
     private final ResponseHandler responseHandler = new ResponseHandler();
 
-    @Mock
-    private CompanyProfileDelete companyProfileDelete;
+    private ApiErrorResponseException apiErrorResponseException;
 
-    @Test
-    void returnOkResponseFromDataApi() throws ApiErrorResponseException, URIValidationException {
-        ApiResponse<Void> expectedResponse = new ApiResponse<>(200, null, null);
-        when(companyProfileDelete.execute()).thenReturn(expectedResponse);
+    @ParameterizedTest
+    @MethodSource("scenarios")
+    void shouldHandleApiErrorResponseScenarios(HttpStatus apiResponseStatus, Class<RuntimeException> expectedException) {
+        // given
+        apiErrorResponseException = new ApiErrorResponseException(
+                new Builder(apiResponseStatus.value(), "", new HttpHeaders()));
 
-        ApiResponse<Void> response = responseHandler.handleApiResponse(null, null, null, companyProfileDelete);
-        assertEquals(response, expectedResponse);
+        // when
+        Executable executable = () -> responseHandler.handle(apiErrorResponseException);
+
+        // then
+        assertThrows(expectedException, executable);
     }
 
     @Test
-    void throwValidationErrorResponse() throws ApiErrorResponseException, URIValidationException {
-        when(companyProfileDelete.execute()).thenThrow(new URIValidationException("invalid path"));
+    void shouldHandleURIValidationException() {
+        // given
+        URIValidationException exception = new URIValidationException("Invalid URI");
 
-        RetryableErrorException thrown = assertThrows(RetryableErrorException.class,
-                () -> responseHandler.handleApiResponse(null, null, null, companyProfileDelete));
-        assertEquals("Invalid path specified", thrown.getMessage());
+        // when
+        Executable executable = () -> responseHandler.handle(exception);
+
+        // then
+        assertThrows(NonRetryableErrorException.class, executable);
     }
 
-    @Test
-    void throwNonRetryableErrorOn400() throws ApiErrorResponseException, URIValidationException {
-        HttpResponseException.Builder builder = new HttpResponseException.Builder(400,
-                "bad request", new HttpHeaders());
-        when(companyProfileDelete.execute()).thenThrow(new ApiErrorResponseException(builder));
-
-        NonRetryableErrorException thrown = assertThrows(NonRetryableErrorException.class,
-                () -> responseHandler.handleApiResponse(null, null, null, companyProfileDelete));
-        assertEquals("400 response received from company-profile-api", thrown.getMessage());
-    }
-
-    @Test
-    void throwApiErrorResponseOn409() throws ApiErrorResponseException, URIValidationException {
-        HttpResponseException.Builder builder = new HttpResponseException.Builder(409,
-                "conflict", new HttpHeaders());
-        when(companyProfileDelete.execute()).thenThrow(new ApiErrorResponseException(builder));
-
-        NonRetryableErrorException thrown = assertThrows(NonRetryableErrorException.class,
-                () -> responseHandler.handleApiResponse(null, null, null, companyProfileDelete));
-        assertEquals("409 response received from company-profile-api", thrown.getMessage());
-    }
-
-    @Test
-    void throwRetryableErrorOn404() throws ApiErrorResponseException, URIValidationException {
-        HttpResponseException.Builder builder = new HttpResponseException.Builder(404,
-                "not found", new HttpHeaders());
-        when(companyProfileDelete.execute()).thenThrow(new ApiErrorResponseException(builder));
-
-        RetryableErrorException thrown = assertThrows(RetryableErrorException.class,
-                () -> responseHandler.handleApiResponse(null, null, null, companyProfileDelete));
-        assertEquals("404 response received from company-profile-api", thrown.getMessage());
-    }
-
-    @Test
-    void throwERetryableErrorOn500() {
-        ResponseHandler spyHandler = spy(responseHandler);
-        doThrow(RetryableErrorException.class).when(spyHandler).handleApiResponse(null,
-                null, null, companyProfileDelete);
-
-        assertThrows(RetryableErrorException.class,
-                () -> spyHandler.handleApiResponse(null, null, null, companyProfileDelete));
+    private static Stream<Arguments> scenarios() {
+        return Stream.of(
+                Arguments.of(HttpStatus.BAD_REQUEST, NonRetryableErrorException.class),
+                Arguments.of(HttpStatus.CONFLICT, NonRetryableErrorException.class),
+                Arguments.of(HttpStatus.UNAUTHORIZED, RetryableErrorException.class),
+                Arguments.of(HttpStatus.FORBIDDEN, RetryableErrorException.class),
+                Arguments.of(HttpStatus.NOT_FOUND, RetryableErrorException.class),
+                Arguments.of(HttpStatus.METHOD_NOT_ALLOWED, RetryableErrorException.class),
+                Arguments.of(HttpStatus.INTERNAL_SERVER_ERROR, RetryableErrorException.class),
+                Arguments.of(HttpStatus.SERVICE_UNAVAILABLE, RetryableErrorException.class)
+        );
     }
 }

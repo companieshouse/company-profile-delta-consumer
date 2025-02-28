@@ -1,10 +1,29 @@
 package uk.gov.companieshouse.companyprofile.delta.steps;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.delete;
+import static com.github.tomakehurst.wiremock.client.WireMock.deleteRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.put;
+import static com.github.tomakehurst.wiremock.client.WireMock.requestMadeFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
+import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication.NAMESPACE;
+import static uk.gov.companieshouse.companyprofile.delta.data.TestData.getOutputData;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
 import consumer.matcher.RequestMatcher;
 import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.StreamSupport;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -12,29 +31,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
-
-import com.github.tomakehurst.wiremock.WireMockServer;
-
 import uk.gov.companieshouse.companyprofile.delta.data.TestData;
 import uk.gov.companieshouse.delta.ChsDelta;
 import uk.gov.companieshouse.logging.Logger;
-
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.StreamSupport;
-
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.companieshouse.companyprofile.delta.data.TestData.getOutputData;
+import uk.gov.companieshouse.logging.LoggerFactory;
 
 public class CompanyProfileSteps {
 
     private static WireMockServer wireMockServer;
+    private static final Logger LOGGER = LoggerFactory.getLogger(NAMESPACE);
     private String output;
-
-    @Autowired
-    private Logger logger;
 
     @Autowired
     private KafkaTemplate<String, Object> kafkaTemplate;
@@ -155,7 +161,8 @@ public class CompanyProfileSteps {
     @Then("a PUT request is sent to the company profile api with the transformed data")
     public void aPutRequestIsSent() {
         output = getOutputData();
-        verify(1, requestMadeFor(new RequestMatcher(logger, output,
+        verify(1, requestMadeFor(new RequestMatcher(LOGGER,
+                output,
                 "/company/00358948/internal",
                 List.of("data.etag", "deltaAt"))));
     }
