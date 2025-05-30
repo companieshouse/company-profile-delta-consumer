@@ -48,6 +48,7 @@
         "date_of_cessation" : null,
         "date_of_creation" : null,
         "date_of_dissolution" : [ 2019, 1, 1 ],
+        "etag": null,
         "external_registration_number" : "12345",
         "foreign_company_details" : {
             "accounting_requirement" : {
