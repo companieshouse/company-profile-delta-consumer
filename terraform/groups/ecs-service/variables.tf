@@ -125,7 +125,7 @@ variable "use_set_environment_files" {
   description = "Toggle default global and shared environment files"
 }
 
-variable "company_appointments_consumer_version" {
+variable "company_profile_delta_consumer_version" {
   type        = string
   description = "The version of the company-profile-delta-consumer-service container to run."
 }
