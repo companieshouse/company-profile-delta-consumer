@@ -69,4 +69,3 @@ in [Docker CHS Development](https://github.com/companieshouse/docker-chs-develop
 This will clone the company-profile-delta-consumer into the repositories folder. Any changes to the code, or resources
 will
 automatically trigger a rebuild and relaunch.
-
