@@ -27,7 +27,7 @@ management:
     web:
       base-path: /
       path-mapping:
-        health: healthcheck
+        health: company-profile-delta-consumer/healthcheck
   endpoint:
     health:
       show-details: never
