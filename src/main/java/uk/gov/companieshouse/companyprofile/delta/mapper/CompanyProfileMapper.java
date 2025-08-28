@@ -113,6 +113,7 @@ public abstract class CompanyProfileMapper {
     @Mapping(target = "data.serviceAddress.region", source = "serviceAddress.region")
 
     @Mapping(target = "data.subtype", source = "subtype")
+    @Mapping(target = "data.term", source = "term")
     @Mapping(target = "data.type", source = "type")
     @Mapping(target = "data.superSecureManagingOfficerCount", source = "superSecureManagingOfficerCount")
     @Mapping(target = "data.undeliverableRegisteredOfficeAddress", source = "undeliverableRegisteredOfficeAddress")
@@ -348,6 +349,17 @@ public abstract class CompanyProfileMapper {
         data.setProofStatus(proofStatusMap.getOrDefault(proofStatusType,null));
         target.setData(data);
 
+    }
+
+    /**Maps enum term to string. */
+    @AfterMapping
+    public void mapEnumsTerm(@MappingTarget CompanyProfile target, CompanyDelta source) {
+        Data data = target.getData();
+        String term = source.getTerm();
+
+        HashMap<String,String> termMap = MapperUtils.getTermMap();
+        data.setTerm(termMap.getOrDefault(term,null));
+        target.setData(data);
     }
 
     /**Maps enum jurisdiction to string. */
