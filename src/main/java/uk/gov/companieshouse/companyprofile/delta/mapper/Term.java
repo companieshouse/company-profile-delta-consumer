@@ -1,23 +1,26 @@
 package uk.gov.companieshouse.companyprofile.delta.mapper;
 
 public enum Term {
-    // Order of values here must not be changed, so as to preserve the ordinal mapping
-    BY_AGREEMENT("by-agreement"),
-    UNTIL_DISSOLUTION("until-dissolution"),
-    NONE("none");
+    BY_AGREEMENT("1", "by-agreement"),
+    UNTIL_DISSOLUTION("2", "until-dissolution"),
+    NONE("3", "none");
 
+    private String id;
     private String mappedValue;
 
-    Term(String mappedValue) {
+    Term(String id, String mappedValue) {
+        this.id = id;
         this.mappedValue = mappedValue;
     }
 
-    public static String getMappedValue(String termIndex) {
-        try {
-            return Term.values()[Integer.valueOf(termIndex) - 1].mappedValue;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            // Null should be returned if term index does not map to an enum value
-            return null;
+    public static String getMappedValue(String id) {
+        for (Term term : Term.values()) {
+            if (term.id.equals(id)) {
+                return term.mappedValue;
+            }
         }
+
+        // Null should be returned if term index does not map to an enum value
+        return null;
     }
 }
