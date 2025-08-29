@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang.StringUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -357,8 +359,7 @@ public abstract class CompanyProfileMapper {
         Data data = target.getData();
         String term = source.getTerm();
 
-        HashMap<String,String> termMap = MapperUtils.getTermMap();
-        data.setTerm(termMap.getOrDefault(term,null));
+        data.setTerm(StringUtils.isNotBlank(term) ? Term.getMappedValue(term) : null);
         target.setData(data);
     }
 

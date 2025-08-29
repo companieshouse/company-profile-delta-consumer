@@ -212,15 +212,4 @@ public class MapperUtils {
         typeMap.put("37","registered-overseas-entity");
         return typeMap;
     }
-
-    /**Create a hashmap for term.*/
-    public static HashMap<String,String> getTermMap() {
-        HashMap<String,String> termMap = new HashMap<>();
-
-        termMap.put("1","by-agreement");
-        termMap.put("2","until-dissolution");
-        termMap.put("3","none");
-
-        return termMap;
-    }
 }
