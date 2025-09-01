@@ -124,6 +124,7 @@
         "sic_codes" : [ "70100" ],
         "subtype" : "private-fund-limited-partnership",
         "type" : "plc",
+        "term" : "none",
         "undeliverable_registered_office_address" : false,
         "has_super_secure_pscs" : null,
         "proof_status" : "paper",

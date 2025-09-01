@@ -40,6 +40,7 @@
   "proof_status": "1",
   "cic_ind": "0",
   "subtype": "2",
+  "term": "3",
   "confirmation_statement_dates": {
     "latest_made_up_to": "20160606",
     "next_due": "20160606",
