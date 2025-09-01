@@ -10,6 +10,16 @@ Transforms company profile deltas into an entity sent to company-profile-api.
 * [MongoDB](https://www.mongodb.com/)
 * [Apache Kafka](https://kafka.apache.org/)
 
+## Running integration tests locally
+
+These can be run using the command:
+
+```shell
+mvn integration-test -Dskip.unit.tests=true failsafe:verify
+```
+
+Note that they are not currently run as part of the pipeline 'analyse-pull-request' build task.
+
 ## Building and Running Locally using Docker
 
 1. Clone [Docker CHS Development](https://github.com/companieshouse/docker-chs-development) and follow the steps in the
