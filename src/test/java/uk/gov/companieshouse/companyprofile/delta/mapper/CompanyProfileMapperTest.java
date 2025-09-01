@@ -370,6 +370,56 @@ class CompanyProfileMapperTest {
         assertEquals(expectedProfile.getData().getProofStatus(),resultProfile.getData().getProofStatus());
     }
 
+
+    @Test
+    void shouldMapTermEnumToCorrectValue() {
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        //Expected field
+        expectedData.setTerm("by-agreement");
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getTerm(),resultProfile.getData().getTerm());
+    }
+
+    @Test
+    void shouldMapTermEnumToNullValue() throws IOException {
+        setUpTestData("company-profile-delta-enumMapper-example.json", null);
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        //Expected field
+        expectedData.setTerm(null);
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getTerm(),resultProfile.getData().getTerm());
+    }
+
+    @Test
+    void shouldMapTermEnumToNullValueWhenDeltaValueNotRecognised() throws IOException {
+        setUpTestData("company-profile-delta-invalid-term-example.json", null);
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        //Expected field
+        expectedData.setTerm(null);
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getTerm(),resultProfile.getData().getTerm());
+    }
+
+
+
     @Test
     void shouldMapJurisdictionEnumToCorrectValues() {
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
