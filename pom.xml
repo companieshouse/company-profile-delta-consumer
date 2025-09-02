@@ -58,6 +58,7 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- Pinning version to address CVE-2025-41234 spring-web pulled transitively-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
@@ -104,11 +105,13 @@
       <artifactId>structured-logging</artifactId>
       <version>${structured-logging.version}</version>
     </dependency>
+    <!-- Pinning version to address CVE-2025-49124 and others tomcat-embed-websocket pulled transitively-->
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-websocket</artifactId>
       <version>10.1.44</version>
     </dependency>
+    <!-- Pinning version to address CVE-2025-48924 commons-lang3 pulled transitively-->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
@@ -125,11 +128,13 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <!-- Pinning version to address CVE-2025-49124 and others tomcat-embed-core pulled transitively-->
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-core</artifactId>
       <version>11.0.10</version>
     </dependency>
+    <!-- Pinning version to address CVE-2025-53864 gson pulled transitively-->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -140,6 +145,7 @@
       <artifactId>api-sdk-manager-java-library</artifactId>
       <version>${api-sdk-manager-java-library.version}</version>
     </dependency>
+    <!-- Pinning version to address CVE-2025-41242 spring-core pulled transitively-->
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -156,6 +162,7 @@
         </exclusion>
       </exclusions>
     </dependency>
+    <!-- Pinning version to address CVE-2025-27818 and CVE-2025-27817 kafka-clients pulled transitively-->
     <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
@@ -166,6 +173,7 @@
       <artifactId>spring-kafka-test</artifactId>
       <scope>test</scope>
       <exclusions>
+        <!-- Excluding to address CVE-2025-27818 and CVE-2025-27817 kafka-clients pulled transitively-->
         <exclusion>
           <groupId>org.apache.kafka</groupId>
           <artifactId>kafka-clients</artifactId>
