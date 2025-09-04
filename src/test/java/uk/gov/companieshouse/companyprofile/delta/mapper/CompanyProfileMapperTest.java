@@ -234,14 +234,14 @@ class CompanyProfileMapperTest {
     }
 
     @Test
-    void shouldMapSubTypeEnumToCorrectValues() {
+    void shouldMapSubTypeEnumToCorrectValue() {
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
         Data expectedData = new Data();
 
         //Expected field
-        expectedData.setSubtype("private-fund-limited-partnership");
+        expectedData.setSubtype("spflp");
         expectedProfile.setData(expectedData);
 
         //compare values
@@ -249,8 +249,24 @@ class CompanyProfileMapperTest {
     }
 
     @Test
-    void shouldMapSubTypeEnumToNullValues() throws IOException {
+    void shouldMapSubTypeEnumToNullValue() throws IOException {
         setUpTestData("company-profile-delta-enumMapper-example.json", null);
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
+
+        CompanyProfile expectedProfile = new CompanyProfile();
+        Data expectedData = new Data();
+
+        //Expected field
+        expectedData.setSubtype(null);
+        expectedProfile.setData(expectedData);
+
+        //compare values
+        assertEquals(expectedProfile.getData().getSubtype(),resultProfile.getData().getSubtype());
+    }
+
+    @Test
+    void shouldMapTSubtypeEnumToNullValueWhenDeltaValueNotRecognised() throws IOException {
+        setUpTestData("company-profile-delta-invalid-subtype-example.json", null);
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
         CompanyProfile expectedProfile = new CompanyProfile();
@@ -417,8 +433,6 @@ class CompanyProfileMapperTest {
         //compare values
         assertEquals(expectedProfile.getData().getTerm(),resultProfile.getData().getTerm());
     }
-
-
 
     @Test
     void shouldMapJurisdictionEnumToCorrectValues() {
