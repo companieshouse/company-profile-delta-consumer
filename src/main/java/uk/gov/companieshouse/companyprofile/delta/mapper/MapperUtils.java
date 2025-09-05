@@ -14,14 +14,6 @@ public class MapperUtils {
         return isCommunityInterestCompanyMap;
     }
 
-    /**Create a hashmap for subtype.*/
-    public static HashMap<String,String> getSubTypeMap() {
-        HashMap<String,String> subTypeMap = new HashMap<>();
-        subTypeMap.put("1","community-interest-company");
-        subTypeMap.put("2","private-fund-limited-partnership");
-        return subTypeMap;
-    }
-
     /**Create a hashmap for  proof_status.*/
     public static HashMap<String,String> getProof_statusMap() {
         HashMap<String,String> proofStatusMap = new HashMap<>();

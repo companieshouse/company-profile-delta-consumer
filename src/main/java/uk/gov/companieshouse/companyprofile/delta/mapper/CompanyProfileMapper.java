@@ -263,16 +263,16 @@ public abstract class CompanyProfileMapper {
 
     }
 
-    /**Maps enum type to string. */
+    /**Maps enum subtype to string. */
     @AfterMapping
-    public void mapEnums(@MappingTarget CompanyProfile target, CompanyDelta source) {
+    public void mapEnumsSubtype(@MappingTarget CompanyProfile target, CompanyDelta source) {
         Data data = target.getData();
         if (data == null) {
             data = new Data();
         }
-        String subTypeFlag = source.getSubtype();
-        HashMap<String,String> subTypeMap = MapperUtils.getSubTypeMap();
-        data.setSubtype(subTypeMap.getOrDefault(subTypeFlag,null));
+        String subtype = source.getSubtype();
+
+        data.setSubtype(StringUtils.isNotBlank(subtype) ? Subtype.getMappedValue(subtype) : null);
         target.setData(data);
     }
 
