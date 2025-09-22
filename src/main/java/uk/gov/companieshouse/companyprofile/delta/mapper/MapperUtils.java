@@ -159,6 +159,7 @@ public class MapperUtils {
         corpAnnotationTypeMap.put("100", "other");
         corpAnnotationTypeMap.put("20", "strike-off-under-section-1002a-of-the-companies-act-2006-incorporation");
         corpAnnotationTypeMap.put("21", "strike-off-under-section-1002a-of-the-companies-act-2006-restoration");
+        corpAnnotationTypeMap.put("22", "overseas-entity-dissolved-wound-up-or-ceased-to-exist");
         return corpAnnotationTypeMap;
     }
 
