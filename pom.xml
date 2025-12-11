@@ -42,13 +42,6 @@
     <sonar.password></sonar.password>
     <sonar.projectKey>uk.gov.companieshouse:company-profile-delta-consumer</sonar.projectKey>
     <sonar.projectName>company-profile-delta-consumer</sonar.projectName>
-    <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml,
-      ${project.basedir}/target/site/jacoco-it/jacoco.xml
-    </sonar.coverage.jacoco.xmlReportPaths>
-    <sonar.jacoco.reports>${project.basedir}/target/site</sonar.jacoco.reports>
-    <sonar.java.binaries>
-      ${project.basedir}/target
-    </sonar.java.binaries>
 
     <spring.boot.version>3.4.5</spring.boot.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
