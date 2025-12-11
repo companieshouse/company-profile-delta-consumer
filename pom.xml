@@ -40,8 +40,8 @@
     <sonar.token>${CODE_ANALYSIS_TOKEN}</sonar.token>
     <sonar.login></sonar.login>
     <sonar.password></sonar.password>
-    <sonar.projectKey>uk.gov.companieshouse:company-profile-delta-consume</sonar.projectKey>
-    <sonar.projectName>company-profile-delta-consume</sonar.projectName>
+    <sonar.projectKey>uk.gov.companieshouse:company-profile-delta-consumer</sonar.projectKey>
+    <sonar.projectName>company-profile-delta-consumer</sonar.projectName>
     <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml,
       ${project.basedir}/target/site/jacoco-it/jacoco.xml
     </sonar.coverage.jacoco.xmlReportPaths>
