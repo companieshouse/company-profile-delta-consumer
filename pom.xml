@@ -118,7 +118,7 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-websocket</artifactId>
-      <version>10.1.44</version>
+      <version>11.0.14</version>
     </dependency>
     <!-- Pinning version to address CVE-2025-48924 commons-lang3 pulled transitively-->
     <dependency>
@@ -141,7 +141,7 @@
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-core</artifactId>
-      <version>11.0.10</version>
+      <version>11.0.14</version>
     </dependency>
     <!-- Pinning version to address CVE-2025-53864 gson pulled transitively-->
     <dependency>
