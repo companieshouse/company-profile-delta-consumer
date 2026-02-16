@@ -29,6 +29,7 @@
     <api-sdk-manager-java-library.version>3.0.11</api-sdk-manager-java-library.version>
     <jib-maven-plugin.version>3.4.5</jib-maven-plugin.version>
     <io-cucumber.version>7.22.2</io-cucumber.version>
+    <spring.version>6.2.15</spring.version>
     <!-- Tests -->
     <skip.integration.tests>false</skip.integration.tests>
     <skip.unit.tests>false</skip.unit.tests>
@@ -72,7 +73,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>6.2.10</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -164,7 +165,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>6.2.10</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
