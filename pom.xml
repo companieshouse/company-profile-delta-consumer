@@ -44,7 +44,7 @@
     <sonar.projectKey>uk.gov.companieshouse:company-profile-delta-consumer</sonar.projectKey>
     <sonar.projectName>company-profile-delta-consumer</sonar.projectName>
 
-    <spring.boot.version>3.4.5</spring.boot.version>
+    <spring.boot.version>3.5.9</spring.boot.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
