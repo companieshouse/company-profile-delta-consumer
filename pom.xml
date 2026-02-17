@@ -29,6 +29,7 @@
     <api-sdk-manager-java-library.version>3.0.11</api-sdk-manager-java-library.version>
     <jib-maven-plugin.version>3.4.5</jib-maven-plugin.version>
     <io-cucumber.version>7.22.2</io-cucumber.version>
+    <spring.version>6.2.15</spring.version>
     <!-- Tests -->
     <skip.integration.tests>false</skip.integration.tests>
     <skip.unit.tests>false</skip.unit.tests>
@@ -44,7 +45,7 @@
     <sonar.projectKey>uk.gov.companieshouse:company-profile-delta-consumer</sonar.projectKey>
     <sonar.projectName>company-profile-delta-consumer</sonar.projectName>
 
-    <spring.boot.version>3.4.5</spring.boot.version>
+    <spring.boot.version>3.5.9</spring.boot.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -72,7 +73,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>6.2.10</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -164,7 +165,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>6.2.10</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
