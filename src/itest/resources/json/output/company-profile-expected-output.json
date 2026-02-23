@@ -140,6 +140,9 @@
         ]
     },
     "parent_company_number": "112233",
+    "sensitive_data" : {
+        "registered_email_address" : "john@example.com"
+    },
     "delta_at": "20190612181928152002",
     "has_mortgages": false
 
