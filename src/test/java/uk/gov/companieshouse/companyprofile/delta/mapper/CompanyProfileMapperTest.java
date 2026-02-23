@@ -1,27 +1,5 @@
 package uk.gov.companieshouse.companyprofile.delta.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.util.FileCopyUtils;
-import uk.gov.companieshouse.api.company.AccountingRequirement;
-import uk.gov.companieshouse.api.company.Accounts;
-import uk.gov.companieshouse.api.company.AnnualReturn;
-import uk.gov.companieshouse.api.company.CompanyProfile;
-import uk.gov.companieshouse.api.company.ConfirmationStatement;
-import uk.gov.companieshouse.api.company.CorporateAnnotation;
-import uk.gov.companieshouse.api.company.Data;
-import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
-import uk.gov.companieshouse.api.company.LastAccounts;
-import uk.gov.companieshouse.api.company.NextAccounts;
-import uk.gov.companieshouse.api.delta.CompanyDelta;
-
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
@@ -34,6 +12,29 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.util.FileCopyUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import uk.gov.companieshouse.api.company.AccountingRequirement;
+import uk.gov.companieshouse.api.company.Accounts;
+import uk.gov.companieshouse.api.company.AnnualReturn;
+import uk.gov.companieshouse.api.company.CompanyProfile;
+import uk.gov.companieshouse.api.company.ConfirmationStatement;
+import uk.gov.companieshouse.api.company.CorporateAnnotation;
+import uk.gov.companieshouse.api.company.Data;
+import uk.gov.companieshouse.api.company.ForeignCompanyDetails;
+import uk.gov.companieshouse.api.company.LastAccounts;
+import uk.gov.companieshouse.api.company.NextAccounts;
+import uk.gov.companieshouse.api.delta.CompanyDelta;
 
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
@@ -768,6 +769,33 @@ class CompanyProfileMapperTest {
 
         //then
         assertNull(resultProfile.getData().getAccounts().getAccountingReferenceDate());
+    }
+
+    @Test
+    void shouldMapRegisteredEmailAddressToSensitiveData() {
+        // given
+        CompanyDelta delta = new CompanyDelta();
+        delta.setRegisteredEmailAddress("john@example.com");
+
+        // when
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(delta);
+
+        // then
+        assertEquals("john@example.com",
+                resultProfile.getSensitiveData().getRegisteredEmailAddress());
+    }
+
+    @Test
+    void shouldHandleNullRegisteredEmailAddress() {
+        // given
+        CompanyDelta delta = new CompanyDelta();
+        delta.setRegisteredEmailAddress(null);
+
+        // when
+        CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(delta);
+
+        // then
+        assertNull(resultProfile.getSensitiveData().getRegisteredEmailAddress());
     }
 
 }
