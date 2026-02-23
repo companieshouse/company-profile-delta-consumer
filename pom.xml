@@ -25,7 +25,7 @@
     <structured-logging.version>3.0.40</structured-logging.version>
     <log4j.version>2.25.3</log4j.version>
     <kafka-models.version>3.0.21</kafka-models.version>
-    <private-api-sdk-java.version>4.0.374</private-api-sdk-java.version>
+    <private-api-sdk-java.version>4.0.456</private-api-sdk-java.version>
     <api-sdk-manager-java-library.version>3.0.11</api-sdk-manager-java-library.version>
     <jib-maven-plugin.version>3.4.5</jib-maven-plugin.version>
     <io-cucumber.version>7.22.2</io-cucumber.version>
