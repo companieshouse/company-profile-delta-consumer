@@ -39,7 +39,7 @@ import uk.gov.companieshouse.api.delta.SicCodes;
 @Mapper(componentModel = "spring")
 public abstract class CompanyProfileMapper {
 
-    @Mapping(target = "sensitiveData.registeredEmailAddress", source = "registeredEmailAddress")
+    @Mapping(target = "sensitiveData.emailAddress", source = "emailAddress")
     @Mapping(target = "data.accounts.accountingReferenceDate.day", source = "accRefDate")
     @Mapping(target = "data.accounts.accountingReferenceDate.month", source = "accRefDate")
 

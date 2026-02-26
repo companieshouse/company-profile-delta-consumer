@@ -775,27 +775,27 @@ class CompanyProfileMapperTest {
     void shouldMapRegisteredEmailAddressToSensitiveData() {
         // given
         CompanyDelta delta = new CompanyDelta();
-        delta.setRegisteredEmailAddress("john@example.com");
+        delta.setEmailAddress("john@example.com");
 
         // when
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(delta);
 
         // then
         assertEquals("john@example.com",
-                resultProfile.getSensitiveData().getRegisteredEmailAddress());
+                resultProfile.getSensitiveData().getEmailAddress());
     }
 
     @Test
-    void shouldHandleNullRegisteredEmailAddress() {
+    void shouldHandleNullEmailAddress() {
         // given
         CompanyDelta delta = new CompanyDelta();
-        delta.setRegisteredEmailAddress(null);
+        delta.setEmailAddress(null);
 
         // when
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(delta);
 
         // then
-        assertNull(resultProfile.getSensitiveData().getRegisteredEmailAddress());
+        assertNull(resultProfile.getSensitiveData().getEmailAddress());
     }
 
 }
