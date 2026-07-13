@@ -20,18 +20,35 @@
         <java.version>21</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <skip.integration.tests>false</skip.integration.tests>
+        <skip.unit.tests>false</skip.unit.tests>
 
         <main.class>uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication</main.class>
 
+        <!-- Source: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot -->
         <spring-boot.version>3.5.16</spring-boot.version>
-        <mockito-core.version>5.17.0</mockito-core.version>
-        <spring-kafka.version>3.3.11</spring-kafka.version>
-        <wiremock.version>3.13.0</wiremock.version>
-        <jose4j.version>0.9.6</jose4j.version>
-        <avro.version>1.12.1</avro.version>
-        <jetty-bom.version>12.1.10</jetty-bom.version>
-        <tomcat.version>11.0.23</tomcat.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
         <map-struct.version>1.6.3</map-struct.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
+        <spring-kafka.version>3.3.16</spring-kafka.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.wiremock/wiremock -->
+        <wiremock.version>3.13.2</wiremock.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.bitbucket.b_c/jose4j -->
+        <jose4j.version>0.9.6</jose4j.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.apache.avro/avro -->
+        <avro.version>1.12.1</avro.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-bom -->
+        <jetty-bom.version>12.1.11</jetty-bom.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.apache.tomcat/tomcat -->
+        <tomcat.version>11.0.23</tomcat.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+        <mockito-core.version>5.23.0</mockito-core.version>
+        <!-- Source: https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+        <cucumber.version>7.34.4</cucumber.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <assertj-core.version>3.27.7</assertj-core.version>
+        <!-- Source: https://mvnrepository.com/artifact/org.testcontainers/testcontainers -->
+        <testcontainers.version>2.0.5</testcontainers.version>
 
         <!-- Source: https://github.com/companieshouse/ch-kafka/releases -->
         <ch-kafka.version>3.0.16</ch-kafka.version>
@@ -44,19 +61,11 @@
         <!-- Source: https://github.com/companieshouse/api-sdk-manager-java-library/releases -->
         <api-sdk-manager-java-library.version>3.0.25</api-sdk-manager-java-library.version>
 
-        <skip.integration.tests>false</skip.integration.tests>
-        <skip.unit.tests>false</skip.unit.tests>
-        <!-- Source: https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
-        <cucumber.version>7.34.4</cucumber.version>
-        <assertj-core.version>3.27.7</assertj-core.version>
-        <test-containers.version>1.21.0</test-containers.version>
-
         <!--sonar configuration-->
         <sonar.java.binaries>${project.basedir}/target</sonar.java.binaries>
         <sonar.jacoco.reports>${project.basedir}/target/site</sonar.jacoco.reports>
         <sonar.projectKey>uk.gov.companieshouse:company-profile-delta-consumer</sonar.projectKey>
         <sonar.projectName>company-profile-delta-consumer</sonar.projectName>
-
 
         <!-- Source: https://mvnrepository.com/artifact/org.codehaus.mojo/build-helper-maven-plugin -->
         <maven-build-helper-plugin.version>3.6.1</maven-build-helper-plugin.version>
@@ -287,14 +296,14 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>${test-containers.version}</version>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>kafka</artifactId>
-            <version>${test-containers.version}</version>
+            <artifactId>testcontainers-kafka</artifactId>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
 
