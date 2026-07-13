@@ -12,6 +12,8 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -70,7 +72,8 @@ class CompanyProfileMapperTest {
     void shouldMapCompanyDeltaToCompanyProfile() {
         CompanyProfile profile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
-        assertEquals(expectedOutputData.toString(), profile.getData().toString());
+        Assertions.assertNotNull(profile.getData());
+        Assertions.assertEquals(expectedOutputData.toString(), profile.getData().toString());
     }
 
     @Test
@@ -80,7 +83,8 @@ class CompanyProfileMapperTest {
 
         CompanyProfile profile = companyProfileMapper.companyDeltaToCompanyProfile(companyDelta);
 
-        assertEquals(expectedOutputData.toString(), profile.getData().toString());
+        Assertions.assertNotNull(profile.getData());
+        Assertions.assertEquals(expectedOutputData.toString(), profile.getData().toString());
     }
 
     @Test
@@ -647,15 +651,18 @@ class CompanyProfileMapperTest {
 
         CompanyProfile resultProfile = companyProfileMapper.companyDeltaToCompanyProfile(emptyDelta);
 
-
         //compare values
-        assertNull(resultProfile.getData().getBranchCompanyDetails());
-        assertNull(resultProfile.getData().getForeignCompanyDetails());
-        assertNull(resultProfile.getData().getConfirmationStatement());
-        assertNull(resultProfile.getData().getRegisteredOfficeAddress());
-        assertNull(resultProfile.getData().getServiceAddress());
-        assertNull(resultProfile.getData().getAccounts());
-        assertNull(resultProfile.getData().getCorporateAnnotation());
+        Assertions.assertNotNull(resultProfile);
+        Assertions.assertNotNull(resultProfile.getData());
+        var data = resultProfile.getData();
+        assertNull(data.getBranchCompanyDetails());
+        assertNull(data.getForeignCompanyDetails());
+        assertNull(data.getConfirmationStatement());
+        assertNull(data.getRegisteredOfficeAddress());
+        assertNull(data.getServiceAddress());
+        assertNull(data.getAccounts());
+        Assertions.assertNotNull(data.getCorporateAnnotation());
+        Assertions.assertTrue(data.getCorporateAnnotation().isEmpty());
     }
 
     @Test

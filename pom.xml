@@ -23,22 +23,31 @@
 
         <main.class>uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication</main.class>
 
+        <spring-boot.version>3.5.16</spring-boot.version>
+        <mockito-core.version>5.17.0</mockito-core.version>
+        <spring-kafka.version>3.3.11</spring-kafka.version>
+        <wiremock.version>3.13.0</wiremock.version>
+        <jose4j.version>0.9.6</jose4j.version>
+        <avro.version>1.12.1</avro.version>
+        <jetty-bom.version>12.1.10</jetty-bom.version>
+        <tomcat.version>11.0.23</tomcat.version>
         <map-struct.version>1.6.3</map-struct.version>
-        <ch-kafka.version>3.0.6</ch-kafka.version>
-        <structured-logging.version>3.0.37</structured-logging.version>
-        <log4j.version>2.25.4</log4j.version>
-        <log4j-to-slf4j.version>2.25.4</log4j-to-slf4j.version>
-        <kafka-models.version>3.0.21</kafka-models.version>
-        <private-api-sdk-java.version>4.0.466</private-api-sdk-java.version>
-        <api-sdk-manager-java-library.version>3.0.11</api-sdk-manager-java-library.version>
 
+        <!-- Source: https://github.com/companieshouse/ch-kafka/releases -->
+        <ch-kafka.version>3.0.16</ch-kafka.version>
+        <!-- Source: https://github.com/companieshouse/structured-logging/releases -->
+        <structured-logging.version>3.0.57</structured-logging.version>
+        <!-- Source: https://github.com/companieshouse/kafka-models/releases -->
+        <kafka-models.version>3.0.35</kafka-models.version>
+        <!-- Source: https://github.com/companieshouse/private-api-sdk-java/releases -->
+        <private-api-sdk-java.version>7.0.11</private-api-sdk-java.version>
+        <!-- Source: https://github.com/companieshouse/api-sdk-manager-java-library/releases -->
+        <api-sdk-manager-java-library.version>3.0.25</api-sdk-manager-java-library.version>
 
-        <!-- Source: https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
-        <cucumber.version>7.34.4</cucumber.version>
-
-        <!-- Tests -->
         <skip.integration.tests>false</skip.integration.tests>
         <skip.unit.tests>false</skip.unit.tests>
+        <!-- Source: https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+        <cucumber.version>7.34.4</cucumber.version>
         <assertj-core.version>3.27.7</assertj-core.version>
         <test-containers.version>1.21.0</test-containers.version>
 
@@ -48,14 +57,6 @@
         <sonar.projectKey>uk.gov.companieshouse:company-profile-delta-consumer</sonar.projectKey>
         <sonar.projectName>company-profile-delta-consumer</sonar.projectName>
 
-        <spring-boot.version>3.5.16</spring-boot.version>
-        <mockito-core.version>5.17.0</mockito-core.version>
-        <spring-kafka.version>3.3.11</spring-kafka.version>
-        <wiremock.version>3.13.0</wiremock.version>
-        <jose4j.version>0.9.6</jose4j.version>
-        <avro.version>1.12.1</avro.version>
-        <jetty-bom.version>12.1.10</jetty-bom.version>
-        <tomcat.version>11.0.23</tomcat.version>
 
         <!-- Source: https://mvnrepository.com/artifact/org.codehaus.mojo/build-helper-maven-plugin -->
         <maven-build-helper-plugin.version>3.6.1</maven-build-helper-plugin.version>
