@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,17 +21,20 @@ import uk.gov.companieshouse.api.delta.CompanyDeleteDelta;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 
 @ExtendWith(MockitoExtension.class)
-public class CompanyProfileDeltaDeserialiserTest {
+class CompanyProfileDeltaDeserialiserTest {
 
-    public static final String COMPANY_PROFILE_DELTA = "company profile delta json string";
-    public static final String COMPANY_PROFILE_DELETE_DELTA = "company profile delete delta json string";
+    private static final String COMPANY_PROFILE_DELTA = "company profile delta json string";
+    private static final String COMPANY_PROFILE_DELETE_DELTA = "company profile delete delta json string";
 
     @InjectMocks
     private CompanyProfileDeltaDeserialiser deserialiser;
+
     @Mock
     private JsonMapper jsonMapper;
+
     @Mock
     private CompanyDelta expectedDelta;
+
     @Mock
     private CompanyDeleteDelta expectedDeleteDelta;
 
@@ -50,8 +54,7 @@ public class CompanyProfileDeltaDeserialiserTest {
     @Test
     void shouldThrowNonRetryableExceptionWhenJacksonExceptionThrown() {
         // given
-        when(jsonMapper.readValue(anyString(), eq(CompanyDelta.class))).thenThrow(
-                JacksonException.class);
+        when(jsonMapper.readValue(anyString(), eq(CompanyDelta.class))).thenThrow(mock(JacksonException.class));
 
         // when
         Executable executable = () -> deserialiser.deserialiseCompanyDelta(COMPANY_PROFILE_DELTA);
@@ -79,8 +82,7 @@ public class CompanyProfileDeltaDeserialiserTest {
     @Test
     void shouldThrowNonRetryableExceptionWhenJacksonExceptionThrownFromDeleteDelta() {
         // given
-        when(jsonMapper.readValue(anyString(), eq(CompanyDeleteDelta.class))).thenThrow(
-                JacksonException.class);
+        when(jsonMapper.readValue(anyString(), eq(CompanyDeleteDelta.class))).thenThrow(mock(JacksonException.class));
 
         // when
         Executable executable = () -> deserialiser.deserialiseCompanyDeleteDelta(COMPANY_PROFILE_DELETE_DELTA);

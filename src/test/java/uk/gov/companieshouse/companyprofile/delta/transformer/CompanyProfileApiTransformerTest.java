@@ -9,17 +9,17 @@ import consumer.exception.NonRetryableErrorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.companyprofile.delta.mapper.CompanyProfileMapper;
 
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class CompanyProfileApiTransformerTest {
 
-    @MockitoBean
+    @Mock
     private CompanyProfileMapper mapper;
 
     private CompanyProfileApiTransformer transformer;
@@ -27,7 +27,7 @@ class CompanyProfileApiTransformerTest {
     private CompanyDelta companyDelta;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         transformer = new CompanyProfileApiTransformer(mapper);
         companyDelta = new CompanyDelta();
     }
