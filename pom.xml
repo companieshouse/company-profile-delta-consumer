@@ -35,8 +35,6 @@
         <jose4j.version>0.9.6</jose4j.version>
         <!-- Source: https://mvnrepository.com/artifact/org.apache.avro/avro -->
         <avro.version>1.12.1</avro.version>
-        <!-- Source: https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-bom -->
-        <jetty-bom.version>12.1.11</jetty-bom.version>
         <!-- Source: https://mvnrepository.com/artifact/org.apache.tomcat/tomcat -->
         <tomcat.version>11.0.23</tomcat.version>
         <!-- Source: https://mvnrepository.com/artifact/org.mockito/mockito-core -->
