@@ -7,8 +7,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import consumer.exception.NonRetryableErrorException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +14,8 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.companieshouse.api.delta.CompanyDeleteDelta;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 
@@ -28,30 +28,30 @@ public class CompanyProfileDeltaDeserialiserTest {
     @InjectMocks
     private CompanyProfileDeltaDeserialiser deserialiser;
     @Mock
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
     @Mock
     private CompanyDelta expectedDelta;
     @Mock
     private CompanyDeleteDelta expectedDeleteDelta;
 
     @Test
-    void shouldDeserialiseToCompanyDelta() throws JsonProcessingException {
+    void shouldDeserialiseToCompanyDelta() {
         // given
-        when(objectMapper.readValue(anyString(), eq(CompanyDelta.class))).thenReturn(expectedDelta);
+        when(jsonMapper.readValue(anyString(), eq(CompanyDelta.class))).thenReturn(expectedDelta);
 
         // when
         CompanyDelta actual = deserialiser.deserialiseCompanyDelta(COMPANY_PROFILE_DELTA);
 
         // then
         assertEquals(expectedDelta, actual);
-        verify(objectMapper).readValue(COMPANY_PROFILE_DELTA, CompanyDelta.class);
+        verify(jsonMapper).readValue(COMPANY_PROFILE_DELTA, CompanyDelta.class);
     }
 
     @Test
-    void shouldThrowNonRetryableExceptionWhenJsonProcessingExceptionThrown() throws JsonProcessingException {
+    void shouldThrowNonRetryableExceptionWhenJacksonExceptionThrown() {
         // given
-        when(objectMapper.readValue(anyString(), eq(CompanyDelta.class))).thenThrow(
-                JsonProcessingException.class);
+        when(jsonMapper.readValue(anyString(), eq(CompanyDelta.class))).thenThrow(
+                JacksonException.class);
 
         // when
         Executable executable = () -> deserialiser.deserialiseCompanyDelta(COMPANY_PROFILE_DELTA);
@@ -60,28 +60,27 @@ public class CompanyProfileDeltaDeserialiserTest {
         NonRetryableErrorException actual = assertThrows(NonRetryableErrorException.class, executable);
         assertEquals("Unable to deserialise UPSERT delta: [company profile delta json string]",
                 actual.getMessage());
-        verify(objectMapper).readValue(COMPANY_PROFILE_DELTA, CompanyDelta.class);
+        verify(jsonMapper).readValue(COMPANY_PROFILE_DELTA, CompanyDelta.class);
     }
 
     @Test
-    void shouldDeserialiseToCompanyDeleteDelta() throws JsonProcessingException {
+    void shouldDeserialiseToCompanyDeleteDelta() {
         // given
-        when(objectMapper.readValue(anyString(), eq(CompanyDeleteDelta.class))).thenReturn(expectedDeleteDelta);
+        when(jsonMapper.readValue(anyString(), eq(CompanyDeleteDelta.class))).thenReturn(expectedDeleteDelta);
 
         // when
         CompanyDeleteDelta actual = deserialiser.deserialiseCompanyDeleteDelta(COMPANY_PROFILE_DELETE_DELTA);
 
         // then
         assertEquals(expectedDeleteDelta, actual);
-        verify(objectMapper).readValue(COMPANY_PROFILE_DELETE_DELTA, CompanyDeleteDelta.class);
+        verify(jsonMapper).readValue(COMPANY_PROFILE_DELETE_DELTA, CompanyDeleteDelta.class);
     }
 
     @Test
-    void shouldThrowNonRetryableExceptionWhenJsonProcessingExceptionThrownFromDeleteDelta()
-            throws JsonProcessingException {
+    void shouldThrowNonRetryableExceptionWhenJacksonExceptionThrownFromDeleteDelta() {
         // given
-        when(objectMapper.readValue(anyString(), eq(CompanyDeleteDelta.class))).thenThrow(
-                JsonProcessingException.class);
+        when(jsonMapper.readValue(anyString(), eq(CompanyDeleteDelta.class))).thenThrow(
+                JacksonException.class);
 
         // when
         Executable executable = () -> deserialiser.deserialiseCompanyDeleteDelta(COMPANY_PROFILE_DELETE_DELTA);
@@ -90,7 +89,7 @@ public class CompanyProfileDeltaDeserialiserTest {
         NonRetryableErrorException actual = assertThrows(NonRetryableErrorException.class, executable);
         assertEquals("Unable to deserialise DELETE delta: [company profile delete delta json string]",
                 actual.getMessage());
-        verify(objectMapper).readValue(COMPANY_PROFILE_DELETE_DELTA, CompanyDeleteDelta.class);
+        verify(jsonMapper).readValue(COMPANY_PROFILE_DELETE_DELTA, CompanyDeleteDelta.class);
     }
 
 }

@@ -23,9 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.FileCopyUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.companieshouse.api.company.AccountingRequirement;
 import uk.gov.companieshouse.api.company.Accounts;
 import uk.gov.companieshouse.api.company.AnnualReturn;
@@ -56,8 +54,7 @@ class CompanyProfileMapperTest {
     }
 
     private void setUpTestData(String inputPath, String outputPath) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
+        JsonMapper mapper = JsonMapper.builder().build();
 
         if (inputPath != null) {
             String input = FileCopyUtils.copyToString(new InputStreamReader(Objects.requireNonNull(ClassLoader.getSystemClassLoader().getResourceAsStream(inputPath))));

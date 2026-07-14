@@ -26,11 +26,9 @@
         <main.class>uk.gov.companieshouse.companyprofile.delta.CompanyProfileDeltaConsumerApplication</main.class>
 
         <!-- Source: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot -->
-        <spring-boot.version>3.5.16</spring-boot.version>
+        <spring-boot.version>4.1.0</spring-boot.version>
         <!-- Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
         <map-struct.version>1.6.3</map-struct.version>
-        <!-- Source: https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
-        <spring-kafka.version>3.3.16</spring-kafka.version>
         <!-- Source: https://mvnrepository.com/artifact/org.wiremock/wiremock -->
         <wiremock.version>3.13.2</wiremock.version>
         <!-- Source: https://mvnrepository.com/artifact/org.bitbucket.b_c/jose4j -->
@@ -49,15 +47,17 @@
         <assertj-core.version>3.27.7</assertj-core.version>
         <!-- Source: https://mvnrepository.com/artifact/org.testcontainers/testcontainers -->
         <testcontainers.version>2.0.5</testcontainers.version>
+        <!-- Source: https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-instrumentation-bom -->
+        <opentelemetry.version>2.29.0</opentelemetry.version>
 
         <!-- Source: https://github.com/companieshouse/ch-kafka/releases -->
-        <ch-kafka.version>3.0.16</ch-kafka.version>
+        <ch-kafka.version>3.0.17</ch-kafka.version>
         <!-- Source: https://github.com/companieshouse/structured-logging/releases -->
         <structured-logging.version>3.0.57</structured-logging.version>
         <!-- Source: https://github.com/companieshouse/kafka-models/releases -->
-        <kafka-models.version>3.0.35</kafka-models.version>
+        <kafka-models.version>3.0.36</kafka-models.version>
         <!-- Source: https://github.com/companieshouse/private-api-sdk-java/releases -->
-        <private-api-sdk-java.version>7.0.11</private-api-sdk-java.version>
+        <private-api-sdk-java.version>7.0.14</private-api-sdk-java.version>
         <!-- Source: https://github.com/companieshouse/api-sdk-manager-java-library/releases -->
         <api-sdk-manager-java-library.version>3.0.25</api-sdk-manager-java-library.version>
 
@@ -88,78 +88,19 @@
         <dependencies>
 
             <dependency>
-                <groupId>org.eclipse.jetty.ee10</groupId>
-                <artifactId>jetty-ee10-bom</artifactId>
-                <version>${jetty-bom.version}</version>
+                <groupId>io.opentelemetry.instrumentation</groupId>
+                <artifactId>opentelemetry-instrumentation-bom</artifactId>
+                <version>${opentelemetry.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
 
-            <!-- Explicitly pin Jetty modules to address CVE-2026-2332 and CVE-2026-5795 -->
             <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-ee</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty.ee10</groupId>
-                <artifactId>jetty-ee10-webapp</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-io</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-http</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-util</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-xml</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-client</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-alpn-client</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-session</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty.ee10</groupId>
-                <artifactId>jetty-ee10-servlet</artifactId>
-                <version>${jetty-bom.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-security</artifactId>
-                <version>${jetty-bom.version}</version>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <!-- Source: https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-core -->
@@ -194,6 +135,13 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Source: https://mvnrepository.com/artifact/com.google.guava/guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>33.6.0-jre</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -206,11 +154,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- Pinning version to address CVE-2025-41234 spring-web pulled transitively-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -219,7 +162,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
         </dependency>
 
         <dependency>
@@ -228,9 +171,27 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>${spring-kafka.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-opentelemetry</artifactId>
+        </dependency>
+
+        <!-- Source: https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-logback-appender-1.0 -->
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-logback-appender-1.0</artifactId>
+            <version>${opentelemetry.version}-alpha</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-kafka</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-kafka-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -281,12 +242,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
@@ -296,14 +251,12 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers-kafka</artifactId>
-            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -361,13 +314,6 @@
             <groupId>org.bitbucket.b_c</groupId>
             <artifactId>jose4j</artifactId>
             <version>${jose4j.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jetty-bom.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -452,8 +398,9 @@
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>${maven-build-helper-plugin.version}</version>
                 <executions>
+                    <!-- Add integration test source folder -->
                     <execution>
-                        <id>add-integration-test-sources</id>
+                        <id>add-integration-test-source</id>
                         <phase>generate-test-sources</phase>
                         <goals>
                             <goal>add-test-source</goal>
@@ -462,6 +409,21 @@
                             <sources>
                                 <source>src/itest/java</source>
                             </sources>
+                        </configuration>
+                    </execution>
+                    <!-- Add integration test resources folder -->
+                    <execution>
+                        <id>add-integration-test-resource</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>add-test-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>src/itest/resources</directory>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>

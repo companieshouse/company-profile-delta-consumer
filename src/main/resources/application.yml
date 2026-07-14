@@ -23,15 +23,33 @@ company-profile:
 
 management:
   endpoints:
-    enabled-by-default: false
+    access:
+      default: read_only
     web:
+      exposure:
+        include: health
       base-path: /
       path-mapping:
         health: company-profile-delta-consumer/healthcheck
   endpoint:
     health:
       show-details: never
-      enabled: true
+  opentelemetry:
+    enabled: ${OTEL_LOG_ENABLED:false}
+    logging:
+      export:
+        otlp:
+          endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4318}/v1/logs
+    tracing:
+      export:
+        otlp:
+          endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4318}/v1/traces
+  otlp:
+    metrics:
+      export:
+        url: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4318}/v1/metrics
+
+
 
 api:
   company-profile-api-key: ${COMPANY_PROFILE_API_KEY:localhost}

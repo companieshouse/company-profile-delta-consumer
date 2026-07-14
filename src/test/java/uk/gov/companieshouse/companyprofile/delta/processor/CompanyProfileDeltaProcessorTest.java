@@ -3,7 +3,6 @@ package uk.gov.companieshouse.companyprofile.delta.processor;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.messaging.Message;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.companieshouse.api.company.CompanyProfile;
 import uk.gov.companieshouse.api.delta.CompanyDelta;
 import uk.gov.companieshouse.companyprofile.delta.service.ApiClientService;
@@ -35,7 +35,7 @@ class CompanyProfileDeltaProcessorTest {
 
     @BeforeEach
     public void setUp() {
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = JsonMapper.builder().build();
         CompanyProfileDeltaDeserialiser deserialiser = new CompanyProfileDeltaDeserialiser(mapper);
         processor = new CompanyProfileDeltaProcessor(apiClientService, transformer, deserialiser);
     }
