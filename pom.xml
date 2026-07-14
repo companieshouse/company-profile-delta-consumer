@@ -454,8 +454,7 @@
                 </executions>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <argLine>-Dfile.encoding=UTF-8</argLine>
-                    <argLine>${failsafeArgLine}</argLine>
+                    <argLine>-Dfile.encoding=UTF-8 ${failsafeArgLine}</argLine>
                     <classesDirectory>${project.build.outputDirectory}</classesDirectory>
                     <skipITs>${skip.integration.tests}</skipITs>
                     <includes>
