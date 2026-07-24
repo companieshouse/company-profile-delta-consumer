@@ -51,7 +51,7 @@ Note that they are not currently run as part of the pipeline 'analyse-pull-reque
 | MANAGEMENT_ENDPOINTS_WEB_PATH_MAPPING_HEALTH | The specific path for the health endpoint                                           | company-profile-delta-consumer/healthcheck             |
 | MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS      | The level of detail shown in the health endpoint                                    | never                                                  |
 | MANAGEMENT_ENDPOINT_HEALTH_ENABLED           | A boolean value to enable or disable the health endpoint                            | true                                                   |
-| API_COMPANY_PROFILE_API_KEY                  | The API key for accessing the company profile API                                   | g9yZIA81Zo9J46Kzp3JPbfld6kOqxR47EAYqXbRV               |
+| API_COMPANY_PROFILE_API_KEY                  | The API key for accessing the company profile API                                   | <API KEY VALUE>               |
 | API_URL                                      | The URL of the external API                                                         | [http://api.chs.local:4001](http://api.chs.local:4001) |
 | INTERNAL_API_URL                             | The URL of the internal API                                                         | [http://api.chs.local:4001](http://api.chs.local:4001) |
 | HUMAN_LOG                                    | A boolean value to enable more readable log messages                                | 1                                                      |
@@ -63,7 +63,7 @@ Note that they are not currently run as part of the pipeline 'analyse-pull-reque
 | LOGLEVEL                                     | The level of log messages output to the logs                                        | debug                                                  |
 | MAXIMUM_RETRY_ATTEMPTS                       | The number of times a message will be retried before being moved to the error topic | 5                                                      |
 | RETRY_THROTTLE_RATE_SECONDS                  | The delay in seconds between retry attempts                                         | 5                                                      |
-| COMPANY_PROFILE_DATA_API_KEY                 | The API key for accessing the company profile data API                              | abyZIA81Zo9J47Kzp3JPbfld6kOqxR47EAYqXbRW               |
+| COMPANY_PROFILE_DATA_API_KEY                 | The API key for accessing the company profile data API                              | <API KEY VALUE>               |
 
 ## Building the docker image
 
