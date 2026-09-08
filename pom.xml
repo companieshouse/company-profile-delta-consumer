@@ -51,7 +51,7 @@
         <!-- Source: https://github.com/companieshouse/ch-kafka/releases -->
         <ch-kafka.version>3.0.17</ch-kafka.version>
         <!-- Source: https://github.com/companieshouse/structured-logging/releases -->
-        <structured-logging.version>3.0.57</structured-logging.version>
+        <structured-logging.version>4.0.4</structured-logging.version>
         <!-- Source: https://github.com/companieshouse/kafka-models/releases -->
         <kafka-models.version>3.0.36</kafka-models.version>
         <!-- Source: https://github.com/companieshouse/private-api-sdk-java/releases -->
