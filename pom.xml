@@ -45,8 +45,8 @@
         <assertj-core.version>3.27.7</assertj-core.version>
         <!-- Source: https://mvnrepository.com/artifact/org.testcontainers/testcontainers -->
         <testcontainers.version>2.0.5</testcontainers.version>
-        <!-- Source: https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-instrumentation-bom -->
-        <opentelemetry.version>2.29.0</opentelemetry.version>
+        <!-- CH Internal BOMs -->
+        <ch-bom.version>0.1.36</ch-bom.version>
 
         <!-- Source: https://github.com/companieshouse/ch-kafka/releases -->
         <ch-kafka.version>3.0.17</ch-kafka.version>
@@ -86,9 +86,9 @@
         <dependencies>
 
             <dependency>
-                <groupId>io.opentelemetry.instrumentation</groupId>
-                <artifactId>opentelemetry-instrumentation-bom</artifactId>
-                <version>${opentelemetry.version}</version>
+                <groupId>uk.gov.companieshouse</groupId>
+                <artifactId>ch-dependency-bom</artifactId>
+                <version>${ch-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -177,7 +177,6 @@
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-logback-appender-1.0</artifactId>
-            <version>${opentelemetry.version}-alpha</version>
             <scope>compile</scope>
         </dependency>
 
