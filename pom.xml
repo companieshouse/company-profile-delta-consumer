@@ -5,7 +5,7 @@
     <parent>
         <groupId>uk.gov.companieshouse</groupId>
         <artifactId>companies-house-parent</artifactId>
-        <version>2.1.14</version>
+        <version>3.0.0</version>
         <relativePath/>
     </parent>
 
@@ -47,13 +47,13 @@
         <assertj-core.version>3.27.7</assertj-core.version>
         <!-- Source: https://mvnrepository.com/artifact/org.testcontainers/testcontainers -->
         <testcontainers.version>2.0.5</testcontainers.version>
-        <!-- Source: https://mvnrepository.com/artifact/io.opentelemetry.instrumentation/opentelemetry-instrumentation-bom -->
-        <opentelemetry.version>2.29.0</opentelemetry.version>
+        <!-- CH Internal BOMs -->
+        <ch-bom.version>0.1.36</ch-bom.version>
 
         <!-- Source: https://github.com/companieshouse/ch-kafka/releases -->
         <ch-kafka.version>3.0.17</ch-kafka.version>
         <!-- Source: https://github.com/companieshouse/structured-logging/releases -->
-        <structured-logging.version>3.0.57</structured-logging.version>
+        <structured-logging.version>4.0.4</structured-logging.version>
         <!-- Source: https://github.com/companieshouse/kafka-models/releases -->
         <kafka-models.version>3.0.36</kafka-models.version>
         <!-- Source: https://github.com/companieshouse/private-api-sdk-java/releases -->
@@ -62,10 +62,9 @@
         <api-sdk-manager-java-library.version>3.0.25</api-sdk-manager-java-library.version>
 
         <!--sonar configuration-->
-        <sonar.java.binaries>${project.basedir}/target</sonar.java.binaries>
-        <sonar.jacoco.reports>${project.basedir}/target/site</sonar.jacoco.reports>
-        <sonar.projectKey>uk.gov.companieshouse:company-profile-delta-consumer</sonar.projectKey>
-        <sonar.projectName>company-profile-delta-consumer</sonar.projectName>
+        <sonar.exclusions>
+            **/Application.java
+        </sonar.exclusions>
 
         <!-- Source: https://mvnrepository.com/artifact/org.codehaus.mojo/build-helper-maven-plugin -->
         <maven-build-helper-plugin.version>3.6.1</maven-build-helper-plugin.version>
@@ -88,9 +87,9 @@
         <dependencies>
 
             <dependency>
-                <groupId>io.opentelemetry.instrumentation</groupId>
-                <artifactId>opentelemetry-instrumentation-bom</artifactId>
-                <version>${opentelemetry.version}</version>
+                <groupId>uk.gov.companieshouse</groupId>
+                <artifactId>ch-dependency-bom</artifactId>
+                <version>${ch-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -192,7 +191,6 @@
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-logback-appender-1.0</artifactId>
-            <version>${opentelemetry.version}-alpha</version>
             <scope>compile</scope>
         </dependency>
 
@@ -349,6 +347,11 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco-maven-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/Application.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>pre-unit-test</id>
@@ -356,21 +359,15 @@
                             <goal>prepare-agent</goal>
                         </goals>
                         <configuration>
-                            <!-- Sets the path to the file which contains the execution model. -->
-                            <destFile>${sonar.jacoco.reports}/jacoco.exec</destFile>
                             <propertyName>surefireArgLine</propertyName>
                         </configuration>
                     </execution>
                     <execution>
                         <id>post-unit-test</id>
-                        <phase>test</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <dataFile>${sonar.jacoco.reports}/jacoco.exec</dataFile>
-                            <outputDirectory>${sonar.jacoco.reports}/jacoco</outputDirectory>
-                        </configuration>
                     </execution>
                     <execution>
                         <id>pre-integration-test</id>
@@ -379,23 +376,15 @@
                             <goal>prepare-agent</goal>
                         </goals>
                         <configuration>
-                            <!-- Sets the path to the file which contains the execution model. -->
-                            <destFile>${sonar.jacoco.reports}/jacoco-it.exec</destFile>
                             <propertyName>failsafeArgLine</propertyName>
                         </configuration>
                     </execution>
                     <execution>
                         <id>post-integration-test</id>
-                        <phase>post-integration-test</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>${sonar.jacoco.reports}/jacoco-it.exec</dataFile>
-                            <!-- Sets the output directory for the code coverage report. -->
-                            <outputDirectory>${sonar.jacoco.reports}/jacoco-it</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

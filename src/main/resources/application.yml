@@ -13,6 +13,9 @@ spring:
     bootstrap-servers: ${DATA_SYNC_KAFKA_BROKER_URL:localhost:9092}
     listener:
       concurrency: ${COMPANY_PROFILE_DELTA_LISTENER_CONCURRENCY:1}
+      observation-enabled: true
+    template:
+      observation-enabled: true
 
 company-profile:
   delta:
@@ -44,6 +47,9 @@ management:
       export:
         otlp:
           endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4318}/v1/traces
+  tracing:
+    sampling:
+      probability: ${OTEL_TRACES_SAMPLER_ARG:0.1}
   otlp:
     metrics:
       export:
